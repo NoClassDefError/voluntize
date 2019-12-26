@@ -49,10 +49,25 @@ public class Student {
     private String grade;
 
     /**
-     * 该学生已报名
+     * 该学生已报名，与ActivityPeriod是多对多关系
      */
-    private ArrayList<Activity> activities;
+    private ArrayList<ActivityPeriod> applied;
 
+    /**
+     * 志愿记录，和applied一样，与ActivityPeriod是多对多关系
+     * 报名审核通过则计入志愿记录，但未必参加并录入时长
+     */
+    private ArrayList<ActivityPeriod> participated;
+
+    /**
+     * 头像
+     */
+    private Image profile;
+
+    /**
+     * 总时长
+     */
+    private int totalDuration;
 
 
 }

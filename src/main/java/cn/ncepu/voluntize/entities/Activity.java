@@ -4,12 +4,14 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.util.ArrayList;
 
 /**
  * <h2>志愿活动的实体类</h2>
  *
- * 志愿活动是分时段报名的，为解决这个问题，加入志愿时段实体类ActivityPeriod。
- * 二者是聚合关系。
+ * 一场志愿活动分为多个志愿岗位，ActivityStation
+ * 一个志愿岗位分为多个时间段，ActivityPeriod
+ * 最终按时间段进行报名。
  *
  * @author Ge Hanchen
  * @since 0.0.1
@@ -40,6 +42,10 @@ public class Activity {
 
     private String description;
 
+    /**
+     * 划分为多个岗位
+     */
+    private ArrayList<ActivityStation> stations;
 
     public void setStatus(ActivityStatus status) {
         this.statusId = status.ordinal();
@@ -55,7 +61,7 @@ public class Activity {
                 this.status = ActivityStatus.SEND;
                 break;
             case 2:
-                this.status = ActivityStatus.SIGN_IN;
+                this.status = ActivityStatus.APPLY;
                 break;
             case 3:
                 this.status = ActivityStatus.STARTED;
@@ -72,13 +78,13 @@ public class Activity {
      * <ul>
      *     <li>CONFIRMING 部门已发送等待审核</li>
      *     <li>SEND 审核并修改</li>
-     *     <li>SIGN_IN 报名</li>
+     *     <li>APPLY 报名</li>
      *     <li>STARTED 录用并开始活动</li>
      *     <li>FINISHED 结束并评价</li>
      * </ul>
      * 共5个阶段
      */
     enum ActivityStatus {
-        CONFIRMING, SEND, SIGN_IN, STARTED, FINISHED
+        CONFIRMING, SEND, APPLY, STARTED, FINISHED
     }
 }
