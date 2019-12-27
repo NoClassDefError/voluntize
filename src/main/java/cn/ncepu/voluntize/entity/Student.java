@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h2>学生实体类</h2>
@@ -69,14 +70,14 @@ public class Student {
      * 报名则计入志愿记录，但未必报名成功。
      */
     @OneToMany(mappedBy = "volunteer", targetEntity = Record.class)
-    private ArrayList<Record> participated;
+    private List<Record> participated;
 
     @OneToMany(mappedBy = "student", targetEntity = Comment.class)
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 
     /**
      * 头像
      */
     @OneToMany(mappedBy = "student", targetEntity = Image.class)
-    private ArrayList<Image> profiles;
+    private List<Image> profiles;
 }

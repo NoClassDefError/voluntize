@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h2>志愿评论实体类</h2>
@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 @Data
+@Entity
 public class Comment {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -59,7 +60,7 @@ public class Comment {
      * 评论图片
      */
     @OneToMany(targetEntity = Image.class, mappedBy = "comment")
-    private ArrayList<Image> images;
+    private List<Image> images;
 
     /**
      * 父级评论，没有父级则为空
@@ -69,5 +70,5 @@ public class Comment {
     private Comment parentComment;
 
     @OneToMany(targetEntity = Comment.class)
-    private ArrayList<Comment> sonComment;
+    private List<Comment> sonComment;
 }

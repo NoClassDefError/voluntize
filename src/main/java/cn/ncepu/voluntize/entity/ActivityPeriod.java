@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h2>志愿活动时间段</h2>
@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 @Data
+@Entity
+//@Table(name="activity_period")
 public class ActivityPeriod {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -58,5 +60,5 @@ public class ActivityPeriod {
      * 志愿记录 如有学生报名则增加一条志愿记录
      */
     @OneToMany(targetEntity = Record.class, mappedBy = "period")
-    private ArrayList<Record> records;
+    private List<Record> records;
 }

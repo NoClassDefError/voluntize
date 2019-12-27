@@ -4,7 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h2>志愿活动的实体类</h2>
@@ -32,6 +32,7 @@ public class Activity {
     /**
      * 使用枚举标志活动所处阶段，但不被直接存在数据库中
      */
+    @Transient
     private ActivityStatus status;
 
     /**
@@ -57,19 +58,19 @@ public class Activity {
      * 志愿活动图册
      */
     @OneToMany(targetEntity = Image.class,mappedBy = "activity")
-    private ArrayList<Image> images;
+    private List<Image> images;
 
     /**
      * 志愿活动的评论区，只有在报名阶段以后才允许评论
      */
     @OneToMany(targetEntity = Comment.class, mappedBy = "activity")
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 
     /**
      * 划分为多个岗位
      */
     @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity")
-    private ArrayList<ActivityStation> stations;
+    private List<ActivityStation> stations;
 
     public void setStatus(ActivityStatus status) {
         this.statusId = status.ordinal();

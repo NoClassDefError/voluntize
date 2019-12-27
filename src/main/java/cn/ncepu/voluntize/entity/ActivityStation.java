@@ -3,11 +3,8 @@ package cn.ncepu.voluntize.entity;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * <h2>志愿岗位实体类</h2>
@@ -17,6 +14,7 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 @Data
+@Entity
 public class ActivityStation {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -26,15 +24,19 @@ public class ActivityStation {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @Column(name = "id")
     private String id;
+
     @Basic
-    @Column(name = "name")
+    @Column(name = "station_name")
     private String name;
+
     @Basic
     @Column(name = "description")
     private String description;
+
     @Basic
     @Column(name = "name")
     private String location;
+
     /**
      * 使用一个字符串储存多个要求，中间使用';'隔开
      */
@@ -45,10 +47,13 @@ public class ActivityStation {
     /**
      * 所属志愿活动
      */
+    @ManyToOne(targetEntity = Activity.class)
+    @JoinColumn(name="parent_activity", referencedColumnName = "id")
     private Activity parentActivity;
 
     /**
      * 划分为多个时间段
      */
-    private ArrayList<ActivityPeriod> periods;
+    @OneToMany(targetEntity = ActivityPeriod.class)
+    private List<ActivityPeriod> periods;
 }

@@ -2,11 +2,9 @@ package cn.ncepu.voluntize.entity;
 
 import lombok.Data;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h2>部门实体类</h2>
@@ -15,6 +13,7 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 @Data
+@Entity
 public class Department {
     @Id
     @Column(name = "id", nullable = false)
@@ -40,14 +39,14 @@ public class Department {
      * 部门图册
      */
     @OneToMany(mappedBy = "department", targetEntity = Image.class)
-    private ArrayList<Image> images;
+    private List<Image> images;
 
     /**
      * 该部门发布的所有志愿活动信息
      */
     @OneToMany(mappedBy = "department", targetEntity = Activity.class)
-    private ArrayList<Activity> activities;
+    private List<Activity> activities;
 
     @OneToMany(mappedBy = "department", targetEntity = Comment.class)
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 }

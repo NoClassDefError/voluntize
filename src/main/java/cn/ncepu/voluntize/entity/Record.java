@@ -20,6 +20,7 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+//@Table(name="record")
 public class Record {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -37,7 +38,8 @@ public class Record {
     @JoinColumn(name = "volunteer", referencedColumnName = "id")
     private Student volunteer;
 
-
+    @ManyToOne(targetEntity = ActivityPeriod.class)
+    @JoinColumn(name = "the_period", referencedColumnName = "id")
     private ActivityPeriod period;
 
     /**
@@ -50,6 +52,7 @@ public class Record {
     /**
      * 使用枚举标志志愿所处阶段，但不被直接存在数据库中
      */
+    @Transient
     private RecordStatus status;
 
     /**
@@ -89,5 +92,4 @@ public class Record {
     enum RecordStatus {
         APPLIED, PASSED, EVALUATED
     }
-
 }

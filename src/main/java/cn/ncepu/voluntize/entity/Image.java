@@ -3,10 +3,7 @@ package cn.ncepu.voluntize.entity;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * <h2>图片实体类</h2>
@@ -17,21 +14,35 @@ import javax.persistence.Id;
  * @since 0.0.1
  */
 @Data
+@Entity
 public class Image {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     @Column(name = "id")
     private String id;
+
     @Basic
     @Column(name = "url")
     private String url;
+
     @Basic
     @Column(name = "name")
     private String name;
 
+    @ManyToOne(targetEntity = Student.class)
+    @JoinColumn(name="student", referencedColumnName = "id")
     private Student student;
+
+    @ManyToOne(targetEntity = Activity.class)
+    @JoinColumn(name="activity", referencedColumnName = "id")
     private Activity activity;
+
+    @ManyToOne(targetEntity = Department.class)
+    @JoinColumn(name="department", referencedColumnName = "id")
     private Department department;
+
+    @ManyToOne(targetEntity = Comment.class)
+    @JoinColumn(name="comment", referencedColumnName = "id")
     private Comment comment;
 }
