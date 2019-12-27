@@ -31,7 +31,7 @@ public class Comment {
      * 所属志愿活动，非空
      */
     @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name = "activity",referencedColumnName = "id")
+    @JoinColumn(name = "activity", referencedColumnName = "id")
     private Activity activity;
 
     @ManyToOne(targetEntity = Student.class)
@@ -46,7 +46,7 @@ public class Comment {
      * 评论内容
      */
     @Basic
-    @Column(name = "description",length = 10000)
+    @Column(name = "description", columnDefinition = "text")
     private String content;
 
     /**
@@ -66,9 +66,9 @@ public class Comment {
      * 父级评论，没有父级则为空
      */
     @ManyToOne(targetEntity = Comment.class)
-    @JoinColumn(name = "parent_comment",referencedColumnName = "id")
+    @JoinColumn(name = "parent_comment", referencedColumnName = "id")
     private Comment parentComment;
 
-    @OneToMany(targetEntity = Comment.class)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "parentComment")
     private List<Comment> sonComment;
 }

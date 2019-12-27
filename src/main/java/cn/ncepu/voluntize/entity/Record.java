@@ -20,7 +20,6 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-//@Table(name="record")
 public class Record {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2

@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@Table(name="activity_station")
 public class ActivityStation {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -48,12 +49,12 @@ public class ActivityStation {
      * 所属志愿活动
      */
     @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name="parent_activity", referencedColumnName = "id")
+    @JoinColumn(name = "parent_activity", referencedColumnName = "id")
     private Activity parentActivity;
 
     /**
      * 划分为多个时间段
      */
-    @OneToMany(targetEntity = ActivityPeriod.class)
+    @OneToMany(targetEntity = ActivityPeriod.class, mappedBy = "parent")
     private List<ActivityPeriod> periods;
 }

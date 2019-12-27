@@ -28,7 +28,7 @@ public class Department {
     private String password;
 
     @Basic
-    @Column(name = "phoneNum", length = 11)
+    @Column(name = "phone_num", length = 11)
     private String phoneNum;
 
     @Basic

@@ -47,7 +47,7 @@ public class Activity {
     private String name;
 
     @Basic
-    @Column(name = "description",length = 10000)
+    @Column(name = "description",columnDefinition = "text")
     private String description;
 
     @ManyToOne(targetEntity = Department.class)

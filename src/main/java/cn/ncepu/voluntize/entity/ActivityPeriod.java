@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @Entity
-//@Table(name="activity_period")
+@Table(name = "activity_period")//此处表名自动生成时与类名不同，idea语法检查时会找不到表
 public class ActivityPeriod {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
