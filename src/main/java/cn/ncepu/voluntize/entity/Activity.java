@@ -1,14 +1,14 @@
-package cn.ncepu.voluntize.entities;
+package cn.ncepu.voluntize.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 
 /**
  * <h2>志愿活动的实体类</h2>
- *
+ * <p>
  * 一场志愿活动分为多个志愿岗位，ActivityStation
  * 一个志愿岗位分为多个时间段，ActivityPeriod
  * 最终按时间段进行报名。
@@ -17,12 +17,16 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 @Data
+@Entity
 public class Activity {
 
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
      */
     @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @Column(name = "id")
     private String id;
 
     /**
@@ -33,18 +37,38 @@ public class Activity {
     /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
+    @Basic
     @Column(name = "status_id")
     private int statusId;
 
+    @Basic
+    @Column(name = "name")
     private String name;
 
+    @Basic
+    @Column(name = "description",length = 10000)
+    private String description;
+
+    @ManyToOne(targetEntity = Department.class)
+    @JoinColumn(name = "department", referencedColumnName = "id")
     private Department department;
 
-    private String description;
+    /**
+     * 志愿活动图册
+     */
+    @OneToMany(targetEntity = Image.class,mappedBy = "activity")
+    private ArrayList<Image> images;
+
+    /**
+     * 志愿活动的评论区，只有在报名阶段以后才允许评论
+     */
+    @OneToMany(targetEntity = Comment.class, mappedBy = "activity")
+    private ArrayList<Comment> comments;
 
     /**
      * 划分为多个岗位
      */
+    @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity")
     private ArrayList<ActivityStation> stations;
 
     public void setStatus(ActivityStatus status) {
