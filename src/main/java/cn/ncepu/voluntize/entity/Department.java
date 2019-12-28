@@ -3,7 +3,6 @@ package cn.ncepu.voluntize.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +31,10 @@ public class Department {
     private String phoneNum;
 
     @Basic
+    @Column(name = "email", length = 50)
+    private String email;
+
+    @Basic
     @Column(name = "manager")
     private String manager;
 
@@ -49,4 +52,15 @@ public class Department {
 
     @OneToMany(mappedBy = "department", targetEntity = Comment.class)
     private List<Comment> comments;
+
+    @Override
+    public Object clone() {
+        Department stu = null;
+        try {
+            stu = (Department) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return stu;
+    }
 }

@@ -7,6 +7,15 @@ import lombok.Data;
  */
 @Data
 public class LoginVo {
+    public LoginVo() {
+
+    }
+
+    public LoginVo(String id, String password) {
+        this.id = id;
+        this.password = password;
+    }
+
     private String id;
     private String password;
 }

@@ -8,6 +8,7 @@ class VoluntizeApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

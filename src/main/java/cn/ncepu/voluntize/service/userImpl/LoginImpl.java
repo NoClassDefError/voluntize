@@ -1,22 +1,22 @@
-package cn.ncepu.voluntize.service.loginImpl;
+package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.DepartmentRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
+import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.vo.LoginVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class LoginImpl {
-    private final StudentRepository studentRepository;
-    private final DepartmentRepository departmentRepository;
+public class LoginImpl implements LoginService {
 
-    public LoginImpl(StudentRepository studentRepository, DepartmentRepository departmentRepository) {
-        this.studentRepository = studentRepository;
-        this.departmentRepository = departmentRepository;
-    }
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     public boolean login(LoginVo user) {
         Optional<Student> optional1 = studentRepository.findById(user.getId());

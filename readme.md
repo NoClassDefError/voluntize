@@ -83,6 +83,11 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 在点击*找回密码邮件*中的超链接之后，或者在*修改密码页面*输入原来密码之后，
 就可以直接修改密码。
 
+### web作用域限定
+**session作用域**
+
+UserId 学生或部门的id
+
 ### 前后端通信设计
 
 
@@ -93,3 +98,9 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 ### 数据库长文本存储，mysql引擎
 ### spring service层分开实现的方法
 类适配器模式与对象适配器模式
+
+抽象类的注入与实现 https://blog.csdn.net/evilcry2012/article/details/78927479
+
+一个接口或抽象类是难以分开成多个方法分别实现的，将其分成多个接口
+并继承同一个接口也不行。
+

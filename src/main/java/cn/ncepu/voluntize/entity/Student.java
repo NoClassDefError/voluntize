@@ -3,7 +3,6 @@ package cn.ncepu.voluntize.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Data
-public class Student {
+public class Student implements Cloneable {
 
     /**
      * 学号，唯一非空，外部导入，学生表主键
@@ -51,7 +50,7 @@ public class Student {
     private String grade;
 
     @Basic
-    @Column(name = "phoneNum", length = 11)
+    @Column(name = "phone_num", length = 11)
     private String phoneNum;
 
     @Basic
@@ -80,4 +79,15 @@ public class Student {
      */
     @OneToMany(mappedBy = "student", targetEntity = Image.class)
     private List<Image> profiles;
+
+    @Override
+    public Object clone() {
+        Student stu = null;
+        try {
+            stu = (Student) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return stu;
+    }
 }
