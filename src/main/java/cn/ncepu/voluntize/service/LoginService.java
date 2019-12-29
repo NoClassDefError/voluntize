@@ -7,7 +7,7 @@ public interface LoginService extends UserService {
      * 登录服务
      *
      * @param user LoginVo
-     * @return 登录是否成功
+     * @return -1-登录失败 0-管理员 1-学生 2-部门
      */
-    boolean login(LoginVo user);
+    int login(LoginVo user);
 }

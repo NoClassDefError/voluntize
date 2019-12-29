@@ -18,9 +18,12 @@ public class LoginImpl implements LoginService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public boolean login(LoginVo user) {
+    public int login(LoginVo user) {
+        //判断是否是管理员
+        if (user.getId().equals("admin") && user.getPassword().equals("adIl1Fun*&23hu)283")) return 0;
+        //判断是否是学生
         Optional<Student> optional1 = studentRepository.findById(user.getId());
-        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())) return true;
-        return departmentRepository.findById(user.getId()).filter(department -> user.getPassword().equals(department.getPassword())).isPresent();
+        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())) return 1;
+        return departmentRepository.findById(user.getId()).filter(department -> user.getPassword().equals(department.getPassword())).isPresent() ? 2 : 0;
     }
 }

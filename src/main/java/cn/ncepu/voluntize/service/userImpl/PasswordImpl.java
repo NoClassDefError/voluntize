@@ -49,8 +49,7 @@ public class PasswordImpl implements PasswordService {
     }
 
     @Override
-    public boolean sendEmail() {
-        String id = (String) session.getAttribute("UserId");
+    public boolean sendEmail(String id) {
         Optional<Student> optional = studentRepository.findById(id);
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (optional.isPresent()) {
@@ -66,7 +65,7 @@ public class PasswordImpl implements PasswordService {
     private void send(String emailAddress, String password) {
         try {
             String verifyAddress = Inet4Address.getLocalHost().getHostAddress() + ":"
-                    + environment.getProperty("local.server.port") + "/volunteer/verify?password="
+                    + environment.getProperty("local.server.port") + "/volunteer/password/verify?password="
                     + password;
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailHost);
@@ -85,7 +84,7 @@ public class PasswordImpl implements PasswordService {
             return decrypt(password);
         } catch (Exception e) {
             e.printStackTrace();
-            return "decrypt failed";
+            return null;
         }
     }
 

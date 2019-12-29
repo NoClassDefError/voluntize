@@ -17,7 +17,7 @@ public interface PasswordService extends UserService {
      * 将用户身份加密成一段字符串，写在邮件中的超链接的get请求中
      * @return 发送是否成功
      */
-    boolean sendEmail();
+    boolean sendEmail(String id);
 
     /**
      * 要求通过这个唯一的password，确认是谁
