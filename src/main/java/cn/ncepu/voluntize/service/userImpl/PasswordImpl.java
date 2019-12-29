@@ -8,17 +8,14 @@ import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.util.DesUtils;
 import cn.ncepu.voluntize.util.RandomUtil;
 import cn.ncepu.voluntize.vo.LoginVo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,7 +31,7 @@ public class PasswordImpl implements PasswordService {
     @Autowired
     private HttpSession session;
     @Autowired
-    private Environment environment;
+    private ServletContext context;
 
     @Value("${spring.mail.username}")
     private String mailHost;
@@ -63,19 +60,14 @@ public class PasswordImpl implements PasswordService {
     }
 
     private void send(String emailAddress, String password) {
-        try {
-            String verifyAddress = Inet4Address.getLocalHost().getHostAddress() + ":"
-                    + environment.getProperty("local.server.port") + "/volunteer/password/verify?password="
-                    + password;
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(mailHost);
-            message.setTo(emailAddress);
-            message.setSubject("华北电力大学志愿服务系统：密码找回验证邮件");
-            message.setText("请在5分钟内点击修改密码：\n" + verifyAddress);
-            mailSender.send(message);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        String verifyAddress = context.getAttribute("path") + "/password/verify?password="
+                + password;
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(mailHost);
+        message.setTo(emailAddress);
+        message.setSubject("华北电力大学志愿服务系统：密码找回验证邮件");
+        message.setText("请在5分钟内点击修改密码：\n" + verifyAddress);
+        mailSender.send(message);
     }
 
     @Override

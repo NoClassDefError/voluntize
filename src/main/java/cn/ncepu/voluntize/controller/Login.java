@@ -27,13 +27,13 @@ public class Login extends BaseController {
     public String login(LoginVo loginVo) {
         switch (service.login(loginVo)) {
             case 0:
-                session.setAttribute("userId", loginVo.getId());
+                session.setAttribute("UserId", loginVo.getId());
                 return "adminIndex";
             case 1:
-                session.setAttribute("userId", loginVo.getId());
+                session.setAttribute("UserId", loginVo.getId());
                 return "studentIndex";
             case 2:
-                session.setAttribute("userId", loginVo.getId());
+                session.setAttribute("UserId", loginVo.getId());
                 return "departmentIndex";
             default:
                 return "loginFailed";
@@ -46,7 +46,7 @@ public class Login extends BaseController {
      */
     @RequestMapping(value = "/logout",method = RequestMethod.POST)
     public String logout(){
-        session.removeAttribute("userId");
+        session.removeAttribute("UserId");
         return "index";
     }
 }

@@ -1,5 +1,7 @@
 package cn.ncepu.voluntize.controller;
 
+import cn.ncepu.voluntize.util.HttpResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,14 +18,18 @@ public class UploadImage extends BaseController {
     @Value("${application.uploadDir}")
     private String uploadDir;
 
+    @Autowired
+    ServletContext context;
+
     /**
      * 图片上传接口
+     *
      * @param file spring mvc中的文件上传格式：MultipartFile
      * @return "isEmpty" "uploadFailed" "success"
      */
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
-    public String uploadImage(@RequestParam(value = "file") MultipartFile file) {
-        if (file.isEmpty()) return "isEmpty";
+    public HttpResult uploadImage(@RequestParam(value = "file") MultipartFile file) {
+        if (file.isEmpty()) return new HttpResult("uploadImage:isEmpty");
         // 获取文件名
         String fileName = file.getOriginalFilename();
         logger.info("上传的文件名为：" + fileName);
@@ -39,10 +46,11 @@ public class UploadImage extends BaseController {
         try {
             file.transferTo(dest);
             logger.info("上传成功后的文件路径是：" + filePath + fileName);
-            return "success";
+            return new HttpResult("uploadImage:success", "url:" + context.getAttribute("path")
+                    + "/image/" + fileName);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
-        return "upload failed";
+        return new HttpResult("uploadImage:error");
     }
 }
