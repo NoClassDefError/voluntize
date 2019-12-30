@@ -7,7 +7,7 @@ import cn.ncepu.voluntize.repository.StudentRepository;
 import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.util.DesUtils;
 import cn.ncepu.voluntize.util.RandomUtil;
-import cn.ncepu.voluntize.vo.LoginVo;
+import cn.ncepu.voluntize.requestVo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

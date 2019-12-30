@@ -1,10 +1,11 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.service.PasswordService;
-import cn.ncepu.voluntize.util.HttpResult;
+import cn.ncepu.voluntize.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,6 +37,7 @@ public class ChangePassword extends BaseController {
      * @return 成功或失败json字符串
      */
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+    @ResponseBody
     public HttpResult changePassword(String oldPassword,String password) {
         if(!passwordService.verifyByOrigin(oldPassword))
             return new HttpResult("changePassword:old password incorrect");
@@ -50,6 +52,7 @@ public class ChangePassword extends BaseController {
      * @return 成功或失败json字符串
      */
     @RequestMapping(value = "/sendEmail",method = RequestMethod.POST)
+    @ResponseBody
     public HttpResult sendMail(String id){
         if (passwordService.sendEmail(id))
             return new HttpResult("sendEmail:success");

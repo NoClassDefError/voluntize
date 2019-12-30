@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.service;
 
-import cn.ncepu.voluntize.vo.LoginVo;
+import cn.ncepu.voluntize.requestVo.LoginVo;
+import cn.ncepu.voluntize.responseVo.UserInfoVo;
 
 public interface LoginService extends UserService {
     /**
@@ -9,5 +10,5 @@ public interface LoginService extends UserService {
      * @param user LoginVo
      * @return -1-登录失败 0-管理员 1-学生 2-部门
      */
-    int login(LoginVo user);
+    UserInfoVo login(LoginVo user);
 }

@@ -1,4 +1,4 @@
-package cn.ncepu.voluntize.vo;
+package cn.ncepu.voluntize.requestVo;
 
 import lombok.Data;
 

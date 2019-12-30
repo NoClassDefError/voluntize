@@ -1,6 +1,9 @@
 # 华北电力大学志愿活动系统
 ## 软件概要设计
 本软件使用前后端分离的设计模式。不使用jsp，使用html网页中的js脚本进行前后端通信。
+    
+    在前后端分离模式下，如何解决模型与页面的绑定问题？
+    后台除了主页以外，不再负责控制页面的跳转与返回。页面的跳转皆有前端js完成。
 
 本软件使用maven管理依赖，tomcat作为web服务器。
 
@@ -12,7 +15,7 @@
 ## 软件详细设计
 ### 实体类设计
 
-**志愿活动**
+#### 志愿活动
 
 志愿活动生命周期：
 <ul>
@@ -31,7 +34,7 @@
 设计ActivityStation中有多个ActivityPeriod，即一个岗位中分多个时间段，最终按
 时间段报名。
 
-**学生与志愿活动的关系**
+#### 学生与志愿活动的关系
 
 多个学生参加多个志愿活动，这是多对多关系，而且这个多对多关系是多层的，蕴含了
 例如志愿报名结果，志愿成绩等信息。学生参加志愿活动分为如下流程：
@@ -44,7 +47,7 @@
 
 因此新建一个关联表Record即志愿记录类来解决这个问题。
 
-**多级评论**
+#### 多级评论
 
 允许添加评论的评论，因此评论是一个树状结构，只用如下方法处理树状结构的储存问题。
 
@@ -60,25 +63,25 @@
     private List<Comment> sonComment;
 ```
 
-**图片实体类的多用性** 
+#### 图片实体类的多用性 
 
 Image实体类用于储存图片，可以是Student或Department的头像，也可以是评论与
 活动介绍所带内容。该类与多个实体类保持多对一关系，减小了多个图片表造成的冗余。
 
-**数据表结构**
+#### 数据表结构
 
 ![img](./readmeSrc/dbo.png)
 
 ### 业务逻辑设计
-**登录** 
+#### 登录 
 
 设计UserVo类，用于接收用户填写信息。在业务逻辑中自动判断用户身份，跳转向不同主页。
 
-**账户信息修改**
+#### 账户信息修改
 
 由于密码修改的特殊逻辑，这里不修改密码，只修改其他信息。
  
-**密码修改**
+#### 密码修改
 
 在点击*找回密码邮件*中的超链接之后，或者在*修改密码页面*输入原来密码之后，
 就可以直接修改密码。
@@ -87,18 +90,88 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 从而修改密码。
 
 ### web作用域限定
-**session作用域**
+#### session作用域
 
 UserId 学生或部门的id
 
-**applicationContext作用域**
+#### applicationContext作用域
 
 path 服务器地址
 
 ### 前后端通信设计
 
+#### 登录
+http://192.168.43.1:8888/volunteer/login
 
+发送 post application/json 
 
+    id 用户名
+    password 密码
+    示例：{"id":"12345","password":"12345"}
+返回 UserInfo转成的json
+
+前端应根据其中的userCategory属性跳转至合适的页面：-1-登录失败 0-管理员 1-学生 2-部门
+```
+    {
+        "userCategory":1,
+        "student":{"studentNum":"120171020201",
+        ... 学生其他信息
+        },"department":null
+    }
+```
+
+#### 登出
+http://192.168.43.1:8888/volunteer/logout
+
+发送
+    
+    无
+返回
+
+    主页 index.html
+
+#### 修改学生信息
+http://192.168.43.1:8888/volunteer/updateStudent
+
+发送post application/json
+
+    name 姓名
+    phoneNum 电话号码
+    email 邮箱
+    profiles json数组，图片对象，包含name,url两个属性
+    示例：{"email":"12345","name":"12","phoneNum":"1234","profiles":[{"name":"1234","url":"123456"}]}
+
+注意，对于新的图片，要通过图片上传接口上传并得到图片的url，再加入profiles的
+json数组中；若未上传新的图片，则保持原信息不变即可。
+
+返回 json
+
+    成功{"updateResult":"success"}
+    失败{"updateResult":"failed"}
+    
+#### 修改部门信息
+http://192.168.43.1:8888/volunteer/updateDepartment
+
+发送post application/json
+
+    phoneNum 
+    manager
+    email
+    profiles 与上个接口相同
+    
+#### 图片上传接口
+
+http://192.168.43.1:8888/volunteer/uploadImage
+
+发送 post multipart/form-data
+
+    file 文件本身
+
+返回 json
+
+    {uploadImage:success,url:图片的url}
+    {uploadImage:error}
+    
 ## 软件调试
 
 ### jpa uuid主键生成策略
@@ -111,3 +184,12 @@ path 服务器地址
 一个接口或抽象类是难以分开成多个方法分别实现的，将其分成多个接口
 并继承同一个接口也不行。
 
+### RequestBody注解与ResponseBody注解
+
+如果返回的不是页面，要添加ResponseBody注解。
+
+对于RequestBody注解：
+application/x-www-form-urlencoded，可选；
+multipart/form-data, 不能处理（即使用@RequestBody不能处理这种格式的数据）；
+其他格式，必须（其他格式包括application/json, application/xml等。
+这些格式的数据，必须使用@RequestBody来处理）；

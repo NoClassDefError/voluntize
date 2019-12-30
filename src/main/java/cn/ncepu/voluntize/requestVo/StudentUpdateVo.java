@@ -1,10 +1,8 @@
-package cn.ncepu.voluntize.vo;
+package cn.ncepu.voluntize.requestVo;
 
-import cn.ncepu.voluntize.entity.Image;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Student修改信息时，为了防止信息被外部仿制，

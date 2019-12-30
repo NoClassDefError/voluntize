@@ -1,7 +1,7 @@
 package cn.ncepu.voluntize.service;
 
-import cn.ncepu.voluntize.vo.DepartmentUpdateVo;
-import cn.ncepu.voluntize.vo.StudentUpdateVo;
+import cn.ncepu.voluntize.requestVo.DepartmentUpdateVo;
+import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
 
 public interface UpdateUserService extends UserService {
     /**

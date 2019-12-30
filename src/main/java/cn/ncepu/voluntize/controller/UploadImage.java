@@ -1,12 +1,9 @@
 package cn.ncepu.voluntize.controller;
 
-import cn.ncepu.voluntize.util.HttpResult;
+import cn.ncepu.voluntize.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -28,6 +25,7 @@ public class UploadImage extends BaseController {
      * @return "isEmpty" "uploadFailed" "success"
      */
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+    @ResponseBody
     public HttpResult uploadImage(@RequestParam(value = "file") MultipartFile file) {
         if (file.isEmpty()) return new HttpResult("uploadImage:isEmpty");
         // 获取文件名

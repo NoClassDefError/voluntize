@@ -6,9 +6,9 @@ import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.DepartmentRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
 import cn.ncepu.voluntize.service.UpdateUserService;
-import cn.ncepu.voluntize.vo.DepartmentUpdateVo;
-import cn.ncepu.voluntize.vo.ImageVo;
-import cn.ncepu.voluntize.vo.StudentUpdateVo;
+import cn.ncepu.voluntize.requestVo.DepartmentUpdateVo;
+import cn.ncepu.voluntize.requestVo.ImageVo;
+import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
