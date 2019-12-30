@@ -88,11 +88,20 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 
 找回密码邮件中的超链接应包含加密的用户信息，在跳转之后进行解码判断是什么用户， 
 从而修改密码。
+#### 添加志愿活动
+
+志愿活动的一次性添加
+
+志愿活动按照ActivityPeriod进行报名，但增删改均以Activity为大类。而志愿活动的
+查询既可以通过关联查询获得。
+
+志愿活动的修改与删除
 
 ### web作用域限定
 #### session作用域
 
 UserId 学生或部门的id
+UserCategory "Student" "Department" "Admin"
 
 #### applicationContext作用域
 

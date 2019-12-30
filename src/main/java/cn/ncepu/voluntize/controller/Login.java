@@ -30,6 +30,18 @@ public class Login extends BaseController {
     public String login(@RequestBody LoginVo loginVo) {
         UserInfoVo userInfoVo = service.login(loginVo);
         session.setAttribute("UserId", loginVo.getId());
+        String userCategory = "";
+        switch (userInfoVo.userCategory) {
+            case 0:
+                userCategory = "Admin";
+                break;
+            case 1:
+                userCategory = "Student";
+                break;
+            case 2:
+                userCategory = "Department";
+        }
+        session.setAttribute("UserCategory", userCategory);
         return JSON.toJSONString(userInfoVo);
     }
 

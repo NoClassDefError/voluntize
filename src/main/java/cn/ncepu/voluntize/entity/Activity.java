@@ -109,7 +109,7 @@ public class Activity {
      * </ul>
      * 共5个阶段
      */
-    enum ActivityStatus {
+    public enum ActivityStatus {
         CONFIRMING, SEND, APPLY, STARTED, FINISHED
     }
 }

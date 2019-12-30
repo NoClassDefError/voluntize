@@ -42,6 +42,12 @@ public class Record {
     private ActivityPeriod period;
 
     /**
+     * 学生报名时的备注信息
+     */
+    @Basic
+    @Column(name = "info")
+    private String info;
+    /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
@@ -88,7 +94,7 @@ public class Record {
         this.statusId = statusId;
     }
 
-    enum RecordStatus {
+    public enum RecordStatus {
         APPLIED, PASSED, EVALUATED
     }
 }
