@@ -25,7 +25,7 @@ public class ChangePassword extends BaseController {
         String id = passwordService.checkEmail(password);
         if (id != null) {
             session.setAttribute("userId", id);
-            return "verify";
+            return "changePassword";
         }
         return "verifyFailed";
     }

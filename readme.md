@@ -159,8 +159,7 @@ http://192.168.43.1:8888/volunteer/updateDepartment
     email
     profiles 与上个接口相同
     
-#### 图片上传接口
-
+#### 图片上传
 http://192.168.43.1:8888/volunteer/uploadImage
 
 发送 post multipart/form-data
@@ -171,7 +170,47 @@ http://192.168.43.1:8888/volunteer/uploadImage
 
     {uploadImage:success,url:图片的url}
     {uploadImage:error}
+
+#### 修改密码
+http://192.168.43.1:8888/volunteer/changePassword
+
+发送 post application/x-www-form-urlencoded
+
+    oldPassword 老密码
+    password 新密码
+
+返回 json
+
+    {changePassword:success}
+    {changePassword:error}
+
+#### 发送验证邮件
+http://192.168.43.1:8888/volunteer/sendEmail
+
+发送 post application/x-www-form-urlencoded
+
+    id 用户id
     
+返回 json
+
+    {sendEmail:success}
+    {sendEmail:error}
+
+### 前端页面设计
+#### 主页
+index.html
+#### 学生主页
+studentIndex.html 
+
+学生信息修改子页面
+#### 部门主页
+departmentIndex.html
+
+部门信息修改子页面
+#### 修改密码页面
+changePassword.html
+#### 邮件验证错误页面
+verifyFailed.html
 ## 软件调试
 
 ### jpa uuid主键生成策略
