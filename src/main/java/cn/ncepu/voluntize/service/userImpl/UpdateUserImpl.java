@@ -17,14 +17,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class UpdateUserImpl implements UpdateUserService {
-
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
-    @Autowired
-    private HttpSession session;
+public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
 
     /**
      * 其中不仅要修改学生进本信息，还要修改图片

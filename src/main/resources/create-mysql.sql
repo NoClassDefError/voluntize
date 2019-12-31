@@ -1,29 +1,3 @@
-alter table activity
-    drop foreign key FKsf1w5vswlmu7hq5cx8wmxlub3;
-alter table activity_period
-    drop foreign key FKptg4vppo98idc4h5gawmudg37;
-alter table activity_station
-    drop foreign key FK46dcjwcjpjkq62lnjbony635i;
-alter table comment
-    drop foreign key FKraqdqfcg5j5daco4ma3iv2v8l;
-alter table comment
-    drop foreign key FKb8bhfe2og2c5v52l5w7lb1y50;
-alter table comment
-    drop foreign key FKk5dgrgaxq2cnqqo788r2gysxo;
-alter table comment
-    drop foreign key FKqeaqu3dhs9wmfy0y0j148k9eg;
-alter table image
-    drop foreign key FKcq928mk18houvk5hsy7ske3ca;
-alter table image
-    drop foreign key FK4rbv3fafist78pxjoly1b9e5j;
-alter table image
-    drop foreign key FKhiuk4p68oep9m3yef6e1ish5x;
-alter table image
-    drop foreign key FKklkraduqlebpw7otuyx8sepnj;
-alter table record
-    drop foreign key FKee83lyereiq1c9l5ao65aedkc;
-alter table record
-    drop foreign key FK7kj4cl6ibmwih6l0wt7qaj1js;
 drop table if exists activity;
 drop table if exists activity_period;
 drop table if exists activity_station;
@@ -75,6 +49,7 @@ create table comment
 create table department
 (
     id        varchar(255) not null,
+    email     varchar(50),
     manager   varchar(255),
     name      varchar(255),
     password  varchar(30),
@@ -96,6 +71,7 @@ create table record
 (
     id          varchar(255) not null,
     audit_level integer,
+    info        varchar(255),
     is_passed   bit,
     status_id   integer,
     the_period  varchar(255),

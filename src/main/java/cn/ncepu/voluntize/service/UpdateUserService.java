@@ -3,7 +3,7 @@ package cn.ncepu.voluntize.service;
 import cn.ncepu.voluntize.requestVo.DepartmentUpdateVo;
 import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
 
-public interface UpdateUserService extends UserService {
+public interface UpdateUserService {
     /**
      * 修改学生账户信息（不包括密码）
      * @param student StudentUpdateVo

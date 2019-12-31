@@ -1,5 +1,6 @@
 package cn.ncepu.voluntize.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -59,6 +60,7 @@ public class ActivityPeriod {
     /**
      * 志愿记录 如有学生报名则增加一条志愿记录
      */
+    @JSONField(serialize = false)
     @OneToMany(targetEntity = Record.class, mappedBy = "period")
     private List<Record> records;
 }

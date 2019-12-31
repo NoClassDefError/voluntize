@@ -5,7 +5,7 @@ import cn.ncepu.voluntize.entity.Student;
 /**
  *
  */
-public interface PasswordService extends UserService {
+public interface PasswordService {
     /**
      * 判断密码是否正确
      * @param password 密码

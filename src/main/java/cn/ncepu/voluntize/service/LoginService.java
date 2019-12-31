@@ -3,7 +3,7 @@ package cn.ncepu.voluntize.service;
 import cn.ncepu.voluntize.requestVo.LoginVo;
 import cn.ncepu.voluntize.responseVo.UserInfoVo;
 
-public interface LoginService extends UserService {
+public interface LoginService {
     /**
      * 登录服务
      *

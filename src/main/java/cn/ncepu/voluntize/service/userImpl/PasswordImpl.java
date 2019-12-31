@@ -2,12 +2,10 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
-import cn.ncepu.voluntize.repository.DepartmentRepository;
-import cn.ncepu.voluntize.repository.StudentRepository;
+import cn.ncepu.voluntize.requestVo.LoginVo;
 import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.util.DesUtils;
 import cn.ncepu.voluntize.util.RandomUtil;
-import cn.ncepu.voluntize.requestVo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,21 +13,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @Service
-public class PasswordImpl implements PasswordService {
+public class PasswordImpl extends BaseUserImpl implements PasswordService {
     @Autowired
     private JavaMailSender mailSender;
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
-    @Autowired
-    private HttpSession session;
     @Autowired
     private ServletContext context;
 

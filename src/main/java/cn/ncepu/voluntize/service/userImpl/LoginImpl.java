@@ -2,23 +2,15 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
-import cn.ncepu.voluntize.repository.DepartmentRepository;
-import cn.ncepu.voluntize.repository.StudentRepository;
 import cn.ncepu.voluntize.requestVo.LoginVo;
 import cn.ncepu.voluntize.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class LoginImpl implements LoginService {
-
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
+public class LoginImpl extends BaseUserImpl implements LoginService {
 
     public UserInfoVo login(LoginVo user) {
         //判断是否是管理员
