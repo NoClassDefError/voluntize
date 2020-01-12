@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -35,13 +36,16 @@ public class ActivityPeriod {
     @JoinColumn(name = "parent", referencedColumnName = "id")
     private ActivityStation parent;
 
+    /**
+     * 对时间和时间段。。。。！
+     */
     @Basic
-    @Column(name = "start_time")
-    private Time startTime;
+    @Column(name = "start_time", columnDefinition = "timestamp default current_timestamp")
+    private Timestamp startTime;
 
     @Basic
-    @Column(name = "end_time")
-    private Time endTime;
+    @Column(name = "end_time", columnDefinition = "timestamp default current_timestamp")
+    private Timestamp endTime;
 
     /**
      * 等效志愿时长

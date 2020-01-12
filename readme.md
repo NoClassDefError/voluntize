@@ -264,3 +264,21 @@ https://www.cnblogs.com/kylinlin/p/5258719.html
 mysqldump导出数据库，或者直接复制数据文件）
 
 5．配置从服务器要连接的主服务器的IP地址和登陆授权，二进制日志文件名和位置
+
+## 服务器运维记录
+
+### 2020.1.11 
+#1 13：41 安装了jdk，在C:\Program Files\Java，已配置环境变量。
+#2 14：38 安装了mysql server，在C:\Program Files\MySQL，用户名root，密码123456，端口3306。
+#3 14：38 创建了项目文件夹，在桌面，voluntize
+#4 21：02 将项目文件编译后加入服务器，在voluntize\voluntize_jar，项目启动命令：java -jar voluntize.jar
+#5 21：06 为了能解压jar包，安装winrar，在C:\Program Files\WinRAR
+#6 21：21 远程连接mysql失败，但本地客户端可以连接。经检验，服务器可以ping通，但telnet 3306端口无响应，猜测是防火墙问题
+#7 21：23 mysql 建库，create schema voluntize;
+
+### 2020.1.12
+#8 00：18 修复bug: 项目软件jdbc连接不上mysql；java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES),原因：直接修改jar包中的properties内容时，空格丢失。
+#9 00：32 项目部署成功，使用/test接口远程测试其相应，访问无响应，猜测是防火墙问题
+#10 00：40 试图将springboot项目注册成为windows后台服务，准备编写windows服务安装程序
+#11 01：24 配置服务器防火墙，发现防火墙早已关闭，修改数据库root用户权限：update user set host='%' where user='root';发现仍然不能远程连接，资料显示需要在阿里云服务器控制台中设置端口规则
+

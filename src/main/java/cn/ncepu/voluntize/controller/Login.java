@@ -42,6 +42,7 @@ public class Login extends BaseController {
                 userCategory = "Department";
         }
         session.setAttribute("UserCategory", userCategory);
+        logger.info(userInfoVo.toString());
         return JSON.toJSONString(userInfoVo);
     }
 
@@ -53,11 +54,12 @@ public class Login extends BaseController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public String logout() {
         session.removeAttribute("UserId");
+        logger.info("logout");
         return "index";
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public void updateStudent(@RequestBody StudentUpdateVo studentUpdateVo) {
-        System.out.println(studentUpdateVo);
+        logger.info(studentUpdateVo.toString());
     }
 }

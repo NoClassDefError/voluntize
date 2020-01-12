@@ -34,6 +34,9 @@ public class ActivityStation {
     @Column(name = "description")
     private String description;
 
+    /**
+     * 公益劳动地点
+     */
     @Basic
     @Column(name = "name")
     private String location;

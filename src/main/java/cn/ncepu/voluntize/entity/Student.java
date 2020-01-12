@@ -61,7 +61,7 @@ public class Student implements Cloneable {
      * 志愿总时长
      */
     @Basic
-    @Column(name = "total_duration")
+    @Column(name = "total_duration", columnDefinition = "int default 0")
     private int totalDuration;
 
     /**

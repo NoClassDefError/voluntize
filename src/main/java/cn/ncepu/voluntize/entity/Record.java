@@ -51,7 +51,7 @@ public class Record {
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id")
+    @Column(name = "status_id",columnDefinition = "int default 0")
     private int statusId;
 
     /**
@@ -73,6 +73,24 @@ public class Record {
     @Basic
     @Column(name = "audit_level")
     private int auditLevel;
+
+    /**
+     * 如果不通过，必填理由
+     */
+    @Basic
+    @Column(name = "evaluation")
+    private String evaluation;
+
+    /**
+     * 学生反馈评星 （0，1，2，3，4，5）
+     */
+    @Basic
+    @Column(name = "stars",columnDefinition = "int default 0")
+    private int stars;
+
+    @Basic
+    @Column(name = "comments")
+    private String comment;
 
     public void setStatus(RecordStatus status) {
         this.statusId = status.ordinal();

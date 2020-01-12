@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -53,8 +54,8 @@ public class Comment {
      * 发布时间
      */
     @Basic
-    @Column(name = "time")
-    private Time time;
+    @Column(name = "time", columnDefinition = "timestamp default current_timestamp")
+    private Timestamp time;
 
     /**
      * 评论图片

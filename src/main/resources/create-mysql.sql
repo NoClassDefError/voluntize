@@ -117,3 +117,5 @@ alter table record
     add constraint FKee83lyereiq1c9l5ao65aedkc foreign key (the_period) references activity_period (id);
 alter table record
     add constraint FK7kj4cl6ibmwih6l0wt7qaj1js foreign key (volunteer) references student (id);
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;

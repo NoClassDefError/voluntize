@@ -39,7 +39,7 @@ public class Activity {
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id")
+    @Column(name = "status_id",columnDefinition = "int default 0")
     private int statusId;
 
     @Basic
