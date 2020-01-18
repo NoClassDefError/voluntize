@@ -17,8 +17,8 @@ import java.util.Scanner;
 
 public class ControllerTestClient {
 
-        private static String url = "http://39.106.92.15:8888/volunteer/";
-//    private static String url = "http://localhost:8888/volunteer/";
+//        private static String url = "http://:8888/volunteer/";
+    private static String url = "http://localhost:8888/volunteer/";
 
     public static void main(String[] args) throws IOException {
         System.out.println("Press enter to send an request.");

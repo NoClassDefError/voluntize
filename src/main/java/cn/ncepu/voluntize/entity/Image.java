@@ -27,22 +27,22 @@ public class Image {
     private String url;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "varchar(255) comment '图片描述，即html image标签的alt属性'")
     private String name;
 
     @ManyToOne(targetEntity = Student.class)
-    @JoinColumn(name="student", referencedColumnName = "id")
+    @JoinColumn(name = "student", referencedColumnName = "id")
     private Student student;
 
     @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name="activity", referencedColumnName = "id")
+    @JoinColumn(name = "activity", referencedColumnName = "id")
     private Activity activity;
 
     @ManyToOne(targetEntity = Department.class)
-    @JoinColumn(name="department", referencedColumnName = "id")
+    @JoinColumn(name = "department", referencedColumnName = "id")
     private Department department;
 
     @ManyToOne(targetEntity = Comment.class)
-    @JoinColumn(name="comment", referencedColumnName = "id")
+    @JoinColumn(name = "comment", referencedColumnName = "id")
     private Comment comment;
 }

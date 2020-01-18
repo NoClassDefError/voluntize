@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name="activity_station")
+@Table(name = "activity_station")
 public class ActivityStation {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -31,21 +31,14 @@ public class ActivityStation {
     private String name;
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "text")
     private String description;
-
-    /**
-     * 公益劳动地点
-     */
-    @Basic
-    @Column(name = "name")
-    private String location;
 
     /**
      * 使用一个字符串储存多个要求，中间使用';'隔开
      */
     @Basic
-    @Column(name = "requirements")
+    @Column(name = "requirements", columnDefinition = "text")
     private String requirements;
 
     /**

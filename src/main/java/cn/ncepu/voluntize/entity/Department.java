@@ -15,27 +15,29 @@ import java.util.List;
 @Entity
 public class Department {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "varchar(255) comment '部门账号'")
     private String id;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "varchar(255) comment '部门名'")
     private String name;
 
     @Basic
-    @Column(name = "password", length = 30)
+    @Column(name = "password", length = 30, nullable = false, columnDefinition = " varchar(30) default '123456' comment '初始密码，默认是123456'")
     private String password;
 
     @Basic
-    @Column(name = "phone_num", length = 11)
+    @Column(name = "phone_num", length = 11, columnDefinition = "varchar(11) comment '该部门负责管理公益劳动相关事宜的老师的手机号\n" +
+            "也可以是部门电话号'")
     private String phoneNum;
 
     @Basic
-    @Column(name = "email", length = 50)
+    @Column(name = "email", columnDefinition = "varchar(255) comment '该部门管理者的邮箱\n" +
+            "用于密码找回'")
     private String email;
 
     @Basic
-    @Column(name = "manager")
+    @Column(name = "manager", columnDefinition = "varchar(255) comment '管理者姓名'")
     private String manager;
 
     /**

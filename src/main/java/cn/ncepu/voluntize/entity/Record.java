@@ -20,6 +20,7 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@Table(name="record")
 public class Record {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -51,7 +52,8 @@ public class Record {
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id",columnDefinition = "int default 0")
+    @Column(name = "status_id", nullable = false, columnDefinition = "int default 0 comment '标志任一公益劳动项目所处状态\n" +
+            "'")
     private int statusId;
 
     /**
@@ -71,25 +73,35 @@ public class Record {
      * 志愿成绩 0 不通过 1 通过 2 良好 3 优秀
      */
     @Basic
-    @Column(name = "audit_level")
+    @Column(name = "audit_level", columnDefinition = " int comment '公益劳动成绩 ：\n" +
+            "0  不通过，若不通过，给评级部门必须填写不通过的理由，见evaluation；\n" +
+            "1  通过； \n" +
+            "2  良好； \n" +
+            "3  优秀。'")
     private int auditLevel;
 
     /**
      * 如果不通过，必填理由
      */
     @Basic
-    @Column(name = "evaluation")
+    @Column(name = "evaluation", columnDefinition = "varchar(255) comment '0  不通过，见audit_level；\n" +
+            "若不通过，给评级部门必须填写不通过的理由（不超过255字）；'")
     private String evaluation;
 
     /**
      * 学生反馈评星 （0，1，2，3，4，5）
      */
     @Basic
-    @Column(name = "stars",columnDefinition = "int default 0")
+    @Column(name = "stars", nullable = false, columnDefinition = "int default 0 comment '公益劳动结束后，\n" +
+            "学生反馈评星 \n" +
+            "（0，1，2，3，4，5）\n" +
+            "默认未评星（0）'")
     private int stars;
 
     @Basic
-    @Column(name = "comments")
+    @Column(name = "comments", columnDefinition = "text comment '公益劳动结束后，\n" +
+            "参加该公益劳动的学生对所参加的活动的文字评价,\n" +
+            "初始值置空'")
     private String comment;
 
     public void setStatus(RecordStatus status) {

@@ -4,11 +4,15 @@ import cn.ncepu.voluntize.requestVo.LoginVo;
 import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
 import cn.ncepu.voluntize.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
+import cn.ncepu.voluntize.util.RsaUtils;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.PrivateKey;
 
 @RestController
 public class Login extends BaseController {
@@ -28,6 +32,7 @@ public class Login extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestBody LoginVo loginVo) {
+        loginVo.decrypt((PrivateKey) session.getAttribute("privateKey"));
         UserInfoVo userInfoVo = service.login(loginVo);
         session.setAttribute("UserId", loginVo.getId());
         String userCategory = "";
@@ -61,5 +66,23 @@ public class Login extends BaseController {
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public void updateStudent(@RequestBody StudentUpdateVo studentUpdateVo) {
         logger.info(studentUpdateVo.toString());
+    }
+
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    public String testHttps(String info) {
+        logger.info(info);
+        return info;
+    }
+
+    @RequestMapping(value = "/publicKey", method = RequestMethod.GET)
+    public String getPublicKey() {
+        if (session.getAttribute("publicKey") != null) {
+            return RsaUtils.keyToString((Key) session.getAttribute("publicKey"));
+        } else {
+            KeyPair keyPair = RsaUtils.genKeyPair(1024);
+            session.setAttribute("publicKey", keyPair.getPublic());
+            session.setAttribute("privateKey", keyPair.getPrivate());
+            return RsaUtils.keyToString(keyPair.getPublic());
+        }
     }
 }
