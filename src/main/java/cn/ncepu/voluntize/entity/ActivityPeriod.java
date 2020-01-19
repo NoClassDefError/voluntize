@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,12 +41,23 @@ public class ActivityPeriod {
      * 对时间和时间段。。。。！
      */
     @Basic
-    @Column(name = "start_time", columnDefinition = "timestamp default current_timestamp")
-    private Timestamp startTime;
+    @Column(name = "start_date", columnDefinition = "timestamp default now() comment '本项公益劳动开始的日期'")
+    private Timestamp startDate;
 
     @Basic
-    @Column(name = "end_time", columnDefinition = "timestamp default current_timestamp")
-    private Timestamp endTime;
+    @Column(name = "end_date", columnDefinition = "timestamp default now()")
+    private Timestamp endDate;
+
+    @Basic
+    @Column(name ="period",columnDefinition = "text comment '每天活动时间安排，例如上午8至11，下午2至5'")
+    private String timePeriod;
+
+    /**
+     * 使用一个字符串储存多个要求，中间使用';'隔开
+     */
+    @Basic
+    @Column(name = "requirements", columnDefinition = "text")
+    private String requirements;
 
     /**
      * 等效志愿时长

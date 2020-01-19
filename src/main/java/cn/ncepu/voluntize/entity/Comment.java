@@ -32,7 +32,7 @@ public class Comment {
      * 所属志愿活动，非空
      */
     @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name = "activity", referencedColumnName = "id")
+    @JoinColumn(name = "activity",nullable = false, referencedColumnName = "id")
     private Activity activity;
 
     @ManyToOne(targetEntity = Student.class)

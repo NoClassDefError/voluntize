@@ -39,7 +39,11 @@ public class Activity {
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id",columnDefinition = "int default 0")
+    @Column(name = "status_id", columnDefinition = "int default 0 comment '0 部门已发送等待审核\n" +
+            "1 审核并修改\n" +
+            "2 报名\n" +
+            "3 录用并开始活动\n" +
+            "4 结束并评价'")
     private int statusId;
 
     @Basic
@@ -47,7 +51,11 @@ public class Activity {
     private String name;
 
     @Basic
-    @Column(name = "description",columnDefinition = "text")
+    @Column(name = "semester", columnDefinition = "varchar(255) comment '学期，例如：“2019-2020学年第一学期”'")
+    private String semester;
+
+    @Basic
+    @Column(name = "description", columnDefinition = "text")
     private String description;
 
     @ManyToOne(targetEntity = Department.class)
@@ -57,7 +65,7 @@ public class Activity {
     /**
      * 志愿活动图册
      */
-    @OneToMany(targetEntity = Image.class,mappedBy = "activity")
+    @OneToMany(targetEntity = Image.class, mappedBy = "activity")
     private List<Image> images;
 
     /**

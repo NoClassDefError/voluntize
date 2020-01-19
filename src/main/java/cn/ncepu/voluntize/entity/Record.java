@@ -66,7 +66,7 @@ public class Record {
      * 被允许加入活动，初始值为空
      */
     @Basic
-    @Column(name = "is_passed")
+    @Column(name = "is_passed",columnDefinition = "tinyint(1) null comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
     private boolean isPassed;
 
     /**

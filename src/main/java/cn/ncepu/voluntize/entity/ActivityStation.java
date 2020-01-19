@@ -34,12 +34,13 @@ public class ActivityStation {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    /**
-     * 使用一个字符串储存多个要求，中间使用';'隔开
-     */
     @Basic
-    @Column(name = "requirements", columnDefinition = "text")
-    private String requirements;
+    @Column(name="linkman",columnDefinition = "varchar(255) comment '联系人，每个地点的联系人不一定一样'")
+    private String linkman;
+
+    @Basic
+    @Column(name="phone_num",columnDefinition = "varchar(255) comment '联系人电话'")
+    private String phoneNum;
 
     /**
      * 所属志愿活动

@@ -23,7 +23,7 @@ public class Image {
     private String id;
 
     @Basic
-    @Column(name = "url")
+    @Column(name = "url", columnDefinition = "text")
     private String url;
 
     @Basic
