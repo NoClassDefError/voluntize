@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +20,8 @@ import java.util.List;
  */
 @Data
 @Entity
+@JsonIgnoreProperties({"images", "comments", "stations", "department", "status"})
+@ToString(exclude = {"images", "comments", "stations", "department", "status"})
 public class Activity {
 
     /**

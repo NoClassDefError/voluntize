@@ -2,8 +2,8 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
-import cn.ncepu.voluntize.requestVo.LoginVo;
-import cn.ncepu.voluntize.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
 
     public UserInfoVo login(LoginVo user) {
         //判断是否是管理员
-        if (user.getId().equals("admin") && user.getPassword().equals("adIl1Fun*&23hu)283"))
+        if ("admin".equals(user.getId()) && "admin".equals(user.getPassword()))
             return new UserInfoVo(0, null, null);
         //判断用户身份
         Optional<Student> optional1 = studentRepository.findById(user.getId());

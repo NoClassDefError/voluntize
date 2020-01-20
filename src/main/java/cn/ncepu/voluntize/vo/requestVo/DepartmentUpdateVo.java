@@ -1,5 +1,6 @@
-package cn.ncepu.voluntize.requestVo;
+package cn.ncepu.voluntize.vo.requestVo;
 
+import cn.ncepu.voluntize.vo.ImageVo;
 import lombok.Data;
 
 import java.util.ArrayList;

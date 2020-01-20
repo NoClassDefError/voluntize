@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "activity_station")
+@ToString(exclude = {"parentActivity", "periods"})
+@JsonIgnoreProperties({"parentActivity", "periods"})
 public class ActivityStation {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2

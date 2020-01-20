@@ -1,4 +1,4 @@
-package cn.ncepu.voluntize.responseVo;
+package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
@@ -13,12 +13,12 @@ public class UserInfoVo {
      * -1-登录失败 0-管理员 1-学生 2-部门
      */
     public int userCategory = -1;
-    public Student student = null;
-    public Department department = null;
+    public StudentVo student = null;
+    public DepartmentVo department = null;
 
     public UserInfoVo(int userCategory, Student student, Department department) {
-        this.department = department;
+        this.student = student == null ? null : new StudentVo(student);
+        this.department = department == null ? null : new DepartmentVo(department);
         this.userCategory = userCategory;
-        this.student = student;
     }
 }

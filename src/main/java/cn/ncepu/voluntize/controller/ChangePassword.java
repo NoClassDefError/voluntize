@@ -1,7 +1,7 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.service.PasswordService;
-import cn.ncepu.voluntize.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

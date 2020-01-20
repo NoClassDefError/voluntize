@@ -2,7 +2,7 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
-import cn.ncepu.voluntize.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
 import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.util.DesUtils;
 import cn.ncepu.voluntize.util.RandomUtil;

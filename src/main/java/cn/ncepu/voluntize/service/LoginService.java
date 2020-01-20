@@ -1,7 +1,7 @@
 package cn.ncepu.voluntize.service;
 
-import cn.ncepu.voluntize.requestVo.LoginVo;
-import cn.ncepu.voluntize.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 
 public interface LoginService {
     /**

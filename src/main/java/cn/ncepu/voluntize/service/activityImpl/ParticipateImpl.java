@@ -6,7 +6,7 @@ import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.ActivityPeriodRepository;
 import cn.ncepu.voluntize.repository.RecordRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
-import cn.ncepu.voluntize.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
 import cn.ncepu.voluntize.service.ParticipateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

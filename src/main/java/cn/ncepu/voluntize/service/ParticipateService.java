@@ -1,7 +1,7 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.entity.Record;
-import cn.ncepu.voluntize.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
 
 import java.util.ArrayList;
 import java.util.List;

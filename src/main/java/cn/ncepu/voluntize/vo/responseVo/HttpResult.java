@@ -1,4 +1,4 @@
-package cn.ncepu.voluntize.responseVo;
+package cn.ncepu.voluntize.vo.responseVo;
 
 import java.util.HashMap;
 

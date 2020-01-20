@@ -1,16 +1,14 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.entity.Activity;
-import cn.ncepu.voluntize.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.responseVo.ActivityVo;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.service.ActivityService;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,28 +29,31 @@ public class ActivityManage extends BaseController {
      */
     @RequestMapping(value = "/findIndexActivities", method = RequestMethod.POST)
     @ResponseBody
-    public String findIndexActivities() {
+    public List<ActivityVo> findIndexActivities() {
         List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.SEND);
         activities.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
         activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
-        return JSON.toJSONString(activities);
+        List<ActivityVo> activityVos = new ArrayList<>();
+        for (Activity activity : activities) activityVos.add(new ActivityVo(activity));
+        return activityVos;
     }
 
     @RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
     @ResponseBody
-    public HttpResult saveActivity(Activity activity) {
-        if (session.getAttribute("UserCategory").equals("Admin")) {
+    public HttpResult saveActivity(@RequestBody Activity activity) {
+        if ("Admin".equals(session.getAttribute("UserCategory")) ||
+                "Department".equals(session.getAttribute("UserCategory"))) {
             activityService.createOrUpdate(activity);
             return new HttpResult("saveActivity:success");
         }
-        return new HttpResult("deleteActivity:no authority");
+        return new HttpResult("saveActivity:no authority");
     }
 
     @RequestMapping(value = "/deleteActivity", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult deleteActivity(String id) {
-        if (session.getAttribute("UserCategory").equals("Admin") &&
-                session.getAttribute("UserCategory").equals("Department")) {
+        if ("Admin".equals(session.getAttribute("UserCategory")) ||
+                "Department".equals(session.getAttribute("UserCategory"))) {
             activityService.deleteActivity(id);
             return new HttpResult("deleteActivity:success");
         }
@@ -66,22 +67,17 @@ public class ActivityManage extends BaseController {
      */
     @RequestMapping(value = "/findAllAc", method = RequestMethod.POST)
     @ResponseBody
-    public String findAllActivities() {
-        if (session.getAttribute("UserCategory").equals("Admin")) {
-            List<Activity> activities = activityService.findAll();
-            return JSON.toJSONString(activities);
-        }
+    public List<Activity> findAllActivities() {
+        if ("Admin".equals(session.getAttribute("UserCategory"))) return activityService.findAll();
         return null;
     }
 
     @RequestMapping(value = "/findConfirmingAc", method = RequestMethod.POST)
     @ResponseBody
-    public String findConfirmingActivities() {
-        if (session.getAttribute("UserCategory").equals("Admin") &&
-                session.getAttribute("UserCategory").equals("Department")) {
-            List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.CONFIRMING);
-            return JSON.toJSONString(activities);
-        }
+    public List<Activity> findConfirmingActivities() {
+        if ("Admin".equals(session.getAttribute("UserCategory")) ||
+                "Department".equals(session.getAttribute("UserCategory")))
+            return activityService.findStatus(Activity.ActivityStatus.CONFIRMING);
         return null;
     }
 }

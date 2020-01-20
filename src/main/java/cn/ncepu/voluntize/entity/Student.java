@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,27 +17,29 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "student")
+@ToString(exclude = {"profiles", "comments", "participated"})
+@JsonIgnoreProperties({"profiles", "comments", "participated"})
 public class Student implements Cloneable {
 
     /**
      * 学号，唯一非空，外部导入，学生表主键
      */
     @Id
-    @Column(name = "id", nullable = false,columnDefinition = "varchar(25) comment '学号，主键'")
+    @Column(name = "id", nullable = false, columnDefinition = "varchar(25) comment '学号，主键'")
     private String studentNum;
 
     /**
      * 身份证号
      */
     @Basic
-    @Column(name = "id_num", length = 19,columnDefinition = "varchar(19) null comment '身份证号'")
+    @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null comment '身份证号'")
     private String idNum;
 
     /**
      * 密码，初始密码为身份证后六位
      */
     @Basic
-    @Column(name = "password", length = 30, nullable = false,columnDefinition = " varchar(30) default '123456' comment '初始密码，默认是123456'")
+    @Column(name = "password", length = 30, nullable = false, columnDefinition = " varchar(30) default '123456' comment '初始密码，默认是123456'")
     private String password;
 
     @Basic
@@ -51,7 +55,7 @@ public class Student implements Cloneable {
     private String grade;
 
     @Basic
-    @Column(name = "class",columnDefinition = "varchar(45) comment '班级\n" +
+    @Column(name = "class", columnDefinition = "varchar(45) comment '班级\n" +
             "可从学籍数据库调用'")
     private String classs;
 

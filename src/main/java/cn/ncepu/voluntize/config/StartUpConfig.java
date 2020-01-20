@@ -1,4 +1,4 @@
-package cn.ncepu.voluntize;
+package cn.ncepu.voluntize.config;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import javax.servlet.ServletContext;
 import java.net.Inet4Address;
 
 @Component
-public class StartUp implements CommandLineRunner {
+public class StartUpConfig implements CommandLineRunner {
 
     @Autowired
     private ServletContext context;

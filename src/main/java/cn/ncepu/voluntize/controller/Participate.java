@@ -1,12 +1,14 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.entity.Record;
-import cn.ncepu.voluntize.requestVo.ParticipateVo;
-import cn.ncepu.voluntize.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.service.ParticipateService;
-import com.alibaba.fastjson.JSON;
+import cn.ncepu.voluntize.vo.responseVo.RecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 public class Participate extends BaseController {
@@ -22,11 +24,16 @@ public class Participate extends BaseController {
         else return new HttpResult("participate:error");
     }
 
-    @RequestMapping(value = "/getRecord", method = RequestMethod.POST)
+    /**
+     * 学生在自己主页上获取自己参加的公益来动记录，后期可以增加分页功能
+     */
+    @RequestMapping(value = "/getStuRecord", method = RequestMethod.POST)
     @ResponseBody
-    public String getRecord(String periodId, String status) {
-        return JSON.toJSONString(participateService.getRecord(periodId, Record.RecordStatus.valueOf(status)));
+    public ArrayList<RecordVo> getStuRecord(String periodId, String status) {
+        ArrayList<RecordVo> recordVos = new ArrayList<>();
+        for (Record record : participateService.getRecord(periodId, Record.RecordStatus.valueOf(status)))
+            recordVos.add(new RecordVo(record));
+        return recordVos;
     }
-
 
 }

@@ -40,9 +40,9 @@ public class ActivityImpl implements ActivityService {
 
     @Deprecated
     public void confirm(String id) {
-        if(activityRepository.findById(id).isPresent()){
+        if (activityRepository.findById(id).isPresent()) {
             Activity activity = activityRepository.findById(id).get();
-            if(activity.getStatus().equals(Activity.ActivityStatus.CONFIRMING))
+            if (activity.getStatus().equals(Activity.ActivityStatus.CONFIRMING))
                 activity.setStatus(Activity.ActivityStatus.SEND);
             activityRepository.save(activity);
         }

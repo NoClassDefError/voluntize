@@ -1,11 +1,10 @@
 package cn.ncepu.voluntize.controller;
 
-import cn.ncepu.voluntize.requestVo.LoginVo;
-import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
-import cn.ncepu.voluntize.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.util.RsaUtils;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,7 @@ public class Login extends BaseController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestBody LoginVo loginVo) {
+    public UserInfoVo login(@RequestBody LoginVo loginVo) {
         loginVo.decrypt((PrivateKey) session.getAttribute("privateKey"));
         UserInfoVo userInfoVo = service.login(loginVo);
         session.setAttribute("UserId", loginVo.getId());
@@ -48,7 +47,7 @@ public class Login extends BaseController {
         }
         session.setAttribute("UserCategory", userCategory);
         logger.info(userInfoVo.toString());
-        return JSON.toJSONString(userInfoVo);
+        return userInfoVo;
     }
 
     /**

@@ -1,9 +1,9 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.service.UpdateUserService;
-import cn.ncepu.voluntize.responseVo.HttpResult;
-import cn.ncepu.voluntize.requestVo.DepartmentUpdateVo;
-import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.requestVo.DepartmentUpdateVo;
+import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

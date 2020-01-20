@@ -1,6 +1,6 @@
 package cn.ncepu.voluntize.controller;
 
-import cn.ncepu.voluntize.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,6 +17,8 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@ToString(exclude = {"student", "comment", "activity","department"})
+@JsonIgnoreProperties({"student", "comment", "activity","department"})
 public class Image {
     @Id
     @GeneratedValue(generator = "system-uuid")

@@ -1,7 +1,9 @@
 package cn.ncepu.voluntize.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -20,6 +22,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "activity_period")//此处表名自动生成时与类名不同，idea语法检查时会找不到表
+@ToString(exclude = {"records", "parent"})
+@JsonIgnoreProperties({"records", "parent"})
 public class ActivityPeriod {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2

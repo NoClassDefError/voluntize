@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
  */
 @Data
 @Entity
+@ToString(exclude = {"images", "activities", "comments"})
+@JsonIgnoreProperties({"images", "activities", "comments"})
 public class Department {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "varchar(255) comment '部门账号'")

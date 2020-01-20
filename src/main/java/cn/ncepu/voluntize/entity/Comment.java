@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +20,8 @@ import java.util.List;
  */
 @Data
 @Entity
+@ToString(exclude = {"activity", "parentComment", "sonComment", "images", "department", "student"})
+@JsonIgnoreProperties({"activity", "parentComment", "sonComment", "images", "department", "student"})
 public class Comment {
     /**
      * 唯一标识id，类型String，主键生成策略：uuid2
@@ -32,7 +36,7 @@ public class Comment {
      * 所属志愿活动，非空
      */
     @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name = "activity",nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "activity", nullable = false, referencedColumnName = "id")
     private Activity activity;
 
     @ManyToOne(targetEntity = Student.class)

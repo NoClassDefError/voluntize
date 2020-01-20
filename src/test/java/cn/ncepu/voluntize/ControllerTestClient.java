@@ -1,8 +1,8 @@
 package cn.ncepu.voluntize;
 
-import cn.ncepu.voluntize.requestVo.ImageVo;
-import cn.ncepu.voluntize.requestVo.LoginVo;
-import cn.ncepu.voluntize.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.ImageVo;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
