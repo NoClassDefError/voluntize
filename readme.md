@@ -80,7 +80,7 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 #### 账户信息修改
 
 由于密码修改的特殊逻辑，这里不修改密码，只修改其他信息。
- 
+
 #### 密码修改
 
 在点击*找回密码邮件*中的超链接之后，或者在*修改密码页面*输入原来密码之后，
@@ -157,7 +157,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 
     成功{"updateResult":"success"}
     失败{"updateResult":"failed"}
-    
+
 #### 修改部门信息
 http://192.168.43.1:8888/volunteer/updateDepartment
 
@@ -167,7 +167,7 @@ http://192.168.43.1:8888/volunteer/updateDepartment
     manager
     email
     profiles 与上个接口相同
-    
+
 #### 图片上传
 http://192.168.43.1:8888/volunteer/uploadImage
 
@@ -199,7 +199,7 @@ http://192.168.43.1:8888/volunteer/sendEmail
 发送 post application/x-www-form-urlencoded
 
     id 用户id
-    
+
 返回 json
 
     {sendEmail:success}
@@ -269,7 +269,7 @@ mysqldump导出数据库，或者直接复制数据文件）
 
 #### 数据库密码加密
  F:\maven\repository\com\alibaba\druid\1.1.10> java -cp druid-1.1.10.jar com.alibaba.druid.filter.config.ConfigTools 123456
- 
+
 privateKey:MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAnsU5HQBR8H7QhawjHu4rYOQ9mqCzdbN93+ChLRLsOZK9JZhhSw8Q7hyqw4LrK7Uisfjb1PVeyAQxh2rKEpA/CQIDAQABAkAa+6XDOgSy/LpvnVuyrAOPSfr2Ro15WXHxFHoP8QFYn0RqI819LkO4wKbhA43Hu2g6yesIrGE+85/QY62CFbUBAiEA6Rd9P+A8dJxOnsFO3wugIr/qWCne/sze4qJNjdCFznECIQCuX9VbxmXrdFGeMmoiY/8emik567uia9dT2/pkt0d2GQIhANpe7TJoi3rb7TQB+jgwFgg4L/4EzCt+F9nPIEUZ9CGhAiEAoqCaWmeksn3fiQ030y8zxpS8klp6uradMobc9oXAzjECIGTQ76BLr7U1aLWdzET+/VuIagfiflxpCPslFQDnd4oX
 
 publicKey:MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ7FOR0AUfB+0IWsIx7uK2DkPZqgs3Wzfd/goS0S7DmSvSWYYUsPEO4cqsOC6yu1IrH429T1XsgEMYdqyhKQPwkCAwEAAQ==
@@ -293,3 +293,5 @@ password:lW2Y36sHhSDFz5QtLsCT57Q/sU3uayv2mKL+DWgk/nwCR3YVJz2lrndolv8XHv0RupBLlum
 #10 00：40 试图将springboot项目注册成为windows后台服务，准备编写windows服务安装程序
 #11 01：24 配置服务器防火墙，发现防火墙早已关闭，修改数据库root用户权限：update user set host='%' where user='root';发现仍然不能远程连接，资料显示需要在阿里云服务器控制台中设置端口规则
 
+### 2020.1.19
+#12 00：41 更新数据表结构与项目
