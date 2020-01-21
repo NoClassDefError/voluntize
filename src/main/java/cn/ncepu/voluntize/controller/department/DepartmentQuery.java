@@ -7,6 +7,7 @@ import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.RecordVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +38,15 @@ public class DepartmentQuery extends BaseController {
         } else return null;
     }
 
-    @RequestMapping(value = "/participants", method = RequestMethod.POST)
-    public List<RecordVo> getParticipants(String periodId) {
-        ArrayList<RecordVo> recordVos  = new ArrayList<>();
-        for(Record record:participateService.getRecord(periodId)) recordVos.add(new RecordVo(record));
+    @RequestMapping(value = "/records", method = RequestMethod.POST)
+    public List<RecordVo> getRecords(String periodId) {
+        ArrayList<RecordVo> recordVos = new ArrayList<>();
+        for (Record record : participateService.getRecord(periodId)) recordVos.add(new RecordVo(record));
         return recordVos;
+    }
+
+    @RequestMapping(value = "/studentInfo", method = RequestMethod.POST)
+    public StudentVo getStudent(String studentId) {
+        return new StudentVo(participateService.studentInfo(studentId));
     }
 }

@@ -8,6 +8,9 @@ import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * TODO 权限验证
+ */
 @RestController("/student")
 public class Participate extends BaseController {
 

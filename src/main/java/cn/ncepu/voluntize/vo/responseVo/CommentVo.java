@@ -1,13 +1,16 @@
-package cn.ncepu.voluntize.vo;
+package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Comment;
 import cn.ncepu.voluntize.entity.Image;
-import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.ImageVo;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 仅负责response，requestVo下还有一个CommentVo
+ */
 @Data
 public class CommentVo {
     private String id;
@@ -27,6 +30,4 @@ public class CommentVo {
         this.time = comment.getTime().toString();
         for (Image image : comment.getImages()) images.add(new ImageVo(image));
     }
-
-    //toComment要在service层里写
 }

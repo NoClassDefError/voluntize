@@ -1,5 +1,6 @@
-package cn.ncepu.voluntize.controller;
+package cn.ncepu.voluntize.controller.admin;
 
+import cn.ncepu.voluntize.controller.BaseController;
 import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
@@ -13,6 +14,7 @@ import java.util.List;
 
 /**
  * 用于管理员与部门发布和管理志愿活动
+ * TODO 权限验证
  */
 @RestController
 public class ActivityManage extends BaseController {
@@ -21,8 +23,6 @@ public class ActivityManage extends BaseController {
 
     @Autowired
     private HttpSession session;
-
-
 
     @RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
     @ResponseBody

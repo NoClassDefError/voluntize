@@ -1,13 +1,13 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.entity.Record;
+import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public interface ParticipateService {
     String participate(ParticipateVo participateVo);
@@ -23,6 +23,7 @@ public interface ParticipateService {
      */
     ArrayList<Record> getRecord(String periodId, Record.RecordStatus status);
     ArrayList<Record> getRecord(String periodId);
+
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的
      * 一次性评论完ActivityPeriod下所有record
@@ -40,4 +41,6 @@ public interface ParticipateService {
      * 学生给予活动评价
      */
     String appraise(AppraiseVo evaluateVo);
+
+    Student studentInfo(String id);
 }

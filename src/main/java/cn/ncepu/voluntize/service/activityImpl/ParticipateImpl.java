@@ -10,6 +10,7 @@ import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class ParticipateImpl implements ParticipateService {
         if (record.isPresent()) {
             Record record1 = record.get();
             record1.setPassed(false);
+            record1.setStatus(Record.RecordStatus.APPLIED);
             recordRepository.save(record1);
             return "success";
         }
@@ -92,6 +94,7 @@ public class ParticipateImpl implements ParticipateService {
             Optional<Record> record = recordRepository.findById(id);
             if (record.isPresent()) {
                 record.get().setStatus(Record.RecordStatus.PASSED);
+                record.get().setPassed(true);
                 recordRepository.save(record.get());
             }
         }
@@ -125,4 +128,9 @@ public class ParticipateImpl implements ParticipateService {
         return "error";
     }
 
+    @Override
+    public Student studentInfo(String id){
+        Optional<Student> optional = studentRepository.findById(id);
+        return optional.orElse(null);
+    }
 }
