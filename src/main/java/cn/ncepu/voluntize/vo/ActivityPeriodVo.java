@@ -1,4 +1,4 @@
-package cn.ncepu.voluntize.vo.responseVo;
+package cn.ncepu.voluntize.vo;
 
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import lombok.Data;

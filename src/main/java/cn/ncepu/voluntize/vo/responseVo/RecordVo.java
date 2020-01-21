@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Record;
+import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import lombok.Data;
 
 /**

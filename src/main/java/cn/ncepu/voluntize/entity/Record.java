@@ -124,11 +124,13 @@ public class Record {
             case 2:
                 this.status = RecordStatus.EVALUATED;
                 break;
+            case 3:
+                this.status = RecordStatus.COMMENTED;
         }
         this.statusId = statusId;
     }
 
     public enum RecordStatus {
-        APPLIED, PASSED, EVALUATED
+        APPLIED, PASSED, EVALUATED,COMMENTED
     }
 }

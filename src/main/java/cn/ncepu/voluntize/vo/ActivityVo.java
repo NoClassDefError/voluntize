@@ -1,11 +1,10 @@
-package cn.ncepu.voluntize.vo.responseVo;
+package cn.ncepu.voluntize.vo;
 
 import lombok.Data;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import cn.ncepu.voluntize.vo.ImageVo;
 import cn.ncepu.voluntize.entity.Image;
 import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
@@ -21,7 +20,7 @@ public class ActivityVo {
     private String semester;
     private String description;
     private String departmentId;
-    private String departmentName;
+    private String departmentName;//前端修改无效
     private Activity.ActivityStatus status;
 
     private List<ImageVo> images = new ArrayList<>();
@@ -38,24 +37,5 @@ public class ActivityVo {
         this.departmentName = activity.getDepartment().getName();
         for (Image image : activity.getImages()) images.add(new ImageVo(image));
         for (ActivityStation station : activity.getStations()) stations.add(new ActivityStationVo(station));
-    }
-
-    @Data
-    static class ActivityStationVo {
-        private String id;
-        private String name;
-        private String linkman;
-        private String phoneNum;
-        private String description;
-        private List<ActivityPeriodVo> periods = new ArrayList<>();
-
-        public ActivityStationVo(ActivityStation station) {
-            this.id = station.getId();
-            this.name = station.getName();
-            this.linkman = station.getLinkman();
-            this.phoneNum = station.getPhoneNum();
-            this.description = station.getDescription();
-            for (ActivityPeriod period : station.getPeriods()) periods.add(new ActivityPeriodVo(period));
-        }
     }
 }

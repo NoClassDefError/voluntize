@@ -1,5 +1,7 @@
-package cn.ncepu.voluntize.controller;
+package cn.ncepu.voluntize.controller.department;
 
+import cn.ncepu.voluntize.controller.BaseController;
+import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.service.UpdateUserService;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.vo.requestVo.DepartmentUpdateVo;
@@ -10,23 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class UpdateInfo extends BaseController {
+@RestController("departmentUpdate")
+public class DepartmentUpdate extends BaseController {
     @Autowired
     UpdateUserService updateUserService;
 
-    /**
-     * @param studentUpdateVo update
-     * @return json 修改是否成功
-     */
-    @RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
-    @ResponseBody
-    public HttpResult updateStudent(StudentUpdateVo studentUpdateVo) {
-        if (updateUserService.updateStudent(studentUpdateVo)) return new HttpResult("updateResult:success");
-        else return new HttpResult("updateResult:error");
-    }
-
-    @RequestMapping(value="/updateDepartment",method = RequestMethod.POST)
+    @RequestMapping(value="/update",method = RequestMethod.POST)
     @ResponseBody
     public HttpResult updateDepartment(DepartmentUpdateVo departmentUpdateVo){
         if(updateUserService.updateDepartment(departmentUpdateVo)) return new HttpResult("updateResult:success");

@@ -1,7 +1,7 @@
 package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.entity.Activity;
-import cn.ncepu.voluntize.vo.responseVo.ActivityVo;
+import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +22,11 @@ public class ActivityManage extends BaseController {
     @Autowired
     private HttpSession session;
 
-    /**
-     * 首页展示的志愿活动，除了审核阶段的志愿活动，其它都可以显示
-     *
-     * @return JSON数组
-     */
-    @RequestMapping(value = "/findIndexActivities", method = RequestMethod.POST)
-    @ResponseBody
-    public List<ActivityVo> findIndexActivities() {
-        List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.SEND);
-        activities.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
-        activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
-        List<ActivityVo> activityVos = new ArrayList<>();
-        for (Activity activity : activities) activityVos.add(new ActivityVo(activity));
-        return activityVos;
-    }
+
 
     @RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
     @ResponseBody
-    public HttpResult saveActivity(@RequestBody Activity activity) {
+    public HttpResult saveActivity(@RequestBody ActivityVo activity) {
         if ("Admin".equals(session.getAttribute("UserCategory")) ||
                 "Department".equals(session.getAttribute("UserCategory"))) {
             activityService.createOrUpdate(activity);
@@ -67,17 +53,26 @@ public class ActivityManage extends BaseController {
      */
     @RequestMapping(value = "/findAllAc", method = RequestMethod.POST)
     @ResponseBody
-    public List<Activity> findAllActivities() {
-        if ("Admin".equals(session.getAttribute("UserCategory"))) return activityService.findAll();
+    public List<ActivityVo> findAllActivities() {
+        if ("Admin".equals(session.getAttribute("UserCategory"))) {
+            List<ActivityVo> activityVos = new ArrayList<>();
+            for (Activity activity : activityService.findAll())
+                activityVos.add(new ActivityVo(activity));
+            return activityVos;
+        }
         return null;
     }
 
     @RequestMapping(value = "/findConfirmingAc", method = RequestMethod.POST)
     @ResponseBody
-    public List<Activity> findConfirmingActivities() {
+    public List<ActivityVo> findConfirmingActivities() {
         if ("Admin".equals(session.getAttribute("UserCategory")) ||
-                "Department".equals(session.getAttribute("UserCategory")))
-            return activityService.findStatus(Activity.ActivityStatus.CONFIRMING);
+                "Department".equals(session.getAttribute("UserCategory"))) {
+            List<ActivityVo> activityVos = new ArrayList<>();
+            for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING))
+                activityVos.add(new ActivityVo(activity));
+            return activityVos;
+        }
         return null;
     }
 }

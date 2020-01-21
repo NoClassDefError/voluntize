@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.entity.Activity;
+import cn.ncepu.voluntize.vo.ActivityVo;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface ActivityService {
      * @param activity 保存的activity
      * @return 保存activity的Id
      */
-    String createOrUpdate(Activity activity);
+    String createOrUpdate(ActivityVo activity);
 
     void deleteActivity(String id);
 
@@ -24,4 +25,8 @@ public interface ActivityService {
      */
     List<Activity> findStatus(Activity.ActivityStatus status);
 
+    /**
+     * 查找特定部门发布的活动
+     */
+    List<Activity> findDepartment(String departmentId);
 }

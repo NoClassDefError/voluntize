@@ -6,9 +6,12 @@ import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.ActivityPeriodRepository;
 import cn.ncepu.voluntize.repository.RecordRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
-import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
 import cn.ncepu.voluntize.service.ParticipateService;
+import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
+import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
+import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -36,18 +39,33 @@ public class ParticipateImpl implements ParticipateService {
      * 添加多对多关联，不需要更新Student表与ActivityPeriod表
      */
     @Override
-    public Record participate(ParticipateVo participateVo) {
-        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getActivityId());
+    public String participate(ParticipateVo participateVo) {
+        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getPeriodId());
         Optional<Student> student = studentRepository.findById((String) session.getAttribute("UserId"));
         if (student.isPresent() && activityPeriod.isPresent()) {
             Record record = new Record();
             record.setVolunteer(student.get());
             record.setPeriod(activityPeriod.get());
             record.setInfo(participateVo.getInfo());
+            if (recordRepository.findOne(Example.of(record)).isPresent())
+                return "duplicated";//检验不能重复报名
             record.setStatus(Record.RecordStatus.APPLIED);
-            return recordRepository.save(record);
+            recordRepository.save(record);
+            return "success";
         }
-        return null;
+        return "error";
+    }
+
+    @Override
+    public String cancel(String recordId) {
+        Optional<Record> record = recordRepository.findById(recordId);
+        if (record.isPresent()) {
+            Record record1 = record.get();
+            record1.setPassed(false);
+            recordRepository.save(record1);
+            return "success";
+        }
+        return "error";
     }
 
     @Override
@@ -63,6 +81,12 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    public ArrayList<Record> getRecord(String periodId) {
+        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
+        return activityPeriod.map(period -> new ArrayList<>(period.getRecords())).orElse(null);
+    }
+
+    @Override
     public void accept(List<String> records) {
         for (String id : records) {
             Optional<Record> record = recordRepository.findById(id);
@@ -74,15 +98,31 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    public void evaluate(Map<String, Integer> records) {
-        for (Map.Entry<String, Integer> entry : records.entrySet()) {
-            Optional<Record> record = recordRepository.findById(entry.getKey());
+    public void evaluate(List<EvaluateVo> records) {
+        for (EvaluateVo evaluateVo : records) {
+            Optional<Record> record = recordRepository.findById(evaluateVo.getRecordId());
             if (record.isPresent()) {
-                record.get().setStatus(Record.RecordStatus.EVALUATED);
-                record.get().setAuditLevel(entry.getValue());
+                Record record1 = record.get();
+                record1.setStatus(Record.RecordStatus.EVALUATED);
+                record1.setAuditLevel(evaluateVo.getAuditLevel());
+                record1.setEvaluation(evaluateVo.getEvaluate());
                 recordRepository.save(record.get());
             }
         }
+    }
+
+    @Override
+    public String appraise(AppraiseVo evaluateVo) {
+        Optional<Record> record = recordRepository.findById(evaluateVo.getRecordId());
+        if (record.isPresent()) {
+            Record record1 = record.get();
+            record1.setStatus(Record.RecordStatus.COMMENTED);
+            record1.setComment(evaluateVo.getComment());
+            record1.setStars(evaluateVo.getStars());
+            recordRepository.save(record1);
+            return "success";
+        }
+        return "error";
     }
 
 }
