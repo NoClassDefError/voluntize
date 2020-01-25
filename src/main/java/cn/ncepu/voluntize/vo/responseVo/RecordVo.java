@@ -13,7 +13,7 @@ public class RecordVo {
     private StudentVo volunteer;
     private ActivityPeriodVo period;
     private String info;
-    private Record.RecordStatus status;
+    private int status;
     private boolean isPassed;
     private int auditLevel;
     private String evaluation;
@@ -27,7 +27,7 @@ public class RecordVo {
         this.evaluation = record.getEvaluation();
         this.info = record.getInfo();
         this.isPassed = record.isPassed();
-        this.status = record.getStatus();
+        this.status = record.getStatusId();
         this.stars = record.getStars();
         this.volunteer = new StudentVo(record.getVolunteer());
         this.period = new ActivityPeriodVo(record.getPeriod());

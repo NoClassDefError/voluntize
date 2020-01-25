@@ -29,4 +29,8 @@ public class ActivityPeriodVo {
         this.amountRequired = period.getAmountRequired();
         this.equDuration = period.getEquDuration();
     }
+
+    public ActivityPeriodVo(){
+
+    }
 }

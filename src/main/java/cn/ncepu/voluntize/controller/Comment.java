@@ -20,7 +20,7 @@ public class Comment {
     @RequestMapping("/saveOrUpdate")
     @ResponseBody
     public HttpResult comment(@RequestBody CommentVo commentVo) {
-        return new HttpResult("comment:", commentService.saveOrUpdate(commentVo));
+        return new HttpResult("comment:"+commentService.saveOrUpdate(commentVo));
     }
 
     @RequestMapping("/delete")

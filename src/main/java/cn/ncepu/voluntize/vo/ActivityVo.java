@@ -21,7 +21,7 @@ public class ActivityVo {
     private String description;
     private String departmentId;
     private String departmentName;//前端修改无效
-    private Activity.ActivityStatus status;
+    private int status;
 
     private List<ImageVo> images = new ArrayList<>();
     private List<ActivityStationVo> stations = new ArrayList<>();
@@ -29,7 +29,7 @@ public class ActivityVo {
 
     public ActivityVo(Activity activity) {
         this.id = activity.getId();
-        this.status = activity.getStatus();
+        this.status = activity.getStatusId();
         this.name = activity.getName();
         this.semester = activity.getSemester();
         this.description = activity.getDescription();
@@ -37,5 +37,9 @@ public class ActivityVo {
         this.departmentName = activity.getDepartment().getName();
         for (Image image : activity.getImages()) images.add(new ImageVo(image));
         for (ActivityStation station : activity.getStations()) stations.add(new ActivityStationVo(station));
+    }
+
+    public ActivityVo(){
+
     }
 }

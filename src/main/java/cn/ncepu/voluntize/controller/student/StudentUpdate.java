@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("studentUpdate")
+@RestController("/student")
 public class StudentUpdate {
     @Autowired
     UpdateUserService updateUserService;
@@ -18,7 +18,7 @@ public class StudentUpdate {
      * @param studentUpdateVo update
      * @return json 修改是否成功
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateStu", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult updateStudent(StudentUpdateVo studentUpdateVo) {
         if (updateUserService.updateStudent(studentUpdateVo)) return new HttpResult("updateResult:success");

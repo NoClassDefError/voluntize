@@ -1,6 +1,8 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.entity.Activity;
+import cn.ncepu.voluntize.vo.ActivityPeriodVo;
+import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 
 import java.util.List;
@@ -13,6 +15,10 @@ public interface ActivityService {
      * @return 保存activity的Id
      */
     String createOrUpdate(ActivityVo activity);
+
+    String updateStation(ActivityStationVo activityStationVo);
+
+    String updatePeriod(ActivityPeriodVo activityPeriodVo);
 
     void deleteActivity(String id);
 

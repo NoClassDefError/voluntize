@@ -2,6 +2,7 @@ package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Image;
+import cn.ncepu.voluntize.vo.ImageVo;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class DepartmentVo {
     private String phoneNum;
     private String email;
     private String manager;
-    private List<String> images = new ArrayList<>();
+    private List<ImageVo> images = new ArrayList<>();
 
     public DepartmentVo(Department department) {
         id = department.getId();
@@ -26,6 +27,6 @@ public class DepartmentVo {
         phoneNum = department.getPhoneNum();
         email = department.getEmail();
         manager = department.getManager();
-        for (Image image : department.getImages()) images.add(image.getId());
+        for (Image image : department.getImages()) images.add(new ImageVo(image));
     }
 }

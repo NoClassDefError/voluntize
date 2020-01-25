@@ -44,10 +44,10 @@ public class CommentImpl implements CommentService {
         comment1.setContent(commentVo.getContent());
         final int[] flag = {0};//线程安全
         //判断修改的是否是自己的评论
-        if(comment1.getStudent()!=null){
-            if(!comment1.getStudent().getStudentNum().equals(session.getAttribute("UserId")))
+        if (comment1.getStudent() != null) {
+            if (!comment1.getStudent().getStudentNum().equals(session.getAttribute("UserId")))
                 flag[0] = 3;
-        } else if(comment1.getDepartment()!=null)
+        } else if (comment1.getDepartment() != null)
             if (!comment1.getDepartment().getId().equals(session.getAttribute("UserId")))
                 flag[0] = 3;
         comment1.setActivity(activityRepository.findById(commentVo.getActivityId()).orElseGet(() -> {

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 除了login接口返回的基本信息外，学生主页上所要展示的其他信息
  */
-@RestController("/studentQuery")
+@RestController("/student/query")
 public class StudentQuery extends BaseController {
     @Autowired
     private ActivityService activityService;

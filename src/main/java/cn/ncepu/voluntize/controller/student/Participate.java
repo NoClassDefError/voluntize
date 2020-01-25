@@ -8,10 +8,7 @@ import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * TODO 权限验证
- */
-@RestController("/student")
+@RestController("/student/service")
 public class Participate extends BaseController {
 
     @Autowired
@@ -21,7 +18,7 @@ public class Participate extends BaseController {
     @ResponseBody
     public HttpResult participate(@RequestBody ParticipateVo participateVo) {
         String result = participateService.participate(participateVo);
-        return new HttpResult("participate:", result);
+        return new HttpResult("participate:" + result);
     }
 
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)

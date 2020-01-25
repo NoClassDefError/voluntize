@@ -3,6 +3,8 @@ package cn.ncepu.voluntize.controller.department;
 import cn.ncepu.voluntize.controller.BaseController;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
+import cn.ncepu.voluntize.vo.ActivityPeriodVo;
+import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
@@ -13,10 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-/**
- * TODO 权限验证
- */
-@RestController("/manage")
+import java.util.concurrent.atomic.AtomicReference;
+
+@RestController("/department/service")
 public class Manage extends BaseController {
 
     @Autowired
@@ -25,10 +26,27 @@ public class Manage extends BaseController {
     @Autowired
     private ParticipateService participateService;
 
-    @RequestMapping("/release")
+    /**
+     * 测试信息
+·    *
+     */
+    @RequestMapping("/saveActivity")
     @ResponseBody
     public HttpResult releaseOrUpdate(@RequestBody ActivityVo activityVo) {
-        return new HttpResult("release activity:", activityService.createOrUpdate(activityVo));
+        AtomicReference<String> result = new AtomicReference<>(activityService.createOrUpdate(activityVo));
+        return new HttpResult("release activity:" + result);
+    }
+
+    @RequestMapping("/saveStation")
+    @ResponseBody
+    public HttpResult saveStation(@RequestBody ActivityStationVo activityStationVo) {
+        return new HttpResult("release activity station:" + activityService.updateStation(activityStationVo));
+    }
+
+    @RequestMapping("/savePeriod")
+    @ResponseBody
+    public HttpResult savePeriod(ActivityPeriodVo activityPeriodVo) {
+        return new HttpResult("release activity period:" + activityService.updatePeriod(activityPeriodVo));
     }
 
     @RequestMapping("/cancel")
