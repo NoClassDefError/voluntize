@@ -47,7 +47,7 @@ public class Department {
     /**
      * 部门图册
      */
-    @OneToMany(mappedBy = "department", targetEntity = Image.class)
+    @OneToMany(mappedBy = "department", targetEntity = Image.class, cascade = CascadeType.ALL)
     private List<Image> images;
 
     /**

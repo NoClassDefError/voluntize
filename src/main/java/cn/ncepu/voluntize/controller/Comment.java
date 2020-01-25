@@ -17,7 +17,7 @@ public class Comment {
     @Autowired
     private CommentService commentService;
 
-    @RequestMapping("/saveOrUpdate")
+    @RequestMapping("/save")
     @ResponseBody
     public HttpResult comment(@RequestBody CommentVo commentVo) {
         return new HttpResult("comment:"+commentService.saveOrUpdate(commentVo));

@@ -107,9 +107,11 @@ UserCategory "Student" "Department" "Admin"
 
 path 服务器地址
 
-### 前后端通信设计
+## 前后端通信设计
 
-#### 登录
+### 通用接口
+
+#### 登录，获取用户部分信息
 http://192.168.43.1:8888/volunteer/login
 
 发送 post application/json 
@@ -138,35 +140,6 @@ http://192.168.43.1:8888/volunteer/logout
 返回
 
     主页 index.html
-
-#### 修改学生信息
-http://192.168.43.1:8888/volunteer/updateStudent
-
-发送post application/json
-
-    name 姓名
-    phoneNum 电话号码
-    email 邮箱
-    profiles json数组，图片对象，包含name,url两个属性
-    示例：{"email":"12345","name":"12","phoneNum":"1234","profiles":[{"name":"1234","url":"123456"}]}
-
-注意，对于新的图片，要通过图片上传接口上传并得到图片的url，再加入profiles的
-json数组中；若未上传新的图片，则保持原信息不变即可。
-
-返回 json
-
-    成功{"updateResult":"success"}
-    失败{"updateResult":"failed"}
-
-#### 修改部门信息
-http://192.168.43.1:8888/volunteer/updateDepartment
-
-发送post application/json
-
-    phoneNum 
-    manager
-    email
-    profiles 与上个接口相同
 
 #### 图片上传
 http://192.168.43.1:8888/volunteer/uploadImage
@@ -205,21 +178,326 @@ http://192.168.43.1:8888/volunteer/sendEmail
     {sendEmail:success}
     {sendEmail:error}
 
-### 前端页面设计
-#### 主页
-index.html
-#### 学生主页
-studentIndex.html 
+#### 发表评论
+/comment/save
 
-学生信息修改子页面
-#### 部门主页
-departmentIndex.html
+发送 post application/json
 
-部门信息修改子页面
-#### 修改密码页面
-changePassword.html
-#### 邮件验证错误页面
-verifyFailed.html
+```
+    private String id;//添加id时为修改，不添加为新增
+    private String content;//评论内容
+    private ArrayList<ImageVo> imageVos;//数组
+    private String parentCommentId;//父评论id，若无则不写
+    private String activityId;//必填
+```
+示例:
+```
+
+```
+返回 json 包含保存评论的id
+
+#### 删除评论
+/comment/delete
+
+发送 post application/x-www-form-urlencoded
+```
+commentId 要删除的评论id
+```
+
+返回 无 
+
+#### 获取特定活动的评论区（分页）
+/comment/getComments
+
+发送 post application/x-www-form-urlencoded
+```
+activity 该活动的id
+size 每页活动数
+page 页码
+```
+
+返回 json数组
+示例：
+```
+
+```
+
+### 部门接口
+#### 修改部门信息
+http://192.168.43.1:8888/volunteer/updateDepartment
+
+发送post application/json
+
+    phoneNum 
+    manager
+    email
+    profiles //与上个接口相同
+
+#### 获取已发送的活动信息
+/released
+
+发送 post 无内容
+
+返回 json
+```
+
+```
+
+#### 获取特定活动时间段的报名记录
+/records
+
+发送 post application/x-www-form-urlencoded
+
+```
+periodId 时间段
+```
+
+返回 json
+```
+
+```
+
+#### 获取特定学生信息
+/studentInfo
+
+发送 post application/x-www-form-urlencoded
+
+```
+studentId 学生学号
+```
+
+返回 json
+```
+
+```
+
+
+#### 新建活动
+/saveActivity
+
+发送 post application/json
+
+```
+id //添加id时为修改，不添加为新增
+name 
+semester 
+description
+departmentId
+images //json数组，图片对象，包含name,url两个属性
+```
+示例：
+```
+{
+    "name": "2019图书馆公益活动4",
+    "semester": "2019-2020第一学期",
+    "description": "搬运书籍，贴标签等",
+    "departmentId": "6177001",
+    "images": []
+}
+```
+
+返回  json 其中包含已保存活动的id信息
+
+```
+{"save activity": "0779c44d-4034-47d0-93bf-2d49829ed7ed"}
+```
+
+#### 为已有活动添加活动地点
+/saveStation
+
+发送 post application/json
+
+```
+id//添加id时为修改，不添加为新增
+name
+linkman
+phoneNum
+description
+parentId //活动的id
+```
+
+```
+{
+    "name": "主C 101",
+    "linkman": "张三",
+    "phoneNum": "61772591",
+    "description": "",
+    "parentId": "6177001"
+}
+```
+返回  json 其中包含报存活动地点的id信息
+
+#### 为已有活动地点添加时间段
+/savePeriod
+
+发送 post application/json
+
+```
+id//添加id时为修改，不添加为新增
+parentStationId//不能为空
+startDate//起始日期，格式： 2020-01-11 02:23:37.0
+endDate//结束日期
+timePeriod//以字符串表示每天几点开始几点结束
+requirements//需求
+equDuration//等效时长
+amountRequired//需要人数
+```
+
+示例：
+```
+{
+    "startDate": "2020-01-11 02:23:37.0",
+    "endDate": "2020-01-20 02:22:58.0",
+    "timePeriod": "上午8点开始，下午不用来",
+    "requirements": null,
+    "equDuration": 20,
+    "amountRequired": 20
+}
+```
+返回  json 其中包含报存活动时间段的id信息
+
+#### 删除活动，活动地点或活动时间段
+/cancel
+
+发送 post application/x-www-form-urlencoded
+
+下面三个属性三选一
+```
+activityId //要删除活动的id
+stationId //要删除活动地点的id
+periodId //要删除活动时间段的id
+
+```
+
+不返回内容
+
+#### 批量审核报名
+/approve
+
+发送 json数组
+通过审核的报名记录（record）的id
+
+不返回内容
+
+#### 批量评价打分
+/evaluate
+
+发送 json数组
+```
+recordId//报名记录（record）的id
+evaluate//评语
+auditLevel//5个等级
+```
+
+实例：
+
+```
+    [
+        {"recordId":"1234456","evaluate":"some words here...","auditLevel":5},
+        {"recordId":"123qs464536","evaluate":"some words here...","auditLevel":1}
+    ]
+```
+
+不返回内容
+### 学生接口
+#### 修改学生信息
+http://192.168.43.1:8888/volunteer/updateStudent
+
+发送post application/json
+
+```
+    name 姓名
+    phoneNum 电话号码
+    email 邮箱
+    profiles json数组，图片对象，包含name,url两个属性
+```
+
+示例：
+```
+    {
+        "email":"12345",
+        "name":"12",
+        "phoneNum":"1234",
+        "profiles":[
+                {"name":"1234","url":"123456"},
+                {"name":"1234","url":"123456"}
+            ]
+    }
+```
+
+注意，对于新的图片，要通过图片上传接口上传并得到图片的url，再加入profiles的
+json数组中；若未上传新的图片，则保持原信息不变即可。
+
+返回 json
+
+    成功{"updateResult":"success"}
+    失败{"updateResult":"failed"}
+
+
+#### 获取可报名的活动信息
+/findIndexActivities
+
+发送 post 无信息
+
+返回 json数组
+
+示例：
+```
+
+```
+
+#### 获取自己的公益劳动报名记录
+/getRecord
+
+发送 post 无信息
+
+返回 json数组
+
+示例：
+```
+
+```
+
+#### 报名参加活动
+/participate
+
+发送 post application/json 
+
+```
+    periodId //活动时间段的id
+    info //报名备注信息
+```
+
+返回 json 成功或失败
+
+#### 取消报名
+/cancel
+
+发送 post application/a-www-form-urlencoded
+
+```
+    recordId 报名记录的id
+```
+
+返回 json 成功或失败
+
+#### 活动结束后评价
+/appraise
+
+发送 post application/json
+
+```
+    recordId
+    comment//学生评价
+    stars//评星1-5
+```
+
+返回 json 成功或失败
+
+### 管理员接口
+
+#### 
+
 ## 软件调试
 
 ### jpa uuid主键生成策略

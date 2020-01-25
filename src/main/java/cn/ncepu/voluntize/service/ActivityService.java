@@ -22,6 +22,10 @@ public interface ActivityService {
 
     void deleteActivity(String id);
 
+    void deleteActivityPeriod(String id);
+
+    void deleteActivityStation(String id);
+
     List<Activity> findAll();
 
     /**

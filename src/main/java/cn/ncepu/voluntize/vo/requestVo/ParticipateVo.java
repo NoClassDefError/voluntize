@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ParticipateVo  {
 
-    private String PeriodId;
+    private String periodId;
 
     private String info;
 

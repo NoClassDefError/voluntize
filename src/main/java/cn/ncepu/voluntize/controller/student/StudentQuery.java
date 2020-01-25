@@ -47,9 +47,9 @@ public class StudentQuery extends BaseController {
      */
     @RequestMapping(value = "/getRecord", method = RequestMethod.POST)
     @ResponseBody
-    public ArrayList<RecordVo> getStuRecord(String periodId, String status) {
+    public ArrayList<RecordVo> getStuRecord() {
         ArrayList<RecordVo> recordVos = new ArrayList<>();
-        for (Record record : participateService.getRecord(periodId, Record.RecordStatus.valueOf(status)))
+        for (Record record : participateService.getRecordByStu())
             recordVos.add(new RecordVo(record));
         return recordVos;
     }

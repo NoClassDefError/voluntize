@@ -68,8 +68,9 @@ public class Activity {
 
     /**
      * 志愿活动图册
+     * TODO 级联保存与删除问题
      */
-    @OneToMany(targetEntity = Image.class, mappedBy = "activity")
+    @OneToMany(targetEntity = Image.class, mappedBy = "activity", cascade = CascadeType.ALL)
     private List<Image> images;
 
     /**

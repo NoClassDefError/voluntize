@@ -24,6 +24,9 @@ public interface ParticipateService {
     ArrayList<Record> getRecord(String periodId, Record.RecordStatus status);
     ArrayList<Record> getRecord(String periodId);
 
+
+    List<Record> getRecordByStu();
+
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的
      * 一次性评论完ActivityPeriod下所有record

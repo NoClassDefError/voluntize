@@ -92,7 +92,7 @@ public class Student implements Cloneable {
     /**
      * 头像
      */
-    @OneToMany(mappedBy = "student", targetEntity = Image.class)
+    @OneToMany(mappedBy = "student", targetEntity = Image.class, cascade = CascadeType.ALL)
     private List<Image> profiles;
 
     @Override

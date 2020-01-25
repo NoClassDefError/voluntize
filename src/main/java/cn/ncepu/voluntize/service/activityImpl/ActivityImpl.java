@@ -68,10 +68,10 @@ public class ActivityImpl implements ActivityService {
     }
 
     private Activity convertActivityVo(Activity origin, ActivityVo activity) {
-        origin.setStatusId(activity.getStatus());
         origin.setName(activity.getName());
         origin.setSemester(activity.getSemester());
         origin.setDescription(activity.getDescription());
+        if (activity.getDepartmentId() == null) origin.setDepartment(null);
         if (departmentRepository.findById(activity.getDepartmentId()).isPresent())
             origin.setDepartment(departmentRepository.findById(activity.getDepartmentId()).get());
         ArrayList<Image> images = new ArrayList<>();
@@ -112,6 +112,16 @@ public class ActivityImpl implements ActivityService {
     @Override
     public void deleteActivity(String id) {
         activityRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteActivityPeriod(String id) {
+        activityPeriodRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteActivityStation(String id) {
+        activityStationRepository.deleteById(id);
     }
 
     @Override

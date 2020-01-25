@@ -89,7 +89,14 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    public List<Record> getRecordByStu(){
+        String stuId = (String) session.getAttribute("UserId");
+        return studentRepository.findById(stuId).orElse(new Student()).getParticipated();
+    }
+
+    @Override
     public void accept(List<String> records) {
+
         for (String id : records) {
             Optional<Record> record = recordRepository.findById(id);
             if (record.isPresent()) {
