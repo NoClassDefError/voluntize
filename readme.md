@@ -129,6 +129,23 @@ http://192.168.43.1:8888/volunteer/login
         ... 学生其他信息
         },"department":null
     }
+    {
+    "userCategory": 2,
+    "student": null,
+    "department": {
+        "id": "6177001",
+        "name": "图书馆（主）",
+        "phoneNum": null,
+        "email": null,
+        "manager": null,
+        "images": [
+            {
+                "name": null,
+                "url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E5%A4%B4%E5%83%8F&step_word=&hs=0&pn=36&spn=0&di=224840&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=4163580791%2C1286387910&os=1384471263%2C3542048267&simid=0%2C0&adpicid=0&lpn=0&ln=3718&fr=&fmq=1579421350054_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=head&bdtype=0&oriquery=&objurl=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201610%2F15%2F20161015073047_nTMaz.thumb.700_0.jpeg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3B17tpwg2_z%26e3Bv54AzdH3Fks52AzdH3F%3Ft1%3D08888ambb&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined"
+            }
+        ]
+    }
+    }
 ```
 
 #### 登出
@@ -217,9 +234,43 @@ page 页码
 ```
 
 返回 json数组
-示例：
+示例：activity = 001 size = 3 page = 0
 ```
-
+[
+    {
+        "id": "3001",
+        "time": "2019-03-13 20:30:13.0",
+        "parentCommentId": null,
+        "content": "老师很棒",
+        "distributorCategory": "student",
+        "distributorName": "邵博深",
+        "distributorId": "120181080701",
+        "activityId": "001",
+        "images": []
+    },
+    {
+        "id": "3002",
+        "time": "2019-03-13 17:51:00.0",
+        "parentCommentId": null,
+        "content": "认真",
+        "distributorCategory": "department",
+        "distributorName": "图书馆（主）",
+        "distributorId": "6177001",
+        "activityId": "001",
+        "images": []
+    },
+    {
+        "id": "3004",
+        "time": "2020-01-27 07:56:37.0",
+        "parentCommentId": "3006",
+        "content": "asdf",
+        "distributorCategory": "student",
+        "distributorName": "葛翰臣",
+        "distributorId": "120171020201",
+        "activityId": "001",
+        "images": []
+    }
+]
 ```
 
 ### 部门接口
@@ -240,7 +291,118 @@ http://192.168.43.1:8888/volunteer/updateDepartment
 
 返回 json
 ```
-
+[
+    {
+        "id": "001",
+        "name": "2019图书馆公益活动",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": [
+            {
+                "id": "1001",
+                "name": "主C 101",
+                "linkman": "张三",
+                "phoneNum": "61772591",
+                "description": "adoifudnxiudsaoyfuiaofnyuadiof",
+                "parentId": "001",
+                "periods": [
+                    {
+                        "id": "1",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-11 02:23:37.0",
+                        "endDate": "2020-01-20 02:22:58.0",
+                        "timePeriod": "上午8点开始，下午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 20
+                    },
+                    {
+                        "id": "2",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-14 02:26:00.0",
+                        "endDate": "2020-01-20 02:25:25.0",
+                        "timePeriod": "下午2点开始，上午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 10
+                    }
+                ]
+            },
+            {
+                "id": "1002",
+                "name": "图书馆主馆101",
+                "linkman": "李四",
+                "phoneNum": "61773253",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            },
+            {
+                "id": "1003",
+                "name": "图书馆主馆305",
+                "linkman": "王五",
+                "phoneNum": "61773241",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            }
+        ]
+    },
+    {
+        "id": "003",
+        "name": "2018图书馆公益活动",
+        "semester": "2018-2019第二学期",
+        "description": "为了增强学生实践精神，并减小学校各部门工作负担。。。",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 4,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "0779c44d-4034-47d0-93bf-2d49829ed7ed",
+        "name": "2019图书馆公益活动4",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "6e1cd45a-0f16-4444-9f8b-3231f1cf5335",
+        "name": "2019图书馆公益活动2",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "9c2a048a-4b07-48c9-bba4-ce3f1f6345ed",
+        "name": "2019图书馆公益活动3",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
+    }
+]
 ```
 
 #### 获取特定活动时间段的报名记录
@@ -254,7 +416,44 @@ periodId 时间段
 
 返回 json
 ```
-
+[
+    {
+        "id": "02",
+        "volunteerId": "120181080702",
+        "periodId": "1",
+        "info": "玩耍……",
+        "status": 2,
+        "auditLevel": 0,
+        "evaluation": "被录取而一直未到",
+        "stars": 0,
+        "comment": null,
+        "passed": true
+    },
+    {
+        "id": "05",
+        "volunteerId": "120181080704",
+        "periodId": "1",
+        "info": "试试吧",
+        "status": 0,
+        "auditLevel": null,
+        "evaluation": null,
+        "stars": 0,
+        "comment": null,
+        "passed": false
+    },
+    {
+        "id": "06",
+        "volunteerId": "120181080703",
+        "periodId": "1",
+        "info": "放心",
+        "status": 0,
+        "auditLevel": null,
+        "evaluation": null,
+        "stars": 0,
+        "comment": null,
+        "passed": false
+    }
+]
 ```
 
 #### 获取特定学生信息
@@ -268,7 +467,24 @@ studentId 学生学号
 
 返回 json
 ```
-
+{
+    "studentNum": "120171020201",
+    "idNum": "341003199908170034",
+    "name": "葛翰臣",
+    "major": "电气工程及其自动化",
+    "grade": "大三",
+    "classs": "电气1710",
+    "phoneNum": null,
+    "email": "Macswelle@outlook.com",
+    "school": "电气学院",
+    "totalDuration": 0,
+    "profiles": [
+        {
+            "name": null,
+            "url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E5%A4%B4%E5%83%8F&step_word=&hs=0&pn=42&spn=0&di=53570&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=3117110987%2C173625746&os=2075175500%2C824963435&simid=0%2C0&adpicid=0&lpn=0&ln=3718&fr=&fmq=1579421350054_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=head&bdtype=0&oriquery=&objurl=http%3A%2F%2Fimg2.woyaogexing.com%2F2018%2F03%2F10%2F9a68831f24d2985b!360x360_big.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bo5yw52jxtg2_z%26e3Bv54AzdH3Fp57xtwg2AzdH3FojtxtgAzdH3Fda8bAzdH3Fclmaac_z%26e3Bip4s&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined"
+        }
+    ]
+}
 ```
 
 
@@ -443,7 +659,19 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 
 示例：
 ```
-
+[
+    {
+        "id": "003",
+        "name": "2018图书馆公益活动",
+        "semester": "2018-2019第二学期",
+        "description": "为了增强学生实践精神，并减小学校各部门工作负担。。。",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 4,
+        "images": [],
+        "stations": []
+    }
+]
 ```
 
 #### 获取自己的公益劳动报名记录
@@ -455,7 +683,20 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 
 示例：
 ```
-
+[
+    {
+        "id": "03",
+        "volunteerId": "120171020201",
+        "periodId": "3",
+        "info": "选我",
+        "status": 1,
+        "auditLevel": null,
+        "evaluation": null,
+        "stars": 0,
+        "comment": null,
+        "passed": true
+    }
+]
 ```
 
 #### 报名参加活动

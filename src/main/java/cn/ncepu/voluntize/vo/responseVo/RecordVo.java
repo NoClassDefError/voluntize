@@ -1,7 +1,6 @@
 package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Record;
-import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import lombok.Data;
 
 /**
@@ -10,14 +9,14 @@ import lombok.Data;
 @Data
 public class RecordVo {
     private String id;
-    private StudentVo volunteer;
-    private ActivityPeriodVo period;
+    private String volunteerId;
+    private String periodId;
     private String info;
     private int status;
     private boolean isPassed;
-    private int auditLevel;
+    private Integer auditLevel;
     private String evaluation;
-    private int stars;
+    private Integer stars;
     private String comment;
 
     public RecordVo(Record record){
@@ -29,7 +28,7 @@ public class RecordVo {
         this.isPassed = record.isPassed();
         this.status = record.getStatusId();
         this.stars = record.getStars();
-        this.volunteer = new StudentVo(record.getVolunteer());
-        this.period = new ActivityPeriodVo(record.getPeriod());
+        this.volunteerId = record.getVolunteer().getStudentNum();
+        this.periodId = record.getPeriod().getId();
     }
 }

@@ -14,8 +14,8 @@ public class ActivityPeriodVo {
     private String endDate;
     private String timePeriod;
     private String requirements;
-    private int equDuration;
-    private int amountRequired;
+    private Integer equDuration;
+    private Integer amountRequired;
 
     public ActivityPeriodVo(ActivityPeriod period) {
         this.id = period.getId();

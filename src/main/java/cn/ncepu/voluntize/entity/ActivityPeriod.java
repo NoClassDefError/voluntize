@@ -68,14 +68,14 @@ public class ActivityPeriod {
      */
     @Basic
     @Column(name = "equ_duration",columnDefinition = "int comment '等效公益劳动时长\n不是简单的末初时间的差，需要单独给定' ")
-    private int equDuration;
+    private Integer equDuration;
 
     /**
      * 所需人数，活动开始前有效
      */
     @Basic
     @Column(name = "amount_required",columnDefinition = "int comment '所需人数'")
-    private int amountRequired;
+    private Integer amountRequired;
 
     /**
      * 志愿记录 如有学生报名则增加一条志愿记录

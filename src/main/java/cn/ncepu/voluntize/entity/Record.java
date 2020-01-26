@@ -82,7 +82,7 @@ public class Record {
             "1  通过； \n" +
             "2  良好； \n" +
             "3  优秀。'")
-    private int auditLevel;
+    private Integer auditLevel;
 
     /**
      * 如果不通过，必填理由
@@ -100,7 +100,7 @@ public class Record {
             "学生反馈评星 \n" +
             "（0，1，2，3，4，5）\n" +
             "默认未评星（0）'")
-    private int stars;
+    private Integer stars;
 
     @Basic
     @Column(name = "comments", columnDefinition = "text comment '公益劳动结束后，\n" +
