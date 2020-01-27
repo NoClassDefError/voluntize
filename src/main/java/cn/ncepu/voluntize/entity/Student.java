@@ -36,7 +36,7 @@ public class Student implements Cloneable {
     private String idNum;
 
     /**
-     * 密码，初始密码为身份证后六位
+     * 密码，初始密码为"123456"
      */
     @Basic
     @Column(name = "password", length = 30, nullable = false, columnDefinition = " varchar(30) default '123456' comment '初始密码，默认是123456'")
@@ -47,7 +47,7 @@ public class Student implements Cloneable {
     private String name;
 
     @Basic
-    @Column(name = "major")
+    @Column(name = "major",columnDefinition = "comment '专业'")
     private String major;
 
     @Basic
@@ -60,7 +60,7 @@ public class Student implements Cloneable {
     private String classs;
 
     @Basic
-    @Column(name = "phone_num", length = 11)
+    @Column(name = "phone_num", length = 11,columnDefinition = "comment '学生的常用联系电话'")
     private String phoneNum;
 
     @Basic
@@ -76,7 +76,7 @@ public class Student implements Cloneable {
      * 志愿总时长
      */
     @Basic
-    @Column(name = "total_duration", columnDefinition = "int default 0")
+    @Column(name = "total_duration", columnDefinition = "int default 0 comment'学生已获得时长，单位：小时'")
     private int totalDuration;
 
     /**

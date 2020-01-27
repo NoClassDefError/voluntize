@@ -49,4 +49,15 @@ public class Image {
     @ManyToOne(targetEntity = Comment.class)
     @JoinColumn(name = "comment", referencedColumnName = "id")
     private Comment comment;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setName(String name) {
+    }
 }
