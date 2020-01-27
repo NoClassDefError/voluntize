@@ -196,7 +196,7 @@ http://192.168.43.1:8888/volunteer/sendEmail
     {sendEmail:error}
 
 #### 发表评论
-/comment/save
+http://192.168.43.1:8888/volunteer/comment/save
 
 发送 post application/json
 
@@ -209,12 +209,24 @@ http://192.168.43.1:8888/volunteer/sendEmail
 ```
 示例:
 ```
-
+{
+        "parentCommentId": null,
+        "content": "老师很棒",
+        "activityId": "001",
+        "images": []
+}
 ```
 返回 json 包含保存评论的id
-
+```
+{
+    "result": {
+        "commentId": "2fc14154-4f8a-4ef3-902e-39b40ee29666",
+        "save": "no parent comment found but result success"
+    }
+}
+```
 #### 删除评论
-/comment/delete
+http://192.168.43.1:8888/volunteer/comment/delete
 
 发送 post application/x-www-form-urlencoded
 ```
@@ -224,7 +236,7 @@ commentId 要删除的评论id
 返回 无 
 
 #### 获取特定活动的评论区（分页）
-/comment/getComments
+http://192.168.43.1:8888/volunteer/comment/getComments
 
 发送 post application/x-www-form-urlencoded
 ```
@@ -275,7 +287,7 @@ page 页码
 
 ### 部门接口
 #### 修改部门信息
-http://192.168.43.1:8888/volunteer/updateDepartment
+http://192.168.43.1:8888/volunteer/department/updateDepartment
 
 发送post application/json
 
@@ -285,7 +297,7 @@ http://192.168.43.1:8888/volunteer/updateDepartment
     profiles //与上个接口相同
 
 #### 获取已发送的活动信息
-/released
+http://192.168.43.1:8888/volunteer/department/query/released
 
 发送 post 无内容
 
@@ -406,7 +418,7 @@ http://192.168.43.1:8888/volunteer/updateDepartment
 ```
 
 #### 获取特定活动时间段的报名记录
-/records
+http://192.168.43.1:8888/volunteer/department/query/records
 
 发送 post application/x-www-form-urlencoded
 
@@ -457,7 +469,7 @@ periodId 时间段
 ```
 
 #### 获取特定学生信息
-/studentInfo
+http://192.168.43.1:8888/volunteer/department/query/studentInfo
 
 发送 post application/x-www-form-urlencoded
 
@@ -489,7 +501,7 @@ studentId 学生学号
 
 
 #### 新建活动
-/saveActivity
+http://192.168.43.1:8888/volunteer/department/service/saveActivity
 
 发送 post application/json
 
@@ -519,7 +531,7 @@ images //json数组，图片对象，包含name,url两个属性
 ```
 
 #### 为已有活动添加活动地点
-/saveStation
+http://192.168.43.1:8888/volunteer/department/service/saveStation
 
 发送 post application/json
 
@@ -544,7 +556,7 @@ parentId //活动的id
 返回  json 其中包含报存活动地点的id信息
 
 #### 为已有活动地点添加时间段
-/savePeriod
+http://192.168.43.1:8888/volunteer/department/service/savePeriod
 
 发送 post application/json
 
@@ -573,7 +585,7 @@ amountRequired//需要人数
 返回  json 其中包含报存活动时间段的id信息
 
 #### 删除活动，活动地点或活动时间段
-/cancel
+http://192.168.43.1:8888/volunteer/department/service/cancel
 
 发送 post application/x-www-form-urlencoded
 
@@ -588,7 +600,7 @@ periodId //要删除活动时间段的id
 不返回内容
 
 #### 批量审核报名
-/approve
+http://192.168.43.1:8888/volunteer/department/service/approve
 
 发送 json数组
 通过审核的报名记录（record）的id
@@ -596,7 +608,7 @@ periodId //要删除活动时间段的id
 不返回内容
 
 #### 批量评价打分
-/evaluate
+http://192.168.43.1:8888/volunteer/department/service/evaluate
 
 发送 json数组
 ```
@@ -617,7 +629,7 @@ auditLevel//5个等级
 不返回内容
 ### 学生接口
 #### 修改学生信息
-http://192.168.43.1:8888/volunteer/updateStudent
+http://192.168.43.1:8888/volunteer/student/updateStudent
 
 发送post application/json
 
@@ -651,7 +663,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 
 
 #### 获取可报名的活动信息
-/findIndexActivities
+http://192.168.43.1:8888/volunteer/student/query/findIndexActivities
 
 发送 post 无信息
 
@@ -675,7 +687,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 ```
 
 #### 获取自己的公益劳动报名记录
-/getRecord
+http://192.168.43.1:8888/volunteer/student/query/getRecord
 
 发送 post 无信息
 
@@ -700,7 +712,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 ```
 
 #### 报名参加活动
-/participate
+http://192.168.43.1:8888/volunteer/student/service/participate
 
 发送 post application/json 
 
@@ -712,7 +724,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 返回 json 成功或失败
 
 #### 取消报名
-/cancel
+http://192.168.43.1:8888/volunteer/student/service/cancel
 
 发送 post application/a-www-form-urlencoded
 
@@ -723,7 +735,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
 返回 json 成功或失败
 
 #### 活动结束后评价
-/appraise
+http://192.168.43.1:8888/volunteer/student/service/appraise
 
 发送 post application/json
 

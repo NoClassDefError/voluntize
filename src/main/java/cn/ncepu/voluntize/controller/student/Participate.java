@@ -8,7 +8,8 @@ import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/student/service")
+@RestController
+@RequestMapping("/student/service")
 public class Participate extends BaseController {
 
     @Autowired

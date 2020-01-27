@@ -1,5 +1,8 @@
 package cn.ncepu.voluntize.vo.responseVo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 
 /**
@@ -15,7 +18,19 @@ public class HttpResult {
      * @param strings 多个键值对
      */
     public HttpResult(String... strings) {
+        Logger logger = LoggerFactory.getLogger(this.getClass());
         for (String s : strings) {
+            String[] kv = s.split(":");
+            result.put(kv[0], kv[1]);
+        }
+        logger.info(result.toString());
+    }
+
+    public HttpResult(String string){
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.info(string);
+        String[] kv1 = string.split("---");
+        for(String s:kv1){
             String[] kv = s.split(":");
             result.put(kv[0], kv[1]);
         }

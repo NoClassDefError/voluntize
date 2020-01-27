@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
-@RestController("/comment")
+@RestController
+@RequestMapping("/comment")
 public class Comment {
 
     @Autowired
@@ -20,7 +21,7 @@ public class Comment {
     @RequestMapping("/save")
     @ResponseBody
     public HttpResult comment(@RequestBody CommentVo commentVo) {
-        return new HttpResult("comment:"+commentService.saveOrUpdate(commentVo));
+        return new HttpResult("save:"+commentService.saveOrUpdate(commentVo));
     }
 
     @RequestMapping("/delete")

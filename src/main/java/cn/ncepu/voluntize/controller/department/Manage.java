@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-@RestController("/department/service")
+@RestController
+@RequestMapping("/department/service")
 public class Manage extends BaseController {
 
     @Autowired

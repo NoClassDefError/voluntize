@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * 用于管理员与部门发布和管理志愿活动
  */
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 public class ActivityManage extends BaseController {
     @Autowired
     private ActivityService activityService;

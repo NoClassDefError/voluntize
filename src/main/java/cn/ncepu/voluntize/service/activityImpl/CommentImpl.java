@@ -39,10 +39,18 @@ public class CommentImpl implements CommentService {
     private DepartmentRepository departmentRepository;
 
     public String saveOrUpdate(CommentVo commentVo) {
-        Optional<Comment> comment = commentRepository.findById(commentVo.getId());
+        Optional<Comment> comment = commentRepository.findById(commentVo.getId() != null ? commentVo.getId() : "");
         Comment comment1 = comment.orElseGet(Comment::new);
         comment1.setContent(commentVo.getContent());
         final int[] flag = {0};//线程安全
+        comment1.setActivity(activityRepository.findById(commentVo.getActivityId() != null ? commentVo.getActivityId() : "").orElseGet(() -> {
+            flag[0] = 1;
+            return null;
+        }));
+        comment1.setParentComment(commentRepository.findById(commentVo.getParentCommentId() != null ? commentVo.getParentCommentId() : "").orElseGet(() -> {
+            flag[0] = 2;
+            return null;
+        }));
         //判断修改的是否是自己的评论
         if (comment1.getStudent() != null) {
             if (!comment1.getStudent().getStudentNum().equals(session.getAttribute("UserId")))
@@ -50,30 +58,21 @@ public class CommentImpl implements CommentService {
         } else if (comment1.getDepartment() != null)
             if (!comment1.getDepartment().getId().equals(session.getAttribute("UserId")))
                 flag[0] = 3;
-        comment1.setActivity(activityRepository.findById(commentVo.getActivityId()).orElseGet(() -> {
-            flag[0] = 1;
-            return null;
-        }));
-        comment1.setParentComment(commentRepository.findById(commentVo.getParentCommentId()).orElseGet(() -> {
-            flag[0] = 2;
-            return null;
-        }));
         ArrayList<Image> images = new ArrayList<>();
-        commentVo.getImageVos().forEach((vo) -> images.add(vo.toImage()));
+        if (commentVo.getImageVos() != null) commentVo.getImageVos().forEach((vo) -> images.add(vo.toImage()));
         comment1.setImages(images);
         comment1.setTime(new Timestamp(new Date().getTime()));
-        if ("student".equals(session.getAttribute("userCategory")))
+        if ("Student".equals(session.getAttribute("UserCategory")))
             comment1.setStudent(studentRepository.findById((String) session.getAttribute("UserId")).orElse(null));
-        else if ("department".equals(session.getAttribute("userCategory")))
+        else if ("Department".equals(session.getAttribute("UserCategory")))
             comment1.setDepartment(departmentRepository.findById((String) session.getAttribute("UserId")).orElse(null));
         switch (flag[0]) {
             default:
-                commentRepository.save(comment1);
-                return "success";
+                return "success---commentId:" + commentRepository.save(comment1).getId();
             case 1:
                 return "no activity found";
             case 2:
-                return "no parent comment found but result success";
+                return "no parent comment found but result success---commentId:" + commentRepository.save(comment1).getId();
             case 3:
                 return "no authority";
         }
@@ -85,6 +84,14 @@ public class CommentImpl implements CommentService {
     public void delete(String commentId) {
         Comment comment = commentRepository.findById(commentId).orElse(null);
         if (comment != null) {
+            //权限校验
+            if (comment.getStudent() != null) {
+                if (!comment.getStudent().getStudentNum().equals(session.getAttribute("UserId")))
+                    return;
+            } else if (comment.getDepartment() != null)
+                if (!comment.getDepartment().getId().equals(session.getAttribute("UserId")))
+                    return;
+            //删除评论
             comment.setImages(null);
             comment.setContent("该评论已被删除");
             commentRepository.save(comment);

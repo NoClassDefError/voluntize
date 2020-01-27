@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/student")
+@RestController
+@RequestMapping("/student")
 public class StudentUpdate {
     @Autowired
     UpdateUserService updateUserService;

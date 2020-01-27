@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController("/department/query")
+@RestController
+@RequestMapping("/department/query")
 public class DepartmentQuery extends BaseController {
     @Autowired
     private ActivityService activityService;
