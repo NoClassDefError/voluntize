@@ -31,8 +31,7 @@ public class Department {
     private String password;
 
     @Basic
-    @Column(name = "phone_num", length = 11, columnDefinition = "varchar(11) comment '该部门负责管理公益劳动相关事宜的老师的手机号\n" +
-            "也可以是部门电话号'")
+    @Column(name = "phone_num", length = 11, columnDefinition = "varchar(11) comment '该部门负责管理公益劳动相关事宜的老师的手机号\n'" )
     private String phoneNum;
 
     @Basic

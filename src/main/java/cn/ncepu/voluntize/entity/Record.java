@@ -14,7 +14,7 @@ import javax.persistence.*;
  * <ul>
  *     <li>已报名</li>
  *     <li>已审核</li>
- *     <li>已评价</li>
+ *     <li>已授分甚至评价</li>
  * </ul>
  *
  * @author Ge Hanchen
@@ -50,14 +50,13 @@ public class Record {
      * 学生报名时的备注信息
      */
     @Basic
-    @Column(name = "info")
+    @Column(name = "info",columnDefinition = "comment'学生报名时的备注信息'")
     private String info;
     /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id", nullable = false, columnDefinition = "int default 0 comment '标志任一公益劳动项目所处状态\n" +
-            "'")
+    @Column(name = "status_id", nullable = false, columnDefinition = "int default 0 comment '标志任一公益劳动项目所处状态\n0  已报名 \n1 已审核\n2 已授分甚至评价'")
     private int statusId;
 
     /**
