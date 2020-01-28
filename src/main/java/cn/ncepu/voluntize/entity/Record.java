@@ -50,7 +50,7 @@ public class Record {
      * 学生报名时的备注信息
      */
     @Basic
-    @Column(name = "info",columnDefinition = "comment'学生报名时的备注信息'")
+    @Column(name = "info",columnDefinition = "text comment '学生报名时的备注信息'")
     private String info;
     /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
