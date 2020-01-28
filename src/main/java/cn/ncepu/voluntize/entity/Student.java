@@ -47,7 +47,7 @@ public class Student implements Cloneable {
     private String name;
 
     @Basic
-    @Column(name = "major",columnDefinition = "comment '专业'")
+    @Column(name = "major",columnDefinition = "varchar(255) comment '专业'")
     private String major;
 
     @Basic
@@ -60,7 +60,7 @@ public class Student implements Cloneable {
     private String classs;
 
     @Basic
-    @Column(name = "phone_num", length = 11,columnDefinition = "comment '学生的常用联系电话'")
+    @Column(name = "phone_num", length = 11,columnDefinition = "varchar(11) comment '学生的常用联系电话'")
     private String phoneNum;
 
     @Basic
