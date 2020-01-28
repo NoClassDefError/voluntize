@@ -53,7 +53,7 @@ public class ActivityPeriod {
     private Timestamp endDate;
 
     @Basic
-    @Column(name ="period",columnDefinition = "text comment '每天活动时间安排，例如上午8至11，下午2至5'")
+    @Column(name = "period", columnDefinition = "text comment '每天活动时间安排，例如上午8至11，下午2至5'")
     private String timePeriod;
 
     /**
@@ -67,20 +67,20 @@ public class ActivityPeriod {
      * 等效志愿时长
      */
     @Basic
-    @Column(name = "equ_duration",columnDefinition = "int comment '等效公益劳动时长\n不是简单的末初时间的差，需要单独给定' ")
+    @Column(name = "equ_duration", columnDefinition = "int comment '等效公益劳动时长\n不是简单的末初时间的差，需要单独给定' ")
     private Integer equDuration;
 
     /**
      * 所需人数，活动开始前有效
      */
     @Basic
-    @Column(name = "amount_required",columnDefinition = "int comment '所需人数'")
+    @Column(name = "amount_required", columnDefinition = "int comment '所需人数'")
     private Integer amountRequired;
 
     /**
      * 志愿记录 如有学生报名则增加一条志愿记录
      */
     @JSONField(serialize = false)
-    @OneToMany(targetEntity = Record.class, mappedBy = "period")
+    @OneToMany(targetEntity = Record.class, mappedBy = "period", cascade = CascadeType.REMOVE)
     private List<Record> records;
 }

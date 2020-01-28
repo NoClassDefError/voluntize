@@ -76,13 +76,13 @@ public class Activity {
     /**
      * 志愿活动的评论区，只有在报名阶段以后才允许评论
      */
-    @OneToMany(targetEntity = Comment.class, mappedBy = "activity")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "activity", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     /**
      * 划分为多个岗位
      */
-    @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity")
+    @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity", cascade = CascadeType.REMOVE)
     private List<ActivityStation> stations;
 
     public void setStatus(ActivityStatus status) {

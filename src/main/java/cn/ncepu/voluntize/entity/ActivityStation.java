@@ -56,6 +56,6 @@ public class ActivityStation {
     /**
      * 划分为多个时间段
      */
-    @OneToMany(targetEntity = ActivityPeriod.class, mappedBy = "parent")
+    @OneToMany(targetEntity = ActivityPeriod.class, mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<ActivityPeriod> periods;
 }

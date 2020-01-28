@@ -53,10 +53,10 @@ public class Department {
     /**
      * 该部门发布的所有志愿活动信息
      */
-    @OneToMany(mappedBy = "department", targetEntity = Activity.class)
+    @OneToMany(mappedBy = "department", targetEntity = Activity.class,cascade = CascadeType.REMOVE)
     private List<Activity> activities;
 
-    @OneToMany(mappedBy = "department", targetEntity = Comment.class)
+    @OneToMany(mappedBy = "department", targetEntity = Comment.class,cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @Override

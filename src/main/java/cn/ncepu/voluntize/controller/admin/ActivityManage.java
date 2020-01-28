@@ -15,18 +15,18 @@ import java.util.List;
  * 用于管理员与部门发布和管理志愿活动
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/activity")
 public class ActivityManage extends BaseController {
     @Autowired
     private ActivityService activityService;
 
-    @RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult saveActivity(@RequestBody ActivityVo activity) {
         return new HttpResult("saveActivity:", activityService.createOrUpdate(activity));
     }
 
-    @RequestMapping(value = "/deleteActivity", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public void deleteActivity(String id) {
         activityService.deleteActivity(id);
     }
@@ -36,7 +36,7 @@ public class ActivityManage extends BaseController {
      *
      * @return json
      */
-    @RequestMapping(value = "/findAllAc", method = RequestMethod.POST)
+    @RequestMapping(value = "/findAll", method = RequestMethod.POST)
     @ResponseBody
     public List<ActivityVo> findAllActivities() {
         List<ActivityVo> activityVos = new ArrayList<>();
@@ -45,7 +45,7 @@ public class ActivityManage extends BaseController {
         return activityVos;
     }
 
-    @RequestMapping(value = "/findConfirmingAc", method = RequestMethod.POST)
+    @RequestMapping(value = "/findConfirming", method = RequestMethod.POST)
     @ResponseBody
     public List<ActivityVo> findConfirmingActivities() {
         List<ActivityVo> activityVos = new ArrayList<>();
