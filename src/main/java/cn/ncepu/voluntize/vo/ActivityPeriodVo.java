@@ -16,6 +16,7 @@ public class ActivityPeriodVo {
     private String requirements;
     private Integer equDuration;
     private Integer amountRequired;
+    private Integer amountSigned;
 
     public ActivityPeriodVo(ActivityPeriod period) {
         this.id = period.getId();
@@ -28,6 +29,8 @@ public class ActivityPeriodVo {
         this.timePeriod = period.getTimePeriod();
         this.amountRequired = period.getAmountRequired();
         this.equDuration = period.getEquDuration();
+        //在此查找该活动的报名记录
+        this.amountSigned = period.getRecords().size();
     }
 
     public ActivityPeriodVo(){

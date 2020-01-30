@@ -284,6 +284,16 @@ page 页码
     }
 ]
 ```
+#### 查询活动信息
+http://192.168.43.1:8888/volunteer/query/activity
+
+发送 post application/x-www-form-encoded
+
+activityId或stationId或periodId
+
+返回 查询的最外层activity的所有信息
+
+
 
 ### 部门接口
 #### 修改部门信息

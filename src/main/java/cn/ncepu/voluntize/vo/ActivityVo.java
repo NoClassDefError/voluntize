@@ -10,6 +10,8 @@ import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import cn.ncepu.voluntize.entity.ActivityStation;
 
+import javax.persistence.EntityNotFoundException;
+
 /**
  * 用于显示Activity信息，一般情况下总是与Period和Station合并显示，但也有Period单独显示的情况
  */
@@ -28,18 +30,22 @@ public class ActivityVo {
     //没有comments，它们需要单独分页返回
 
     public ActivityVo(Activity activity) {
-        this.id = activity.getId();
-        this.status = activity.getStatusId();
-        this.name = activity.getName();
-        this.semester = activity.getSemester();
-        this.description = activity.getDescription();
-        this.departmentId = activity.getDepartment().getId();
-        this.departmentName = activity.getDepartment().getName();
-        for (Image image : activity.getImages()) images.add(new ImageVo(image));
-        for (ActivityStation station : activity.getStations()) stations.add(new ActivityStationVo(station));
+        try {
+            this.id = activity.getId();
+            this.status = activity.getStatusId();
+            this.name = activity.getName();
+            this.semester = activity.getSemester();
+            this.description = activity.getDescription();
+            this.departmentId = activity.getDepartment().getId();
+            this.departmentName = activity.getDepartment().getName();
+            for (Image image : activity.getImages()) images.add(new ImageVo(image));
+            for (ActivityStation station : activity.getStations()) stations.add(new ActivityStationVo(station));
+        } catch (NullPointerException e) {
+            throw new EntityNotFoundException("No activity found!");
+        }
     }
 
-    public ActivityVo(){
+    public ActivityVo() {
 
     }
 }

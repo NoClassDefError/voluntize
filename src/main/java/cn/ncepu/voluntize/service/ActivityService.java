@@ -39,4 +39,10 @@ public interface ActivityService {
      * 查找特定部门发布的活动
      */
     List<Activity> findDepartment(String departmentId);
+
+    Activity findById(String activityId);
+
+    Activity findByPeriod(String periodId);
+
+    Activity findByStation(String stationId);
 }

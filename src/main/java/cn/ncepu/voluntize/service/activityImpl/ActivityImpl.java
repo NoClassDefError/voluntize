@@ -156,4 +156,20 @@ public class ActivityImpl implements ActivityService {
         }
         return null;
     }
+
+    @Override
+    public Activity findById(String activityId) {
+        return activityRepository.findById(activityId).orElse(null);
+    }
+
+    @Override
+    public Activity findByPeriod(String periodId) {
+        Optional<ActivityPeriod> period = activityPeriodRepository.findById(periodId);
+        return period.map(activityPeriod -> activityPeriod.getParent().getParentActivity()).orElse(null);
+    }
+
+    @Override
+    public Activity findByStation(String stationId){
+        return activityStationRepository.findById(stationId).map(ActivityStation::getParentActivity).orElse(null);
+    }
 }

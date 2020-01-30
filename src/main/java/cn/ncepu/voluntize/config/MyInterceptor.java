@@ -13,9 +13,6 @@ import javax.servlet.http.HttpSession;
 @Component
 public class MyInterceptor implements HandlerInterceptor {
 
-    @Autowired
-    private HttpSession session;
-
     /**
      * 用于拦截部分请求进行权限验证
      */
@@ -23,12 +20,17 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURL().substring(request.getRequestURL().lastIndexOf("volunteer"));
         String category;
+        HttpSession session = request.getSession();
         Logger logger = LoggerFactory.getLogger(this.getClass());
         logger.info("Access path = " + path);
-        if (session == null || session.getAttribute("UserCategory") == null) {
+        logger.info("Session id = " + session.getId());
+        if (session.getAttribute("UserCategory") == null) {
             category = "Visitor";
             logger.info("This is a visitor.");
-        } else category = (String) session.getAttribute("UserCategory");
+        } else {
+            category = (String) session.getAttribute("UserCategory");
+            logger.info("This is a " + category);
+        }
         if ((path.indexOf("student") == 1) && !"Student".equals(category)) {
             logger.info("No authority to access student function!");
             return false;
