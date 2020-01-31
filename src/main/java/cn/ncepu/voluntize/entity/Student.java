@@ -35,6 +35,10 @@ public class Student implements Cloneable {
     @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null comment '身份证号'")
     private String idNum;
 
+    @Basic
+    @Column(name = "gender", columnDefinition = "varchar(10) comment '性别'")
+    private String gender;
+
     /**
      * 密码，初始密码为"123456"
      */
@@ -47,7 +51,7 @@ public class Student implements Cloneable {
     private String name;
 
     @Basic
-    @Column(name = "major",columnDefinition = "varchar(255) comment '专业'")
+    @Column(name = "major", columnDefinition = "varchar(255) comment '专业'")
     private String major;
 
     @Basic
@@ -60,7 +64,7 @@ public class Student implements Cloneable {
     private String classs;
 
     @Basic
-    @Column(name = "phone_num", length = 11,columnDefinition = "varchar(11) comment '学生的常用联系电话'")
+    @Column(name = "phone_num", length = 11, columnDefinition = "varchar(11) comment '学生的常用联系电话'")
     private String phoneNum;
 
     @Basic

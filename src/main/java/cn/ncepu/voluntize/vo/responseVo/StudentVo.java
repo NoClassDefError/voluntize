@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class StudentVo {
     private String studentNum;
     private String idNum;
+    private String gender;
     private String name;
     private String major;
     private String grade;
@@ -32,6 +33,7 @@ public class StudentVo {
         phoneNum = student.getPhoneNum();
         email = student.getEmail();
         school = student.getSchool();
+        gender = student.getGender();
         totalDuration = student.getTotalDuration();
         for (Image image : student.getProfiles()) profiles.add(new ImageVo(image));
 
