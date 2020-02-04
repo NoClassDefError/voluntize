@@ -443,7 +443,7 @@ periodId 时间段
         "id": "02",
         "volunteerId": "120181080702",
         "periodId": "1",
-        "info": "玩耍……",
+        "info": "玩耍……",//学生的自我介绍
         "status": 2,
         "auditLevel": 0,
         "evaluation": "被录取而一直未到",
@@ -699,7 +699,9 @@ http://192.168.43.1:8888/volunteer/student/query/findIndexActivities
 #### 获取自己的公益劳动报名记录
 http://192.168.43.1:8888/volunteer/student/query/getRecord
 
-发送 post 无信息
+发送 post 
+status 可取 0,1,2,3 也可以不带此参数
+
 
 返回 json数组
 

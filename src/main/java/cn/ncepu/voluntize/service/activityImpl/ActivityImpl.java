@@ -148,13 +148,9 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> findDepartment(String departmentId) {
-        Optional<Department> department = departmentRepository.findById(departmentId);
-        if (department.isPresent()) {
-            Department department1 = department.get();
-            return department1.getActivities();
-        }
-        return null;
+    public List<Activity> findDepartment(String departmentId, Integer status) {
+        if (status == null) return activityRepository.findByDepartmentId(departmentId);
+        else return activityRepository.findByDepartmentId(departmentId, status);
     }
 
     @Override
@@ -169,7 +165,7 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public Activity findByStation(String stationId){
+    public Activity findByStation(String stationId) {
         return activityStationRepository.findById(stationId).map(ActivityStation::getParentActivity).orElse(null);
     }
 }

@@ -1,9 +1,12 @@
 package cn.ncepu.voluntize.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 @Configuration
 public class ApplicationConfigurer implements WebMvcConfigurer {
@@ -17,6 +20,7 @@ public class ApplicationConfigurer implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedOrigins("*")
-                .allowCredentials(true);
+                .allowCredentials(true).maxAge(3600);
     }
+
 }

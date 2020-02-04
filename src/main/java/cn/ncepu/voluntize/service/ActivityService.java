@@ -11,6 +11,7 @@ public interface ActivityService {
 
     /**
      * 添加或更新志愿活动
+     *
      * @param activity 保存的activity
      * @return 保存activity的Id
      */
@@ -30,15 +31,16 @@ public interface ActivityService {
 
     /**
      * 查找特定阶段的活动
+     *
      * @param status 活动阶段
      * @return 活动
      */
     List<Activity> findStatus(Activity.ActivityStatus status);
 
     /**
-     * 查找特定部门发布的活动
+     * 在假设活动与时间段一一对应时
      */
-    List<Activity> findDepartment(String departmentId);
+    List<Activity> findDepartment(String departmentId, Integer status);
 
     Activity findById(String activityId);
 

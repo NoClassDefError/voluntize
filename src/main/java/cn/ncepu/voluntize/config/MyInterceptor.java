@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,15 +21,23 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURL().substring(request.getRequestURL().lastIndexOf("volunteer"));
         String category;
+        char a = 7;
+        System.out.println(a);//响铃提醒
         HttpSession session = request.getSession();
         Logger logger = LoggerFactory.getLogger(this.getClass());
-        logger.info("Access path = " + path);
+        logger.info("Request: " + request.getRequestURL().toString());
         logger.info("Session id = " + session.getId());
         if (session.getAttribute("UserCategory") == null) {
             category = "Visitor";
             logger.info("This is a visitor.");
+            response.addCookie(new Cookie("Is-Visitor", "true"));
+            session.setAttribute("UserCategory", category);
+//            if(path.contains("login")||path.contains("verify")){
+//                session.setAttribute("UserCategory",category);
+//            }else return false;
         } else {
             category = (String) session.getAttribute("UserCategory");
+            response.addCookie(new Cookie("Is-Visitor", "false"));
             logger.info("This is a " + category);
         }
         if ((path.indexOf("student") == 1) && !"Student".equals(category)) {
@@ -51,7 +60,6 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         Logger logger = LoggerFactory.getLogger(handler.getClass());
-        logger.info("Request: " + request.getRequestURL().toString());
         logger.info("Response:" + response.getContentType());
     }
 }

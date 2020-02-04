@@ -50,10 +50,12 @@ public class StudentQuery extends BaseController {
     @ResponseBody
     public ArrayList<RecordVo> getStuRecord(Integer status) {
         ArrayList<RecordVo> recordVos = new ArrayList<>();
-        for (Record record : participateService.getRecordByStu()) {
-            if (record.getStatusId() == status)
+        List<Record> records = participateService.getRecordByStu(status);
+        if (records != null) {
+            for (Record record : records)
                 recordVos.add(new RecordVo(record));
-        }
-        return recordVos;
+            return recordVos;
+        } else return null;
     }
+
 }

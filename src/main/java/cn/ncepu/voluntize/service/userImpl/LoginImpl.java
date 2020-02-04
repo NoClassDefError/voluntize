@@ -26,4 +26,17 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         return new UserInfoVo(-1, null, null);
     }
 
+    @Override
+    public UserInfoVo login(String userId) {
+        //判断是否是管理员
+        if ("admin".equals(userId))
+            return new UserInfoVo(0, null, null);
+        //判断用户身份
+        Optional<Student> optional1 = studentRepository.findById(userId);
+        Optional<Department> optional2 = departmentRepository.findById(userId);
+        return optional1.map(student -> new UserInfoVo(1, student, null))
+                .orElseGet(() -> optional2.map(department -> new UserInfoVo(2, null, department))
+                        .orElseGet(() -> new UserInfoVo(-1, null, null)));
+    }
+
 }

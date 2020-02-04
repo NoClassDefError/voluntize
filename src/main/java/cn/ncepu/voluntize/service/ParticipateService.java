@@ -22,10 +22,10 @@ public interface ParticipateService {
      * 专门设置查询方法
      */
     ArrayList<Record> getRecord(String periodId, Record.RecordStatus status);
+
     ArrayList<Record> getRecord(String periodId);
 
-
-    List<Record> getRecordByStu();
+    List<Record> getRecordByStu(Integer status);
 
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的

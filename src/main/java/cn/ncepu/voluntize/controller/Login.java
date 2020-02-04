@@ -50,6 +50,15 @@ public class Login extends BaseController {
         return userInfoVo;
     }
 
+    @RequestMapping(value = "/getLoginVo", method = RequestMethod.POST)
+    @ResponseBody
+    public UserInfoVo getLoginVo() {
+        String userId = (String) session.getAttribute("UserId");
+        if (userId != null || "Visitor".equals(session.getAttribute("UserCategory")))
+            return service.login(userId);
+        else return new UserInfoVo(-1, null, null);
+    }
+
     /**
      * 登出接口
      *

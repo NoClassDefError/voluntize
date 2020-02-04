@@ -30,10 +30,10 @@ public class DepartmentQuery extends BaseController {
     private HttpSession session;
 
     @RequestMapping(value = "/released", method = RequestMethod.POST)
-    public List<ActivityVo> getActivity() {
+    public List<ActivityVo> getActivity(Integer status) {
         if ("Department".equals(session.getAttribute("UserCategory"))) {
             ArrayList<ActivityVo> activityVos = new ArrayList<>();
-            for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId")))
+            for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId"), status))
                 activityVos.add(new ActivityVo(activity));
             return activityVos;
         } else return null;
@@ -42,7 +42,8 @@ public class DepartmentQuery extends BaseController {
     @RequestMapping(value = "/records", method = RequestMethod.POST)
     public List<RecordVo> getRecords(String periodId) {
         ArrayList<RecordVo> recordVos = new ArrayList<>();
-        for (Record record : participateService.getRecord(periodId)) recordVos.add(new RecordVo(record));
+        for (Record record : participateService.getRecord(periodId))
+            recordVos.add(new RecordVo(record));
         return recordVos;
     }
 

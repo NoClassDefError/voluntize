@@ -98,11 +98,8 @@ public class Activity {
             case 1:
                 this.status = ActivityStatus.SEND;
                 break;
-            case 2:
-                this.status = ActivityStatus.APPLY;
-                break;
             case 3:
-                this.status = ActivityStatus.STARTED;
+                this.status = ActivityStatus.APPLY;
                 break;
             case 4:
                 this.status = ActivityStatus.FINISHED;

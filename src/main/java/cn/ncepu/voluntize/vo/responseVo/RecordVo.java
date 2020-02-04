@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class RecordVo {
     private String id;
-    private String volunteerId;
+    private StudentVo volunteer;
     private String periodId;
     private String info;
     private int status;
@@ -28,7 +28,7 @@ public class RecordVo {
         this.isPassed = record.isPassed();
         this.status = record.getStatusId();
         this.stars = record.getStars();
-        this.volunteerId = record.getVolunteer().getStudentNum();
+        this.volunteer = new StudentVo(record.getVolunteer());
         this.periodId = record.getPeriod().getId();
     }
 }
