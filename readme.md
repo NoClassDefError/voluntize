@@ -111,20 +111,38 @@ path 服务器地址
 
 ### 通用接口
 
-#### 登录，获取用户部分信息
+#### 登录，获取用户部分信息    [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/login
 
 发送 post application/json 
 
-    id 用户名
-    password 密码
+    id  //用户名
+    password //密码
     示例：{"id":"12345","password":"12345"}
 返回 UserInfo转成的json
-
-前端应根据其中的userCategory属性跳转至合适的页面：-1-登录失败 0-管理员 1-学生 2-部门
-```
+    示例1：
     {
-        "userCategory":1,
+        "name"："教务处"//部门名
+        "manager":"李华"//负责人姓名
+        "e-mail":"12345@123.com"//负责人邮箱
+        "phone_num":123456798749//部门负责人联系电话
+    }
+    示例2：
+    {
+        “id”：120181080701//学号
+        “school”:"控计学院"//学院
+        “major”:"软件工程"//专业
+        "grade"："2018级"//年级
+        “class”:"软件1802"//班级
+        “name”："邵博深"//学生姓名
+        “sex”:“男”//性别
+        “phone_num”：15311780285//手机号
+    }
+
+前端应根据其中的userCategory属性跳转至
+    {
+        "userCategory":1,合适的页面：-1-登录失败 0-管理员 1-学生 2-部门
+```
         "student":{"studentNum":"120171020201",
         ... 学生其他信息
         },"department":null
@@ -235,7 +253,7 @@ commentId 要删除的评论id
 
 返回 无 
 
-#### 获取特定活动的评论区（分页）
+#### 获取特定活动的评论区（分页） [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/comment/getComments
 
 发送 post application/x-www-form-urlencoded
@@ -258,7 +276,7 @@ page 页码
         "distributorName": "邵博深",
         "distributorId": "120181080701",
         "activityId": "001",
-        "images": []
+        
     },
     {
         "id": "3002",
@@ -269,7 +287,6 @@ page 页码
         "distributorName": "图书馆（主）",
         "distributorId": "6177001",
         "activityId": "001",
-        "images": []
     },
     {
         "id": "3004",
@@ -280,7 +297,7 @@ page 页码
         "distributorName": "葛翰臣",
         "distributorId": "120171020201",
         "activityId": "001",
-        "images": []
+    
     }
 ]
 ```
@@ -306,128 +323,60 @@ http://192.168.43.1:8888/volunteer/department/updateDepartment
     email
     profiles //与上个接口相同
 
-#### 获取已发送的活动信息
+#### 获取已发送的活动信息  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/query/released
 
 发送 post 无内容
 
 返回 json
-```
+``` 
+
 [
     {
-        "id": "001",
-        "name": "2019图书馆公益活动",
-        "semester": "2019-2020第一学期",
-        "description": "搬运书籍，贴标签等",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 0,
-        "images": [],
+        "id": "001",//该条活动的id
+        "name": "2019图书馆公益活动",//活动名
+        "description": "搬运书籍，贴标签等",//活动描述
+        "departmentName": "图书馆（主）",//部门名
+        "status": 1,//当前所处的时期——审核期
         "stations": [
             {
-                "id": "1001",
-                "name": "主C 101",
-                "linkman": "张三",
-                "phoneNum": "61772591",
-                "description": "adoifudnxiudsaoyfuiaofnyuadiof",
-                "parentId": "001",
                 "periods": [
                     {
-                        "id": "1",
-                        "parentStationId": "1001",
-                        "parentStationName": "主C 101",
-                        "parentActivityId": "001",
-                        "parentActivityName": "2019图书馆公益活动",
-                        "startDate": "2020-01-11 02:23:37.0",
-                        "endDate": "2020-01-20 02:22:58.0",
-                        "timePeriod": "上午8点开始，下午不用来",
-                        "requirements": null,
-                        "equDuration": 20,
-                        "amountRequired": 20
+                        
+                        "startDate": "2020-01-11 02:23:37.0",//开始时间
+                        "endDate": "2020-01-20 02:22:58.0",//结束时间
+                        "equDuration": 20,//等效时长
+                        "amountRequired": 20//所需人数
                     },
-                    {
-                        "id": "2",
-                        "parentStationId": "1001",
-                        "parentStationName": "主C 101",
-                        "parentActivityId": "001",
-                        "parentActivityName": "2019图书馆公益活动",
-                        "startDate": "2020-01-14 02:26:00.0",
-                        "endDate": "2020-01-20 02:25:25.0",
-                        "timePeriod": "下午2点开始，上午不用来",
-                        "requirements": null,
-                        "equDuration": 20,
-                        "amountRequired": 10
-                    }
                 ]
             },
-            {
-                "id": "1002",
-                "name": "图书馆主馆101",
-                "linkman": "李四",
-                "phoneNum": "61773253",
-                "description": "任意内容",
-                "parentId": "001",
-                "periods": []
-            },
-            {
-                "id": "1003",
-                "name": "图书馆主馆305",
-                "linkman": "王五",
-                "phoneNum": "61773241",
-                "description": "任意内容",
-                "parentId": "001",
-                "periods": []
-            }
         ]
-    },
-    {
-        "id": "003",
-        "name": "2018图书馆公益活动",
-        "semester": "2018-2019第二学期",
-        "description": "为了增强学生实践精神，并减小学校各部门工作负担。。。",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 4,
-        "images": [],
-        "stations": []
-    },
-    {
-        "id": "0779c44d-4034-47d0-93bf-2d49829ed7ed",
-        "name": "2019图书馆公益活动4",
-        "semester": "2019-2020第一学期",
-        "description": "搬运书籍，贴标签等",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 0,
-        "images": [],
-        "stations": []
-    },
-    {
-        "id": "6e1cd45a-0f16-4444-9f8b-3231f1cf5335",
-        "name": "2019图书馆公益活动2",
-        "semester": "2019-2020第一学期",
-        "description": "搬运书籍，贴标签等",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 0,
-        "images": [],
-        "stations": []
-    },
-    {
-        "id": "9c2a048a-4b07-48c9-bba4-ce3f1f6345ed",
-        "name": "2019图书馆公益活动3",
-        "semester": "2019-2020第一学期",
-        "description": "搬运书籍，贴标签等",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 0,
-        "images": [],
-        "stations": []
     }
+    {
+        "id": "002",//该条活动的id
+        "name": "图书馆搬书",//活动名
+        "description": "搬运书籍，贴标签等",//活动描述
+        "departmentName": "图书馆（主c）",//部门名
+        "status": 1,//当前所处的时期——审核期
+        "stations": [
+            {
+                "periods": [
+                    {
+                        
+                        "startDate": "2020-02-11 02:23:37.0",//开始时间
+                        "endDate": "2020-01-20 02:22:58.0",//结束时间
+                        "equDuration": 20,//等效时长
+                        "amountRequired": 20//所需人数
+                    },
+                ]
+            },
+        ]
+    }
+                
 ]
 ```
 
-#### 获取特定活动时间段的报名记录
+#### 获取特定活动时间段的报名记录  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/query/records
 
 发送 post application/x-www-form-urlencoded
@@ -441,10 +390,10 @@ periodId 时间段
 [
     {
         "id": "02",
-        "volunteerId": "120181080702",
+        "volunteerId": "120181080702",//学生学号
         "periodId": "1",
         "info": "玩耍……",//学生的自我介绍
-        "status": 2,
+        
         "auditLevel": 0,
         "evaluation": "被录取而一直未到",
         "stars": 0,
@@ -478,7 +427,7 @@ periodId 时间段
 ]
 ```
 
-#### 获取特定学生信息
+#### 获取特定学生信息  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/query/studentInfo
 
 发送 post application/x-www-form-urlencoded
@@ -490,47 +439,39 @@ studentId 学生学号
 返回 json
 ```
 {
-    "studentNum": "120171020201",
-    "idNum": "341003199908170034",
-    "name": "葛翰臣",
-    "major": "电气工程及其自动化",
-    "grade": "大三",
-    "classs": "电气1710",
-    "phoneNum": null,
-    "email": "Macswelle@outlook.com",
-    "school": "电气学院",
-    "totalDuration": 0,
-    "profiles": [
-        {
-            "name": null,
-            "url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E5%A4%B4%E5%83%8F&step_word=&hs=0&pn=42&spn=0&di=53570&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=3117110987%2C173625746&os=2075175500%2C824963435&simid=0%2C0&adpicid=0&lpn=0&ln=3718&fr=&fmq=1579421350054_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=head&bdtype=0&oriquery=&objurl=http%3A%2F%2Fimg2.woyaogexing.com%2F2018%2F03%2F10%2F9a68831f24d2985b!360x360_big.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bo5yw52jxtg2_z%26e3Bv54AzdH3Fp57xtwg2AzdH3FojtxtgAzdH3Fda8bAzdH3Fclmaac_z%26e3Bip4s&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined"
-        }
+    "studentNum": "120171020201",//学号
+    "name": "葛翰臣",//姓名
+    "major": "电气工程及其自动化",//专业
+    "grade": "2017级",//年级
+    "classs": "电气1710"，//班级
+    "phoneNum": 136546546,//学生手机号
+    "school": "电气学院",//学院
+    “sex”："男"//性别
+    “record”：[
+        "info":"我觉得我能胜任"//学生报名时的个人介绍
     ]
 }
 ```
 
 
-#### 新建活动
+#### 新建活动  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/service/saveActivity
 
 发送 post application/json
 
 ```
 id //添加id时为修改，不添加为新增
-name 
-semester 
-description
-departmentId
-images //json数组，图片对象，包含name,url两个属性
+name//活动名称 
+description//活动内容介绍
+departmentId//部门id
+
 ```
 示例：
 ```
 {
-    "name": "2019图书馆公益活动4",
-    "semester": "2019-2020第一学期",
-    "description": "搬运书籍，贴标签等",
-    "departmentId": "6177001",
-    "images": []
+    "name": "2019图书馆公益活动4",//活动名称 
+    "description": "搬运书籍，贴标签等",//活动内容介绍
+    "departmentId": "6177001",//部门id
 }
 ```
 
@@ -540,56 +481,53 @@ images //json数组，图片对象，包含name,url两个属性
 {"save activity": "0779c44d-4034-47d0-93bf-2d49829ed7ed"}
 ```
 
-#### 为已有活动添加活动地点
+#### 为已有活动添加活动地点  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/service/saveStation
 
 发送 post application/json
 
 ```
 id//添加id时为修改，不添加为新增
-name
-linkman
-phoneNum
-description
+name//劳动地点
+linkman//联系人
+phoneNum//联系人的电话或手机号
 parentId //活动的id
 ```
 
 ```
 {
-    "name": "主C 101",
-    "linkman": "张三",
-    "phoneNum": "61772591",
-    "description": "",
-    "parentId": "6177001"
+    "name": "主C 101",//劳动地点
+    "linkman": "张三",//联系人
+    "phoneNum": "61772591",//联系人的电话或手机号
+    "parentId": "6177001"//活动的id
 }
 ```
 返回  json 其中包含报存活动地点的id信息
 
-#### 为已有活动地点添加时间段
+#### 为已有活动地点添加时间段  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/service/savePeriod
 
 发送 post application/json
 
 ```
-id//添加id时为修改，不添加为新增
-parentStationId//不能为空
-startDate//起始日期，格式： 2020-01-11 02:23:37.0
+
+startDate//开始日期，格式： 2020-01-11 02:23:37.0
 endDate//结束日期
-timePeriod//以字符串表示每天几点开始几点结束
-requirements//需求
+timePeriod//每日工作时间，以字符串表示每天几点开始几点结束
+requirements//录取要求
 equDuration//等效时长
-amountRequired//需要人数
+amountRequired//所需人数
 ```
 
 示例：
 ```
 {
-    "startDate": "2020-01-11 02:23:37.0",
-    "endDate": "2020-01-20 02:22:58.0",
-    "timePeriod": "上午8点开始，下午不用来",
-    "requirements": null,
-    "equDuration": 20,
-    "amountRequired": 20
+    "startDate": "2020-01-11 02:23:37.0",//开始日期
+    "endDate": "2020-01-20 02:22:58.0",//结束日期
+    "timePeriod": "上午8点开始，下午不用来",//每日工作时间，
+    "requirements": “男同学优先录取”,//录取要求
+    "equDuration": 20,//等效时长
+    "amountRequired": 20//所需人数
 }
 ```
 返回  json 其中包含报存活动时间段的id信息
@@ -617,27 +555,46 @@ http://192.168.43.1:8888/volunteer/department/service/approve
 
 不返回内容
 
-#### 批量评价打分
+#### 批量评价打分  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/department/service/evaluate
 
 发送 json数组
 ```
 recordId//报名记录（record）的id
 evaluate//评语
-auditLevel//5个等级
+auditLevel//4个等级，不通过：0 ，通过：1，良好：2，优秀：3
+示例：
+[
+    {
+        recordId:001//报名记录（record）的id
+        evaluate:null//评语
+        auditLevel：3//等级
+    }
+    {
+        recordId:001//报名记录（record）的id
+        evaluate:该同学很热情//评语
+        auditLevel：3//等级
+    }
+    {
+        recordId//报名记录（record）的id
+        evaluate：“一直没来”//评语，等级为“0”，必须填理由
+        auditLevel：0//等级
+    }
+
+]
 ```
 
-实例：
 
-```
-    [
-        {"recordId":"1234456","evaluate":"some words here...","auditLevel":5},
-        {"recordId":"123qs464536","evaluate":"some words here...","auditLevel":1}
-    ]
-```
+
 
 不返回内容
-### 学生接口
+
+
+
+
+
+
+## 学生接口
 #### 修改学生信息
 http://192.168.43.1:8888/volunteer/student/updateStudent
 
@@ -672,7 +629,7 @@ json数组中；若未上传新的图片，则保持原信息不变即可。
     失败{"updateResult":"failed"}
 
 
-#### 获取可报名的活动信息
+#### 获取可报名的活动信息  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/student/query/findIndexActivities
 
 发送 post 无信息
@@ -682,21 +639,57 @@ http://192.168.43.1:8888/volunteer/student/query/findIndexActivities
 示例：
 ```
 [
+    {
+        “state”：0//当前状态，可供选择：0，已选择、取消选择：1
+        "name": "2018图书馆公益活动",//活动名称
+        "description": "打杂",//活动内容介绍
+        "stations": [
+            {
+                "name": "图书馆主馆305",//劳动地点
+                "periods": [
+                    {
+                       
+                        "startDate": "2020-01-27 21:34:13",//开始时间
+                        "endDate": "2020-02-27 21:34:13",//结束时间
+                        "timePeriod": "每天中午12点-下午1点",//每日工作时间
+                        "requirements": null,//录取要求
+                        "equDuration": 15,//劳动时长
+                        "amountRequired": 14,//所需人数
+                        "amountSigned": 11//已报人数
+                    }
+                ]
+            }
+        ]
+    }
+    
     {
-        "id": "003",
-        "name": "2018图书馆公益活动",
-        "semester": "2018-2019第二学期",
-        "description": "为了增强学生实践精神，并减小学校各部门工作负担。。。",
-        "departmentId": "6177001",
-        "departmentName": "图书馆（主）",
-        "status": 4,
-        "images": [],
-        "stations": []
-    }
+        “state”：1//当前状态，可供选择：0，已选择、取消选择：1
+        "name": "财务处算账",//活动名称
+        "description": "打杂",//活动内容介绍
+        "stations": [
+            {
+                "name": "D305",//劳动地点
+                "periods": [
+                    {
+                       
+                        "startDate": "2020-01-27 21:34:13",//开始时间
+                        "endDate": "2020-02-27 21:34:13",//结束时间
+                        "timePeriod": "每周二下午2点到5点",//每日工作时间
+                        "requirements": 诚实守信,//录取要求
+                        "equDuration": 30,//劳动时长
+                        "amountRequired": 5//所需人数
+                        "amountSigned": 11//已报人数
+                    }
+                ]
+            }
+        ]
+    }
+
+    ……
 ]
 ```
 
-#### 获取自己的公益劳动报名记录
+#### 获取自己的公益劳动报名记录  [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/student/query/getRecord
 
 发送 post 
@@ -709,17 +702,58 @@ status 可取 0,1,2,3 也可以不带此参数
 ```
 [
     {
-        "id": "03",
-        "volunteerId": "120171020201",
-        "periodId": "3",
-        "info": "选我",
-        "status": 1,
-        "auditLevel": null,
-        "evaluation": null,
-        "stars": 0,
-        "comment": null,
-        "passed": true
-    }
+        “state”：0//当前状态，待审核：0，进行中：1，待部门评价：2
+        "name": "2018图书馆公益活动",//活动名称
+        "description": "打杂",//活动内容介绍
+        "stations": [
+
+            {
+                "name": "图书馆主馆305",//劳动地点
+                "linkman": "王五",//联系人
+                "phoneNum": "61773241",//联系电话
+                "periods": [
+                    {
+                       
+                        "startDate": "2020-01-27 21:34:13",//开始时间
+                        "endDate": "2020-02-27 21:34:13",//结束时间
+                        "timePeriod": "每天中午12点-下午1点",//每日工作时间
+                        "requirements": null,//录取要求
+                        "equDuration": 15,//劳动时长
+                        "amountRequired": 14,//所需人数
+                        
+                    }
+                ]
+            }
+        ]
+    }
+
+    {
+         “state”：2//当前状态，待审核：0，进行中：1，待部门评价：2
+        "name": "财务处",//活动名称
+        "description": "打杂",//活动内容介绍
+        "stations": [
+
+            {
+                "name": "D305",//劳动地点
+                "linkman": "湛山",//联系人
+                "phoneNum": "61775241",//联系电话
+                "periods": [
+                    {
+                       
+                        "startDate": "2020-01-27 21:34:13",//开始时间
+                        "endDate": "2020-02-27 21:34:13",//结束时间
+                        "timePeriod": "每天中午12点-下午1点",//每日工作时间
+                        "requirements": null,//录取要求
+                        "equDuration": 15,//劳动时长
+                        
+                    }
+                ]
+            }
+        ]
+    }
+
+
+    ……
 ]
 ```
 
@@ -762,8 +796,335 @@ http://192.168.43.1:8888/volunteer/student/service/appraise
 ### 管理员接口
 
 #### 
+```
+管理员接口文档 [2020.2.6 添加]
 
-## 软件调试
+账号管理模块
+
+创建账号
+发送  post application/json
+     
+ Id_Type//所创建账号的类型；学生：1   部门：2
+      Id//账号
+
+示例1
+{
+“Id_Type”:1//类型为学生账号
+“Id”:120181080701
+“name”：“邵博深”
+“class”：软件802
+“grade”：2018级
+“major”：软件工程
+“sex”：男
+
+}
+示例2
+{
+“Id_Type”:2//类型为部门账号
+“Id”:6177009
+“name”：财务处
+“manager”：刘惠东//部门负责人
+}
+
+返回 json数组
+    若创建的是部门账号：
+成功{"updatedepartment":"success"}
+失败{"updatedepartment":"failed"}
+若创建的是学生账号：
+成功{"updatestudent":"success"}
+失败{"updatestudent":"failed"}
+
+密码重置
+发送  post application/x-www-form-urlencoded
+      
+Id//部门或者学生的账号
+
+返回 json数组
+{changePassword:success}
+{changePassword:error}
+
+账号删除
+发送  post application/x-www-form-urlencoded
+ Id//部门或者学生的账号
+返回json  
+若创建的是部门账号：
+成功{"updatedepartment":"success"}
+失败{"updatedepartment":"failed"}
+若创建的是学生账号：
+成功{"updatestudent":"success"}
+失败{"updatestudent":"failed"}
+
+
+活动审批模块
+获取部门已提交活动
+发送  post 无内容
+
+返回json数组
+    示例1：
+    [
+        {   "id": "001 "//该条活动的id
+            "name": "2019图书馆公益活动"，//活动名
+            "description": "搬运书籍，贴标签等"，//活动描述
+            "departmentName": "图书馆（主）",//部门名
+            "status": 1,//当前所处的时期——审核期
+            "stations": [
+            {
+                   "periods": [
+                    {
+                        "startDate": "2020-01-11 02:23:37",//开始时间
+                        "endDate": "2020-01-20 02:22:58",//结束时间
+                        "equDuration": 20,//等效时长
+                        "amountRequired": 20//人数要求
+                    }
+                    ]
+            }
+            ]
+        }
+]    
+
+
+审批部门活动
+发送 post application/x-www-form-urlencoded
+        On_off//是否开启审批权限，开启：1  关闭：0
+Activity_id//所审批活动的id
+Result//开启审批权限下的审批结果，通过：1  未通过：0
+            示例1：
+                {
+    “On_off”:0//已关闭审核权限
+}
+            示例2：
+                {
+    “On_off”:1//已开启审核权限
+    “Activity_id”:001//所选审批活动的id
+    “Result”：1//通过
+}
+            示例3：
+                {
+    “On_off”:1//已开启审核权限
+    “Activity_id”:001//所选审批活动的id
+    “Result”：0//未通过
+}
+    
+返回 json数组
+{updateactivity:success}
+{updateactivity:error}
+
+管理员已审批（含关闭审核权限时）的审批记录
+        发生 post 无内容
+        返回json数组
+    示例1：
+    [
+        {   "id": "001 "//该条活动的id
+            "name": "2019图书馆公益活动"，//活动名
+            "description": "搬运书籍，贴标签等"，//活动描述
+            "departmentName": "图书馆（主）",//部门名
+            "status": 1,//status如果仍是1，则是审核未通过 
+            "stations": [
+            {
+                   "periods": [
+                    {
+                        "startDate": "2020-01-11 02:23:37",//开始时间
+                        "endDate": "2020-01-20 02:22:58",//结束时间
+                        "equDuration": 20,//等效时长
+                        "amountRequired": 20//人数要求
+                    }
+                    ]
+            }
+            ]
+        }
+]    
+    示例2：
+    [
+        {   "id": "001 "//该条活动的id
+            "name": "2019图书馆公益活动"，//活动名
+            "description": "搬运书籍，贴标签等"，//活动描述
+            "departmentName": "图书馆（主）",//部门名
+            "status": 2,//已通过审核，status不是0或1，则为已通过
+            "stations": [
+            {
+                  "periods": [
+                   {
+                       "startDate": "2020-01-11 02:23:37",//开始时间
+                       "endDate": "2020-01-20 02:22:58",//结束时间
+                       "equDuration": 20,//等效时长
+                       "amountRequired": 20//人数要求
+                   }
+                   ]
+            }
+            ]
+        }
+]    
+示例2：
+[
+   {    "id": "001 "//该条活动的id
+        "name": "2019图书馆公益活动"，//活动名
+        "description": "搬运书籍，贴标签等"，//活动描述
+        "departmentName": "图书馆（主）",//部门名
+            "status": 3,//已通过审核，status不是0或1，则为已通过
+            "stations": [
+            {
+                   "periods": [
+                    {
+                        "startDate": "2020-01-11 02:23:37",//开始时间
+                        "endDate": "2020-01-20 02:22:58",//结束时间
+                        "equDuration": 20,//等效时长
+                        "amountRequired": 20//人数要求
+                    }
+                    ]
+                    }
+                    ]
+        }
+]
+
+
+活动查询模块
+活动查询
+    发送  post application/x-www-form-urlencoded
+        下面两个属性任输其一：
+            Id//部门或者学生的账号
+            Name//部门或者学生的名字
+                5示例1：
+                {“id”：6177001}//部门的id
+示例2：
+                {“id”：120181080701}//学生的id（学号）
+示例3：
+                {“name”：图书馆（主）}//部门的名字
+示例4：
+                {“name”：邵博深}//学生的名字
+    返回 json
+                示例1：
+                [
+                {   
+                    “id”：6177001//部门的id
+“name”：图书馆（主）//部门名
+                    “manager”：丁松//部门负责人名
+                    “stars”：4//学生给部门的总评星
+                    “activity”:[
+                            {
+                            “name”:图书馆扫地//活动名
+                            “description”：打扫卫生，每天下午2点到//活动内容
+                            “Station”[
+                                “period”[
+                                {
+                                    “start_data”：2020-4-10 08:00:00//开始时间
+                                    “end_data”：2020-5-7 17:50:00//结束时间
+                                    “equ_duration”：20//等效时长
+                                    “amount_required”:10//所需人数
+}   
+]
+“Record”[
+    “comment”:{
+“老师很好”，//a学生的评论
+“不咋地”，//b学生的评论
+“太累了”//c学生的评论
+“……”//其他学生里评论
+                                        }
+]
+]                       
+                        
+                        “name”:图书馆搬书//活动名
+                            “description”：整理书籍,每天上午9点到//活动内容
+                            “Station”[
+                                “period”[
+                                {
+                                    “start_data”：2020-4-11 08:00:00//开始时间
+                                    “end_data”：2020-5-7 12:50:00//结束时间
+                                    “equ_duration”：40//等效时长
+                                    “amount_required”:56//所需人数
+}   
+]
+“Record”[
+    “comment”:{
+“老师很好”，//a学生的评论
+“不咋地”，//b学生的评论
+“太累了”//c学生的评论
+“……”//其他学生里评论
+
+                        }
+                    ]
+}
+]
+
+            示例2：
+            [
+            {   
+                “name”:邵博深//学生名
+                “id”:120181080701//id（学号）
+                “school”:控计学院//学院
+                “major”：软件工程//专业
+                “class”：软件1802//班级
+                “total_duration”:40
+                “activity”[
+                {
+“name”：图书馆搬书//活动名
+“description”：每天下午来搬书//活动描述
+                    “record”[
+        “evaluation”:该学生很认真//部门就该活动给的评价
+                            ]
+
+
+
+“name”：图书馆扫地//活动名
+“description”：每天上午来扫地//活动描述
+                    “record”[
+        “evaluation”:该学生没来//部门就该活动给的评价
+                            ]
+
+
+“name”：财务处算账//活动名
+“description”：核对账目//活动描述
+                    “record”[
+        “evaluation”：//部门就该活动给的评价（此处空白，表示未写评价）
+                            ]
+
+                }   
+                ]
+            }
+            ]
+
+
+批量导出模块
+批量导出学生记录
+    发送 post application/x-www-form-urlencoded
+        Grade//年级
+示例1：
+                “grade”：2018级
+            示例2：
+                “grade”：2019级
+返回 excle文件下载
+    示例1：
+        [
+            {
+“name”：邵博深//学生名
+“id”：120181080701//学号
+“school”:控计学院//学院
+                    “major”：软件工程//专业
+                    “grade”:2018级//年级
+                    “class”：软件1802//班级
+                    “total_duration”:40//总时长
+
+“name”：谢沅伯//学生名
+“id”：120181080702//学号
+“school”:控计学院//学院
+                    “major”：信息安全//专业
+                    “grade”:2018级//年级
+                    “class”：信安1801//班级
+                    “total_duration”:60//总时长
+
+
+……//同上
+
+}
+        ]
+
+```
+
+
+
+
+
+
+##软件调试
 
 ### jpa uuid主键生成策略
 ### 数据库长文本存储，mysql引擎
