@@ -21,8 +21,6 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURL().substring(request.getRequestURL().lastIndexOf("volunteer"));
         String category;
-        char a = 7;
-        System.out.println(a);//响铃提醒
         HttpSession session = request.getSession();
         Logger logger = LoggerFactory.getLogger(this.getClass());
         logger.info("Request: " + request.getRequestURL().toString());

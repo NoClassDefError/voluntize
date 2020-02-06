@@ -95,7 +95,7 @@ public class Record {
      * 学生反馈评星 （0，1，2，3，4，5）
      */
     @Basic
-    @Column(name = "stars", nullable = false, columnDefinition = "int default 0 comment '公益劳动结束后，\n" +
+    @Column(name = "stars", columnDefinition = "int default 0 comment '公益劳动结束后，\n" +
             "学生反馈评星 \n" +
             "（0，1，2，3，4，5）\n" +
             "默认未评星（0）'")

@@ -11,9 +11,10 @@ import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.ImageVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContext;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +35,26 @@ public class ActivityImpl implements ActivityService {
     @Autowired
     private ActivityPeriodRepository activityPeriodRepository;
 
-    /**
-     * 需特别注意，hibernate可以关联查询，但不能关联保存
-     */
+    @Autowired
+    private ServletContext context;
+
     @Override
     public String createOrUpdate(ActivityVo activity) {
-        if (activity.getId() == null)
+        if (activity.getId() == null) {
+            if (context.getAttribute("autoSendActivity").equals(true))
+                activity.setStatus(1);
+            else activity.setStatus(0);
             return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
+        }
         Optional<Activity> optional = activityRepository.findById(activity.getId());
         if (optional.isPresent())
             return activityRepository.save(convertActivityVo(optional.get(), activity)).getId();
-        else return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
+        else {
+            if (context.getAttribute("autoSendActivity").equals(true))
+                activity.setStatus(1);
+            else activity.setStatus(0);
+            return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
+        }
     }
 
     @Override
@@ -71,6 +81,7 @@ public class ActivityImpl implements ActivityService {
         origin.setName(activity.getName());
         origin.setSemester(activity.getSemester());
         origin.setDescription(activity.getDescription());
+        origin.setStatusId(activity.getStatus());
         if (activity.getDepartmentId() == null) origin.setDepartment(null);
         if (departmentRepository.findById(activity.getDepartmentId()).isPresent())
             origin.setDepartment(departmentRepository.findById(activity.getDepartmentId()).get());
@@ -131,20 +142,27 @@ public class ActivityImpl implements ActivityService {
 
     @Override
     public List<Activity> findStatus(Activity.ActivityStatus status) {
-        Activity activity = new Activity();
-        activity.setStatus(status);
-        Example<Activity> example = Example.of(activity);
-        return activityRepository.findAll(example);
+//      放弃使用QBE的方法
+//        Activity activity = new Activity();
+//        activity.setStatus(status[0]);
+//        Example<Activity> example = Example.of(activity);
+        return activityRepository.findByStatus(status.ordinal());
     }
 
-    @Deprecated
-    public void confirm(String id) {
-        if (activityRepository.findById(id).isPresent()) {
-            Activity activity = activityRepository.findById(id).get();
-            if (activity.getStatus().equals(Activity.ActivityStatus.CONFIRMING))
-                activity.setStatus(Activity.ActivityStatus.SEND);
+    @Override
+    public Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size) {
+        return activityRepository.notToFindByStatus(status.ordinal(),
+                PageRequest.of(page, size));
+    }
+
+    @Override
+    public String changeStatus(String activityId, Activity.ActivityStatus status) {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        if (activity != null) {
+            activity.setStatus(status);
             activityRepository.save(activity);
-        }
+            return "success";
+        } else return "error";
     }
 
     @Override

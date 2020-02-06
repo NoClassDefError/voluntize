@@ -106,6 +106,7 @@ UserCategory "Student" "Department" "Admin"
 #### applicationContext作用域
 
 path 服务器地址
+autoSendActivity 活动是否要经过管理员审核
 
 ## 前后端通信设计
 
@@ -594,7 +595,7 @@ auditLevel//4个等级，不通过：0 ，通过：1，良好：2，优秀：3
 
 
 
-## 学生接口
+### 学生接口
 #### 修改学生信息
 http://192.168.43.1:8888/volunteer/student/updateStudent
 
@@ -1124,7 +1125,7 @@ Result//开启审批权限下的审批结果，通过：1  未通过：0
 
 
 
-##软件调试
+## 软件调试
 
 ### jpa uuid主键生成策略
 ### 数据库长文本存储，mysql引擎

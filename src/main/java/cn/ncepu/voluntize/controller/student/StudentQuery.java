@@ -6,7 +6,8 @@ import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityVo;
-import cn.ncepu.voluntize.vo.responseVo.RecordVo;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,12 +49,12 @@ public class StudentQuery extends BaseController {
      */
     @RequestMapping(value = "/getRecord", method = RequestMethod.POST)
     @ResponseBody
-    public ArrayList<RecordVo> getStuRecord(Integer status) {
-        ArrayList<RecordVo> recordVos = new ArrayList<>();
+    public ArrayList<RecordVoStu> getStuRecord(Integer status) {
+        ArrayList<RecordVoStu> recordVos = new ArrayList<>();
         List<Record> records = participateService.getRecordByStu(status);
         if (records != null) {
             for (Record record : records)
-                recordVos.add(new RecordVo(record));
+                recordVos.add(new RecordVoStu(record));
             return recordVos;
         } else return null;
     }

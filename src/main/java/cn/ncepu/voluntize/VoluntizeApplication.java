@@ -13,5 +13,4 @@ public class VoluntizeApplication {
     public static void main(String[] args) {
         SpringApplication.run(VoluntizeApplication.class, args);
     }
-
 }

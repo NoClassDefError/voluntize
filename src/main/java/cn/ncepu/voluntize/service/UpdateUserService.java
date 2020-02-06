@@ -2,6 +2,7 @@ package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.vo.requestVo.DepartmentUpdateVo;
 import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.requestVo.UserUpdateVoAdmin;
 
 public interface UpdateUserService {
     /**
@@ -17,4 +18,12 @@ public interface UpdateUserService {
      * @return 修改是否成功
      */
     boolean updateDepartment(DepartmentUpdateVo department);
+
+    //下面三个由管理员接口调用
+
+    String updateStudent(UserUpdateVoAdmin voAdmin);
+
+    String updateDepartment(UserUpdateVoAdmin voAdmin);
+
+    String deleteUser(String id);
 }

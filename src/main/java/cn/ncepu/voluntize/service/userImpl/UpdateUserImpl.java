@@ -7,6 +7,7 @@ import cn.ncepu.voluntize.service.UpdateUserService;
 import cn.ncepu.voluntize.vo.requestVo.DepartmentUpdateVo;
 import cn.ncepu.voluntize.vo.ImageVo;
 import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.requestVo.UserUpdateVoAdmin;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         //设定基本信息
         newStu.setStudentNum(studentId);
         newStu.setEmail(student.getEmail());
-        newStu.setMajor(student.getName());
+        newStu.setName(student.getName());
         newStu.setGrade(student.getPhoneNum());
 
         //构造并设定image对象
@@ -47,6 +48,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         newStu.setProfiles(images);
         //其他信息保持不变
 
+        studentRepository.save(newStu);
         return true;
     }
 
@@ -73,5 +75,51 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         }
         newDep.setImages(images);
         return true;
+    }
+    @Override
+    public String updateStudent(UserUpdateVoAdmin voAdmin) {
+        //department表中的id不能与student的重复
+        if (departmentRepository.findById(voAdmin.getId()).isPresent())
+            return "A student's id cannot be the same as a department's.";
+        Student student = new Student();
+        student.setStudentNum(voAdmin.getId());
+        student.setName(voAdmin.getName());
+        student.setGrade(voAdmin.getGrade());
+        student.setGender(voAdmin.getGender());
+        student.setClasss(voAdmin.getClasss());
+        student.setIdNum(voAdmin.getIdNum());
+        student.setMajor(voAdmin.getMajor());
+        student.setSchool(voAdmin.getSchool());
+        if (voAdmin.getPassword() == null) student.setPassword("123456");
+        else student.setPassword(voAdmin.getPassword());
+        studentRepository.save(student);
+        return "success";
+    }
+
+    @Override
+    public String updateDepartment(UserUpdateVoAdmin voAdmin) {
+        if (studentRepository.findById(voAdmin.getId()).isPresent())
+            return "A department's id cannot be the same as a student's.";
+        Department department = new Department();
+        department.setId(voAdmin.getId());
+        department.setManager(voAdmin.getManager());
+        department.setName(voAdmin.getName());
+        if (voAdmin.getPassword() == null) department.setPassword("123456");
+        else department.setPassword(voAdmin.getPassword());
+        departmentRepository.save(department);
+        return "success";
+    }
+
+    @Override
+    public String deleteUser(String id) {
+        if (studentRepository.findById(id).isPresent()) {
+            studentRepository.deleteById(id);
+            return "A student account deleted.";
+        }
+        if (departmentRepository.findById(id).isPresent()) {
+            departmentRepository.deleteById(id);
+            return "A department account deleted.";
+        }
+        return "Id not found.";
     }
 }

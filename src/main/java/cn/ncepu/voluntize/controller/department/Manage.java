@@ -28,10 +28,6 @@ public class Manage extends BaseController {
     @Autowired
     private ParticipateService participateService;
 
-    /**
-     * 测试信息
-     * ·    *
-     */
     @RequestMapping("/saveActivity")
     @ResponseBody
     public HttpResult releaseOrUpdate(@RequestBody ActivityVo activityVo) {
@@ -61,6 +57,9 @@ public class Manage extends BaseController {
             activityService.deleteActivityPeriod(periodId);
     }
 
+    /**
+     * 录用
+     */
     @RequestMapping("/approve")
     public void approve(@RequestBody List<String> recordId) {
         participateService.accept(recordId);

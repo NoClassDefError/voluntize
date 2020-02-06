@@ -1,16 +1,17 @@
 package cn.ncepu.voluntize.service.activityImpl;
 
+import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.ActivityPeriodRepository;
 import cn.ncepu.voluntize.repository.RecordRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
+import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
-import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,6 +36,9 @@ public class ParticipateImpl implements ParticipateService {
     @Autowired
     private ActivityPeriodRepository activityPeriodRepository;
 
+    @Autowired
+    private ActivityService activityService;
+
     /**
      * 添加多对多关联，不需要更新Student表与ActivityPeriod表
      */
@@ -44,15 +47,19 @@ public class ParticipateImpl implements ParticipateService {
         Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getPeriodId());
         Optional<Student> student = studentRepository.findById((String) session.getAttribute("UserId"));
         if (student.isPresent() && activityPeriod.isPresent()) {
-            Record record = new Record();
-            record.setVolunteer(student.get());
-            record.setPeriod(activityPeriod.get());
-            record.setInfo(participateVo.getInfo());
-            if (recordRepository.findOne(Example.of(record)).isPresent())
-                return "duplicated";//检验不能重复报名
-            record.setStatus(Record.RecordStatus.APPLIED);
-            recordRepository.save(record);
-            return "success";
+            Activity.ActivityStatus status = activityPeriod.get().getParent().getParentActivity().getStatus();
+            if (status.equals(Activity.ActivityStatus.SEND) || status.equals(Activity.ActivityStatus.STARTED)) {
+                Record record = new Record();
+                record.setVolunteer(student.get());
+                record.setPeriod(activityPeriod.get());
+                record.setInfo(participateVo.getInfo());
+                if (recordRepository.findOne(Example.of(record)).isPresent())
+                    return "You've already participated.";//检验不能重复报名
+                record.setStatus(Record.RecordStatus.APPLIED);
+                record.setStars(0);
+                recordRepository.save(record);
+                return "success";
+            } else return "Cannot participate, the activity status is" + status.name();
         }
         return "error";
     }
@@ -98,27 +105,39 @@ public class ParticipateImpl implements ParticipateService {
 
     @Override
     public void accept(List<String> records) {
-
+        boolean flag = true;
         for (String id : records) {
-            Optional<Record> record = recordRepository.findById(id);
-            if (record.isPresent()) {
-                record.get().setStatus(Record.RecordStatus.PASSED);
-                record.get().setPassed(true);
-                recordRepository.save(record.get());
+            Record record = recordRepository.findById(id).orElse(null);
+            if (record != null) {
+                record.setStatus(Record.RecordStatus.PASSED);
+                record.setPassed(true);
+                recordRepository.save(record);
+                if (flag) {
+                    activityService.changeStatus(
+                            record.getPeriod().getParent().getParentActivity().getId(),
+                            Activity.ActivityStatus.STARTED);
+                    flag = false;
+                }
             }
         }
     }
 
     @Override
     public void evaluate(List<EvaluateVo> records) {
+        boolean flag = true;
         for (EvaluateVo evaluateVo : records) {
-            Optional<Record> record = recordRepository.findById(evaluateVo.getRecordId());
-            if (record.isPresent()) {
-                Record record1 = record.get();
+            Record record1 = recordRepository.findById(evaluateVo.getRecordId()).orElse(null);
+            if (record1 != null) {
                 record1.setStatus(Record.RecordStatus.EVALUATED);
                 record1.setAuditLevel(evaluateVo.getAuditLevel());
                 record1.setEvaluation(evaluateVo.getEvaluate());
-                recordRepository.save(record.get());
+                recordRepository.save(record1);
+                if (flag) {
+                    activityService.changeStatus(
+                            record1.getPeriod().getParent().getParentActivity().getId(),
+                            Activity.ActivityStatus.FINISHED);
+                    flag = false;
+                }
             }
         }
     }

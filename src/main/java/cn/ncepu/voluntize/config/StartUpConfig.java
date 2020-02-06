@@ -24,6 +24,7 @@ public class StartUpConfig implements CommandLineRunner {
         String url = "http://"+Inet4Address.getLocalHost().getHostAddress() + ":"
                 + environment.getProperty("local.server.port") + environment.getProperty("server.servlet.context-path");
         context.setAttribute("path", url);
+        context.setAttribute("autoSendActivity", false);
         LoggerFactory.getLogger(this.getClass()).info("Setting server url to context:" + url);
     }
 }

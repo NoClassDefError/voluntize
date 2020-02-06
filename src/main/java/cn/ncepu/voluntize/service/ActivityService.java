@@ -4,6 +4,7 @@ import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -36,6 +37,11 @@ public interface ActivityService {
      * @return 活动
      */
     List<Activity> findStatus(Activity.ActivityStatus status);
+
+
+    Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size);
+
+    String changeStatus(String activityId, Activity.ActivityStatus status);
 
     /**
      * 在假设活动与时间段一一对应时

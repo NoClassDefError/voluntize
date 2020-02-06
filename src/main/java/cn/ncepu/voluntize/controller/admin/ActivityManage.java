@@ -5,9 +5,11 @@ import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class ActivityManage extends BaseController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private ServletContext context;
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult saveActivity(@RequestBody ActivityVo activity) {
@@ -31,18 +36,18 @@ public class ActivityManage extends BaseController {
         activityService.deleteActivity(id);
     }
 
-    /**
-     * 查询之前需要使用session，判断管理员身份
-     *
-     * @return json
-     */
-    @RequestMapping(value = "/findAll", method = RequestMethod.POST)
+    @RequestMapping("/autoSendActivity")
     @ResponseBody
-    public List<ActivityVo> findAllActivities() {
-        List<ActivityVo> activityVos = new ArrayList<>();
-        for (Activity activity : activityService.findAll())
-            activityVos.add(new ActivityVo(activity));
-        return activityVos;
+    public HttpResult setAutoSendActivity(boolean autoSendActivity) {
+        context.setAttribute("autoSendActivity", autoSendActivity);
+        return new HttpResult("AutoSendActivity enable:" + autoSendActivity);
+    }
+
+    @RequestMapping("/confirm")
+    @ResponseBody
+    public HttpResult confirm(String activityId) {
+        return new HttpResult("confirm:" +
+                activityService.changeStatus(activityId, Activity.ActivityStatus.SEND));
     }
 
     @RequestMapping(value = "/findConfirming", method = RequestMethod.POST)
@@ -53,4 +58,19 @@ public class ActivityManage extends BaseController {
             activityVos.add(new ActivityVo(activity));
         return activityVos;
     }
+
+    @RequestMapping("/findOthers")
+    @ResponseBody
+    public List<ActivityVo> findOthers(int page) {
+        List<ActivityVo> activityVos = new ArrayList<>();
+        for (Activity activity : activityService.notToFindStatus(Activity.ActivityStatus.CONFIRMING, page, 10))
+            activityVos.add(new ActivityVo(activity));
+        return activityVos;
+    }
+
+    public UserInfoVo searchUser(String id){
+
+        return null;
+    }
+
 }
