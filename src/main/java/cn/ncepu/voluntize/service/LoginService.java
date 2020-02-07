@@ -1,7 +1,11 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
+
+import java.util.List;
 
 public interface LoginService {
     /**
@@ -13,4 +17,8 @@ public interface LoginService {
     UserInfoVo login(LoginVo user);
 
     UserInfoVo login(String userId);
+
+    UserInfoVoAdmin findUser(String userId);
+
+    List<StudentVo> findAllStu();
 }

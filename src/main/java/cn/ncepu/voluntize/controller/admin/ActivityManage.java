@@ -68,9 +68,4 @@ public class ActivityManage extends BaseController {
         return activityVos;
     }
 
-    public UserInfoVo searchUser(String id){
-
-        return null;
-    }
-
 }

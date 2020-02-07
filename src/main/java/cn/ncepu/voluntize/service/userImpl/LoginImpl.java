@@ -3,10 +3,14 @@ package cn.ncepu.voluntize.service.userImpl;
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,4 +43,19 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
                         .orElseGet(() -> new UserInfoVo(-1, null, null)));
     }
 
+    @Override
+    public UserInfoVoAdmin findUser(String userId){
+        Optional<Student> optional1 = studentRepository.findById(userId);
+        Optional<Department> optional2 = departmentRepository.findById(userId);
+        return optional1.map(student -> new UserInfoVoAdmin(1, student, null))
+                .orElseGet(() -> optional2.map(department -> new UserInfoVoAdmin(2, null, department))
+                        .orElseGet(() -> new UserInfoVoAdmin(-1, null, null)));
+    }
+
+    @Override
+    public List<StudentVo> findAllStu(){
+        List<StudentVo> studentVos = new ArrayList<>();
+        for(Student student : studentRepository.findAll()) studentVos.add(new StudentVo(student));
+        return studentVos;
+    }
 }

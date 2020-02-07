@@ -1,8 +1,11 @@
 package cn.ncepu.voluntize.controller.admin;
 
+import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.service.UpdateUserService;
 import cn.ncepu.voluntize.vo.requestVo.UserUpdateVoAdmin;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +28,7 @@ public class UserManage {
         else if (new Integer(2).equals(vo.getCategory()))
             return new HttpResult("saveUser:" + updateUserService.updateDepartment(vo),
                     "category:department");
-        return new HttpResult("createUser:No such category.");
+        return new HttpResult("saveUser:No such category.");
     }
 
     @RequestMapping("/delete")
@@ -33,6 +36,4 @@ public class UserManage {
     public HttpResult deleteUser(String id) {
         return new HttpResult("deleteUser:" + updateUserService.deleteUser(id));
     }
-
-
 }

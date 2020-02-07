@@ -92,8 +92,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         student.setSchool(voAdmin.getSchool());
         if (voAdmin.getPassword() == null) student.setPassword("123456");
         else student.setPassword(voAdmin.getPassword());
-        studentRepository.save(student);
-        return "success";
+        return studentRepository.save(student).getStudentNum();
     }
 
     @Override
@@ -106,8 +105,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         department.setName(voAdmin.getName());
         if (voAdmin.getPassword() == null) department.setPassword("123456");
         else department.setPassword(voAdmin.getPassword());
-        departmentRepository.save(department);
-        return "success";
+        return departmentRepository.save(department).getId();
     }
 
     @Override

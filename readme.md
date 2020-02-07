@@ -796,334 +796,140 @@ http://192.168.43.1:8888/volunteer/student/service/appraise
 
 ### 管理员接口
 
-#### 
-```
-管理员接口文档 [2020.2.6 添加]
+#### 创建或修改账号
 
-账号管理模块
+http://192.168.43.1:8888/volunteer/admin/user/save
 
-创建账号
 发送  post application/json
-     
- Id_Type//所创建账号的类型；学生：1   部门：2
-      Id//账号
-
-示例1
-{
-“Id_Type”:1//类型为学生账号
-“Id”:120181080701
-“name”：“邵博深”
-“class”：软件802
-“grade”：2018级
-“major”：软件工程
-“sex”：男
-
-}
-示例2
-{
-“Id_Type”:2//类型为部门账号
-“Id”:6177009
-“name”：财务处
-“manager”：刘惠东//部门负责人
-}
-
-返回 json数组
-    若创建的是部门账号：
-成功{"updatedepartment":"success"}
-失败{"updatedepartment":"failed"}
-若创建的是学生账号：
-成功{"updatestudent":"success"}
-失败{"updatestudent":"failed"}
-
-密码重置
-发送  post application/x-www-form-urlencoded
-      
-Id//部门或者学生的账号
-
-返回 json数组
-{changePassword:success}
-{changePassword:error}
-
-账号删除
-发送  post application/x-www-form-urlencoded
- Id//部门或者学生的账号
-返回json  
-若创建的是部门账号：
-成功{"updatedepartment":"success"}
-失败{"updatedepartment":"failed"}
-若创建的是学生账号：
-成功{"updatestudent":"success"}
-失败{"updatestudent":"failed"}
-
-
-活动审批模块
-获取部门已提交活动
-发送  post 无内容
-
-返回json数组
-    示例1：
-    [
-        {   "id": "001 "//该条活动的id
-            "name": "2019图书馆公益活动"，//活动名
-            "description": "搬运书籍，贴标签等"，//活动描述
-            "departmentName": "图书馆（主）",//部门名
-            "status": 1,//当前所处的时期——审核期
-            "stations": [
-            {
-                   "periods": [
-                    {
-                        "startDate": "2020-01-11 02:23:37",//开始时间
-                        "endDate": "2020-01-20 02:22:58",//结束时间
-                        "equDuration": 20,//等效时长
-                        "amountRequired": 20//人数要求
-                    }
-                    ]
-            }
-            ]
-        }
-]    
-
-
-审批部门活动
-发送 post application/x-www-form-urlencoded
-        On_off//是否开启审批权限，开启：1  关闭：0
-Activity_id//所审批活动的id
-Result//开启审批权限下的审批结果，通过：1  未通过：0
-            示例1：
-                {
-    “On_off”:0//已关闭审核权限
-}
-            示例2：
-                {
-    “On_off”:1//已开启审核权限
-    “Activity_id”:001//所选审批活动的id
-    “Result”：1//通过
-}
-            示例3：
-                {
-    “On_off”:1//已开启审核权限
-    “Activity_id”:001//所选审批活动的id
-    “Result”：0//未通过
-}
+账户密码也在此修改，包含属性有：
+```
+    private String id;//新增时可不填id，自动生成
+    private Integer category;//1为学生，2为部门
+    private String name;//学生名或部门名
+    private String password;//若不提供，则初始密码为123456
     
-返回 json数组
-{updateactivity:success}
-{updateactivity:error}
-
-管理员已审批（含关闭审核权限时）的审批记录
-        发生 post 无内容
-        返回json数组
-    示例1：
-    [
-        {   "id": "001 "//该条活动的id
-            "name": "2019图书馆公益活动"，//活动名
-            "description": "搬运书籍，贴标签等"，//活动描述
-            "departmentName": "图书馆（主）",//部门名
-            "status": 1,//status如果仍是1，则是审核未通过 
-            "stations": [
-            {
-                   "periods": [
-                    {
-                        "startDate": "2020-01-11 02:23:37",//开始时间
-                        "endDate": "2020-01-20 02:22:58",//结束时间
-                        "equDuration": 20,//等效时长
-                        "amountRequired": 20//人数要求
-                    }
-                    ]
-            }
-            ]
-        }
-]    
-    示例2：
-    [
-        {   "id": "001 "//该条活动的id
-            "name": "2019图书馆公益活动"，//活动名
-            "description": "搬运书籍，贴标签等"，//活动描述
-            "departmentName": "图书馆（主）",//部门名
-            "status": 2,//已通过审核，status不是0或1，则为已通过
-            "stations": [
-            {
-                  "periods": [
-                   {
-                       "startDate": "2020-01-11 02:23:37",//开始时间
-                       "endDate": "2020-01-20 02:22:58",//结束时间
-                       "equDuration": 20,//等效时长
-                       "amountRequired": 20//人数要求
-                   }
-                   ]
-            }
-            ]
-        }
-]    
-示例2：
-[
-   {    "id": "001 "//该条活动的id
-        "name": "2019图书馆公益活动"，//活动名
-        "description": "搬运书籍，贴标签等"，//活动描述
-        "departmentName": "图书馆（主）",//部门名
-            "status": 3,//已通过审核，status不是0或1，则为已通过
-            "stations": [
-            {
-                   "periods": [
-                    {
-                        "startDate": "2020-01-11 02:23:37",//开始时间
-                        "endDate": "2020-01-20 02:22:58",//结束时间
-                        "equDuration": 20,//等效时长
-                        "amountRequired": 20//人数要求
-                    }
-                    ]
-                    }
-                    ]
-        }
-]
-
-
-活动查询模块
-活动查询
-    发送  post application/x-www-form-urlencoded
-        下面两个属性任输其一：
-            Id//部门或者学生的账号
-            Name//部门或者学生的名字
-                5示例1：
-                {“id”：6177001}//部门的id
-示例2：
-                {“id”：120181080701}//学生的id（学号）
-示例3：
-                {“name”：图书馆（主）}//部门的名字
-示例4：
-                {“name”：邵博深}//学生的名字
-    返回 json
-                示例1：
-                [
-                {   
-                    “id”：6177001//部门的id
-“name”：图书馆（主）//部门名
-                    “manager”：丁松//部门负责人名
-                    “stars”：4//学生给部门的总评星
-                    “activity”:[
-                            {
-                            “name”:图书馆扫地//活动名
-                            “description”：打扫卫生，每天下午2点到//活动内容
-                            “Station”[
-                                “period”[
-                                {
-                                    “start_data”：2020-4-10 08:00:00//开始时间
-                                    “end_data”：2020-5-7 17:50:00//结束时间
-                                    “equ_duration”：20//等效时长
-                                    “amount_required”:10//所需人数
-}   
-]
-“Record”[
-    “comment”:{
-“老师很好”，//a学生的评论
-“不咋地”，//b学生的评论
-“太累了”//c学生的评论
-“……”//其他学生里评论
-                                        }
-]
-]                       
-                        
-                        “name”:图书馆搬书//活动名
-                            “description”：整理书籍,每天上午9点到//活动内容
-                            “Station”[
-                                “period”[
-                                {
-                                    “start_data”：2020-4-11 08:00:00//开始时间
-                                    “end_data”：2020-5-7 12:50:00//结束时间
-                                    “equ_duration”：40//等效时长
-                                    “amount_required”:56//所需人数
-}   
-]
-“Record”[
-    “comment”:{
-“老师很好”，//a学生的评论
-“不咋地”，//b学生的评论
-“太累了”//c学生的评论
-“……”//其他学生里评论
-
-                        }
-                    ]
-}
-]
-
-            示例2：
-            [
-            {   
-                “name”:邵博深//学生名
-                “id”:120181080701//id（学号）
-                “school”:控计学院//学院
-                “major”：软件工程//专业
-                “class”：软件1802//班级
-                “total_duration”:40
-                “activity”[
-                {
-“name”：图书馆搬书//活动名
-“description”：每天下午来搬书//活动描述
-                    “record”[
-        “evaluation”:该学生很认真//部门就该活动给的评价
-                            ]
-
-
-
-“name”：图书馆扫地//活动名
-“description”：每天上午来扫地//活动描述
-                    “record”[
-        “evaluation”:该学生没来//部门就该活动给的评价
-                            ]
-
-
-“name”：财务处算账//活动名
-“description”：核对账目//活动描述
-                    “record”[
-        “evaluation”：//部门就该活动给的评价（此处空白，表示未写评价）
-                            ]
-
-                }   
-                ]
-            }
-            ]
-
-
-批量导出模块
-批量导出学生记录
-    发送 post application/x-www-form-urlencoded
-        Grade//年级
-示例1：
-                “grade”：2018级
-            示例2：
-                “grade”：2019级
-返回 excle文件下载
-    示例1：
-        [
-            {
-“name”：邵博深//学生名
-“id”：120181080701//学号
-“school”:控计学院//学院
-                    “major”：软件工程//专业
-                    “grade”:2018级//年级
-                    “class”：软件1802//班级
-                    “total_duration”:40//总时长
-
-“name”：谢沅伯//学生名
-“id”：120181080702//学号
-“school”:控计学院//学院
-                    “major”：信息安全//专业
-                    “grade”:2018级//年级
-                    “class”：信安1801//班级
-                    “total_duration”:60//总时长
-
-
-……//同上
-
-}
-        ]
-
+    //学生的信息，更新部门信息时不需要发送这些属性
+    private String classs;//班级，多加一个s避免与关键字冲突
+    private String grade;
+    private String major;
+    private String gender;
+    private String idNum;//身份证号
+    private String school;//学生学院
+    
+    //部门的信息，更新学生时不要发送
+    private String manager;//管理员
 ```
 
+返回
+```json
+{
+  "saveUser": "120171020201",
+  "category": "student"
+}
+```
+或者
+```json
+{
+  "saveUser": "A student's id cannot be the same as a department's.",
+  "category": "student"
+}
+```
+```json
+{
+  "saveUser": "No such category."
+}
+```
 
+#### 删除账号
+http://192.168.43.1:8888/volunteer/admin/user/delete
 
+发送  post application/x-www-form-urlencoded
 
+    id  部门或者学生的账号
+ 
+返回 json  
+```json
+{"deleteUser": "A student account deleted."}
+```
+```json
+{"deleteUser":"No such user."}
+```
 
+#### 获取待审核的活动
+http://192.168.43.1:8888/volunteer/admin/activity/findConfirming
+
+发送 post 无内容
+
+返回 json数组 
+
+格式与/student/query/findIndexActivities、/department/query/released等接口相同
+
+#### 审批部门活动
+http://192.168.43.1:8888/volunteer/admin/activity/confirm
+
+发送 post application/x-www-form-urlencoded 不是批量操作的
+
+    activityId 所审批活动的id
+
+返回
+```json
+{"confirm": "success"}
+```
+
+#### 开启自动审核模式
+http://192.168.43.1:8888/volunteer/admin/activity/autoSendActivity
+
+发送 post application/x-www-form-urlencoded
+
+    autoSendActivity true或false
+
+返回
+```json
+{"AutoSendActivity enable": true}
+```
+
+#### 获取已审批的活动
+http://192.168.43.1:8888/volunteer/admin/activity/findOthers
+
+发送 post application/x-www-form-urlencoded
+
+    page 页码（每页10个活动对象）
+
+返回 json 分页查询
+
+格式与/student/query/findIndexActivities、/department/query/released等接口相同
+
+#### 查询信息
+http://192.168.43.1:8888/volunteer/admin/excel/search
+
+发送  post application/x-www-form-urlencoded
+
+    id 学生或部门id
+
+返回 json
+
+```
+    //前3个属性和login接口返回的一样
+    private int userCategory;
+    private StudentVo student;//学生基本信息
+    private DepartmentVo department;//部门基本信息
+    
+    //如果是学生，返回他的活动记录
+    private List<RecordVoStu> stuRecords = new ArrayList<>();
+    //如果时部门，返回他发布的所有活动
+    private List<ActivityVo> depActivities = new ArrayList<>();
+```
+
+#### 批量导出学生记录
+
+发送 post application/x-www-form-urlencoded
+
+    grade  年级，只填数字，如“2017”，不填则导出全部
+
+返回 multipart/form-data
+
+文件 student_all.xlsx student_2017.xlsx
+表格信息与学生登录接口返回信息一样
 
 ## 软件调试
 

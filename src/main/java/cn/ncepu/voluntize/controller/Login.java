@@ -54,7 +54,7 @@ public class Login extends BaseController {
     @ResponseBody
     public UserInfoVo getLoginVo() {
         String userId = (String) session.getAttribute("UserId");
-        if (userId != null || "Visitor".equals(session.getAttribute("UserCategory")))
+        if (userId != null && !"Visitor".equals(session.getAttribute("UserCategory")))
             return service.login(userId);
         else return new UserInfoVo(-1, null, null);
     }
