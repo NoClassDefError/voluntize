@@ -47,8 +47,8 @@ public class ParticipateImpl implements ParticipateService {
         Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getPeriodId());
         Optional<Student> student = studentRepository.findById((String) session.getAttribute("UserId"));
         if (student.isPresent() && activityPeriod.isPresent()) {
-            Activity.ActivityStatus status = activityPeriod.get().getParent().getParentActivity().getStatus();
-            if (status.equals(Activity.ActivityStatus.SEND) || status.equals(Activity.ActivityStatus.STARTED)) {
+            int status = activityPeriod.get().getParent().getParentActivity().getStatusId();
+            if (status == 1) {
                 Record record = new Record();
                 record.setVolunteer(student.get());
                 record.setPeriod(activityPeriod.get());
@@ -59,22 +59,23 @@ public class ParticipateImpl implements ParticipateService {
                 record.setStars(0);
                 recordRepository.save(record);
                 return "success";
-            } else return "Cannot participate, the activity status is" + status.name();
+            } else return "Cannot participate, the activity status is " + status;
         }
         return "error";
     }
 
     @Override
     public String cancel(String recordId) {
-        Optional<Record> record = recordRepository.findById(recordId);
-        if (record.isPresent()) {
-            Record record1 = record.get();
-            record1.setPassed(false);
-            record1.setStatus(Record.RecordStatus.APPLIED);
-            recordRepository.save(record1);
-            return "success";
-        }
-        return "error";
+        recordRepository.deleteById(recordId);
+//        Optional<Record> record = recordRepository.findById(recordId);
+//        if (record.isPresent()) {
+//            Record record1 = record.get();
+//            record1.setPassed(false);
+//            record1.setStatus(Record.RecordStatus.APPLIED);
+//            recordRepository.save(record1);
+//            return "success";
+//        }
+        return "success";
     }
 
     @Override
@@ -99,27 +100,28 @@ public class ParticipateImpl implements ParticipateService {
     public List<Record> getRecordByStu(Integer status) {
         String studentId = (String) session.getAttribute("UserId");
         if (studentId == null) return null;
+//        System.out.println(status);
         if (status == null) return recordRepository.findByStudent(studentId);
         else return recordRepository.findByStudent(studentId, status);
     }
 
     @Override
-    public void accept(List<String> records) {
+    public String accept(List<String> records) {
         boolean flag = true;
         for (String id : records) {
             Record record = recordRepository.findById(id).orElse(null);
             if (record != null) {
+                if (flag) {
+                    flag = false;
+                    if (record.getPeriod().getParent().getParentActivity().getStatusId() != 2)
+                        return "Cannot accept! The activity is not in the status for participation.";
+                }
                 record.setStatus(Record.RecordStatus.PASSED);
                 record.setPassed(true);
                 recordRepository.save(record);
-                if (flag) {
-                    activityService.changeStatus(
-                            record.getPeriod().getParent().getParentActivity().getId(),
-                            Activity.ActivityStatus.STARTED);
-                    flag = false;
-                }
             }
         }
+        return "success";
     }
 
     @Override

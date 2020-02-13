@@ -41,6 +41,8 @@ public interface ActivityService {
 
     Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size);
 
+    String startActivity(String activityId);
+
     String changeStatus(String activityId, Activity.ActivityStatus status);
 
     /**

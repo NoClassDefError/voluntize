@@ -21,7 +21,6 @@
 <ul>
 <li>CONFIRMING 部门已发送等待审核</li>
 <li>SEND 审核并修改</li>
-<li>APPLY 报名</li>
 <li>STARTED 录用并开始活动</li>
 <li>FINISHED 结束并评价</li>
 </ul>
@@ -43,6 +42,7 @@
      <li>APPLIED 已报名</li>
      <li>PASSED 已审核</li>
      <li>EVALUATED 已评价</li>
+     <li>COMMENTED 已反馈</li>
 </ul>
 
 因此新建一个关联表Record即志愿记录类来解决这个问题。
@@ -100,13 +100,13 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 ### web作用域限定
 #### session作用域
 
-UserId 学生或部门的id
-UserCategory "Student" "Department" "Admin"
+    UserId 学生或部门的id
+    UserCategory "Student" "Department" "Admin"
 
 #### applicationContext作用域
 
-path 服务器地址
-autoSendActivity 活动是否要经过管理员审核
+    path 服务器地址
+    autoSendActivity 活动是否要经过管理员审核
 
 ## 前后端通信设计
 
@@ -921,6 +921,7 @@ http://192.168.43.1:8888/volunteer/admin/excel/search
 ```
 
 #### 批量导出学生记录
+http://192.168.43.1:8888/volunteer/admin/excel/students
 
 发送 post application/x-www-form-urlencoded
 

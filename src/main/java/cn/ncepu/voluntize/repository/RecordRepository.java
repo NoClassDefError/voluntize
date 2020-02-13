@@ -15,4 +15,7 @@ public interface RecordRepository extends JpaRepository<Record, String> {
 
     @Query("select r from Record r where r.volunteer.studentNum=?1")
     List<Record> findByStudent(String studentId);
+
+    @Query("select r from Record r where r.period.id=?1 and r.isPassed=true")
+    List<Record> findPassedByPeriod(String period);
 }

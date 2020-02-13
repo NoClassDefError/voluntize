@@ -37,7 +37,7 @@ public class ActivityPeriod {
     /**
      * 所属志愿岗位
      */
-    @ManyToOne(targetEntity = ActivityStation.class)
+    @ManyToOne(targetEntity = ActivityStation.class,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "parent", referencedColumnName = "id")
     private ActivityStation parent;
 

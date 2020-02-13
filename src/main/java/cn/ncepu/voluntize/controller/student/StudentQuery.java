@@ -9,10 +9,7 @@ import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
 import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +35,7 @@ public class StudentQuery extends BaseController {
     public List<ActivityVo> findIndexActivities() {
         List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.SEND);
         activities.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
-        activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
+//        activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
         List<ActivityVo> activityVos = new ArrayList<>();
         for (Activity activity : activities) activityVos.add(new ActivityVo(activity));
         return activityVos;
@@ -51,6 +48,7 @@ public class StudentQuery extends BaseController {
     @ResponseBody
     public ArrayList<RecordVoStu> getStuRecord(Integer status) {
         ArrayList<RecordVoStu> recordVos = new ArrayList<>();
+//        System.out.println(status);
         List<Record> records = participateService.getRecordByStu(status);
         if (records != null) {
             for (Record record : records)

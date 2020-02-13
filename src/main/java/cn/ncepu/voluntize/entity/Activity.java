@@ -98,10 +98,10 @@ public class Activity {
             case 1:
                 this.status = ActivityStatus.SEND;
                 break;
-            case 3:
-                this.status = ActivityStatus.APPLY;
+            case 2:
+                this.status = ActivityStatus.STARTED;
                 break;
-            case 4:
+            case 3:
                 this.status = ActivityStatus.FINISHED;
                 break;
         }
@@ -112,14 +112,13 @@ public class Activity {
      * <h2>志愿活动生命周期：</h2>
      * <ul>
      *     <li>CONFIRMING 部门已发送等待审核</li>
-     *     <li>SEND 审核并修改</li>
-     *     <li>APPLY 报名</li>
+     *     <li>SEND 开始报名</li>
      *     <li>STARTED 录用并开始活动</li>
      *     <li>FINISHED 结束并评价</li>
      * </ul>
-     * 共5个阶段
+     * 共4个阶段
      */
     public enum ActivityStatus {
-        CONFIRMING, SEND, APPLY, STARTED, FINISHED
+        CONFIRMING, SEND, STARTED, FINISHED
     }
 }

@@ -26,7 +26,7 @@ public class ExcelExport {
     public void exportStudents(HttpServletResponse response) throws IOException {
         String fileName = "students_all";
         List<StudentVo> students = loginService.findAllStu();
-        ExcelUtils<StudentVo> utils = new ExcelUtils<>();
+        ExcelUtils<StudentVo> utils = new ExcelUtils<StudentVo>(){};
         XSSFWorkbook workbook = utils.exportExcel(students, fileName);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("multipart/form-data");

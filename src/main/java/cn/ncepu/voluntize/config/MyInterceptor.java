@@ -23,7 +23,9 @@ public class MyInterceptor implements HandlerInterceptor {
         String category;
         HttpSession session = request.getSession();
         Logger logger = LoggerFactory.getLogger(this.getClass());
-        logger.info("Request: " + request.getRequestURL().toString());
+        logger.info("Request url: " + request.getRequestURL().toString());
+        logger.info("Request content type: " + request.getContentType());
+//        logger.info("Request content" );
         logger.info("Session id = " + session.getId());
         if (session.getAttribute("UserCategory") == null) {
             category = "Visitor";

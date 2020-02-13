@@ -49,7 +49,7 @@ public class ActivityStation {
     /**
      * 所属志愿活动
      */
-    @ManyToOne(targetEntity = Activity.class)
+    @ManyToOne(targetEntity = Activity.class,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "parent_activity", referencedColumnName = "id")
     private Activity parentActivity;
 

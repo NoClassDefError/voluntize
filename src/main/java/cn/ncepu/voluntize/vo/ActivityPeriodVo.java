@@ -1,7 +1,10 @@
 package cn.ncepu.voluntize.vo;
 
 import cn.ncepu.voluntize.entity.ActivityPeriod;
+import cn.ncepu.voluntize.repository.RecordRepository;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Data
 public class ActivityPeriodVo {
@@ -17,6 +20,10 @@ public class ActivityPeriodVo {
     private Integer equDuration;
     private Integer amountRequired;
     private Integer amountSigned;
+    private Integer amountPassed = 0;
+
+//    @Autowired
+//    private RecordRepository recordRepository;
 
     public ActivityPeriodVo(ActivityPeriod period) {
         this.id = period.getId();
@@ -31,9 +38,13 @@ public class ActivityPeriodVo {
         this.equDuration = period.getEquDuration();
         //在此查找该活动的报名记录
         this.amountSigned = period.getRecords().size();
+//        amountPassed = recordRepository.findPassedByPeriod(period.getId()).size();
+        period.getRecords().forEach(record -> {
+            if (record.isPassed()) amountPassed++;
+        });
     }
 
-    public ActivityPeriodVo(){
+    public ActivityPeriodVo() {
 
     }
 }

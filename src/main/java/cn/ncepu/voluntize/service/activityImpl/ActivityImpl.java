@@ -1,17 +1,16 @@
 package cn.ncepu.voluntize.service.activityImpl;
 
 import cn.ncepu.voluntize.entity.*;
-import cn.ncepu.voluntize.repository.ActivityPeriodRepository;
-import cn.ncepu.voluntize.repository.ActivityRepository;
-import cn.ncepu.voluntize.repository.ActivityStationRepository;
-import cn.ncepu.voluntize.repository.DepartmentRepository;
+import cn.ncepu.voluntize.repository.*;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.ImageVo;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
@@ -19,6 +18,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ActivityImpl implements ActivityService {
@@ -36,25 +37,35 @@ public class ActivityImpl implements ActivityService {
     private ActivityPeriodRepository activityPeriodRepository;
 
     @Autowired
+    private RecordRepository recordRepository;
+
+    @Autowired
     private ServletContext context;
+
+    @Autowired
+    private ScheduledExecutorService scheduledExecutorService;
 
     @Override
     public String createOrUpdate(ActivityVo activity) {
         if (activity.getId() == null) {
+            //新增
             if (context.getAttribute("autoSendActivity").equals(true))
                 activity.setStatus(1);
             else activity.setStatus(0);
+            //添加定时器
+            Runnable task = () -> {
+                activity.setStatus(2);
+                activityRepository.save(convertActivityVo(new Activity(), activity));
+                LoggerFactory.getLogger(this.getClass()).info("Task executed, starting activity. Id=" + activity.getId());
+            };
+            scheduledExecutorService.schedule(task, 3, TimeUnit.DAYS);
             return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
         }
         Optional<Activity> optional = activityRepository.findById(activity.getId());
         if (optional.isPresent())
+            //修改
             return activityRepository.save(convertActivityVo(optional.get(), activity)).getId();
-        else {
-            if (context.getAttribute("autoSendActivity").equals(true))
-                activity.setStatus(1);
-            else activity.setStatus(0);
-            return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
-        }
+        return "not found";
     }
 
     @Override
@@ -109,6 +120,7 @@ public class ActivityImpl implements ActivityService {
 
     private ActivityPeriod convertActivityPeriodVo(ActivityPeriod period, ActivityPeriodVo periodVo) {
         period.setAmountRequired(periodVo.getAmountRequired());
+        System.out.println(periodVo.getEndDate() + periodVo.getStartDate() + periodVo);
         period.setEndDate(Timestamp.valueOf(periodVo.getEndDate()));
         period.setStartDate(Timestamp.valueOf(periodVo.getStartDate()));
         period.setEquDuration(periodVo.getEquDuration());
@@ -122,6 +134,7 @@ public class ActivityImpl implements ActivityService {
 
     @Override
     public void deleteActivity(String id) {
+//        System.out.println(id);
         activityRepository.deleteById(id);
     }
 
@@ -156,13 +169,30 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
+    public String startActivity(String activityId) {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        if (activity != null) {
+            activity.setStatus(Activity.ActivityStatus.STARTED);
+            for (ActivityStation station : activity.getStations())
+                for (ActivityPeriod period : station.getPeriods())
+                    for (Record record : period.getRecords())
+                        if (record.getStatusId() == 0) {
+                            record.setPassed(false);
+                            recordRepository.save(record);
+                        }
+            activityRepository.save(activity);
+            return "success";
+        } else return "not found";
+    }
+
+    @Override
     public String changeStatus(String activityId, Activity.ActivityStatus status) {
         Activity activity = activityRepository.findById(activityId).orElse(null);
         if (activity != null) {
             activity.setStatus(status);
             activityRepository.save(activity);
             return "success";
-        } else return "error";
+        } else return "not found";
     }
 
     @Override

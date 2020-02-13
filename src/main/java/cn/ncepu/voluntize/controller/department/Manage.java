@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -43,12 +42,13 @@ public class Manage extends BaseController {
 
     @RequestMapping("/savePeriod")
     @ResponseBody
-    public HttpResult savePeriod(ActivityPeriodVo activityPeriodVo) {
+    public HttpResult savePeriod(@RequestBody ActivityPeriodVo activityPeriodVo) {
         return new HttpResult("release activity period:" + activityService.updatePeriod(activityPeriodVo));
     }
 
-    @RequestMapping("/cancel")
+    @RequestMapping(value = "/cancel")
     public void cancel(String activityId, String stationId, String periodId) {
+        System.out.println(activityId);
         if (activityId != null)
             activityService.deleteActivity(activityId);
         if (stationId != null)
@@ -63,6 +63,14 @@ public class Manage extends BaseController {
     @RequestMapping("/approve")
     public void approve(@RequestBody List<String> recordId) {
         participateService.accept(recordId);
+    }
+
+    /**
+     * 结束录用，开始活动
+     */
+    @RequestMapping("/start")
+    public HttpResult startActivity(String activityId) {
+        return new HttpResult("startActivity:" + activityService.startActivity(activityId));
     }
 
     @RequestMapping("/evaluate")

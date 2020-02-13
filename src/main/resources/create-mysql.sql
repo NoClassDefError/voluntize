@@ -1,4 +1,3 @@
-create schema voluntize collate utf8mb4_0900_ai_ci;
 
 create table department
 (
@@ -19,9 +18,13 @@ create table activity
         primary key,
     description text          null,
     name        varchar(255)  null,
-    status_id   int default 0 null,
-    department  varchar(255)  null comment '部门账号',
     semester    varchar(255)  null comment '学期，例如：“2019-2020学年第一学期”',
+    status_id   int default 0 null comment '0 部门已发送等待审核
+1 审核并修改
+2 报名
+3 录用并开始活动
+4 结束并评价',
+    department  varchar(255)  null comment '部门账号',
     constraint FKsf1w5vswlmu7hq5cx8wmxlub3
         foreign key (department) references department (id)
 );
@@ -31,11 +34,10 @@ create table activity_station
     id              varchar(255) not null
         primary key,
     description     text         null,
-    station_name    varchar(255) null,
-    requirements    text         null,
-    parent_activity varchar(255) null,
     linkman         varchar(255) null comment '联系人，每个地点的联系人不一定一样',
+    station_name    varchar(255) null,
     phone_num       varchar(255) null comment '联系人电话',
+    parent_activity varchar(255) null,
     constraint FK46dcjwcjpjkq62lnjbony635i
         foreign key (parent_activity) references activity (id)
 );
@@ -45,14 +47,13 @@ create table activity_period
     id              varchar(255)                        not null
         primary key,
     amount_required int                                 null comment '所需人数',
-    end_time        timestamp default CURRENT_TIMESTAMP null,
+    end_date        timestamp default CURRENT_TIMESTAMP null,
     equ_duration    int                                 null comment '等效公益劳动时长
 不是简单的末初时间的差，需要单独给定',
-    start_time      timestamp default CURRENT_TIMESTAMP null,
-    parent          varchar(255)                        null,
-    `period` text null comment '每天活动时间安排，例如上午8至11，下午2至5',
-    end_date        timestamp default CURRENT_TIMESTAMP null,
+    requirements    text                                null,
     start_date      timestamp default CURRENT_TIMESTAMP null comment '本项公益劳动开始的日期',
+    `period`        text                                null comment '每天活动时间安排，例如上午8至11，下午2至5',
+    parent          varchar(255)                        null,
     constraint FKptg4vppo98idc4h5gawmudg37
         foreign key (parent) references activity_station (id)
 );
@@ -72,7 +73,8 @@ create table student
     phone_num      varchar(11)                  null,
     school         varchar(255)                 null comment '学院
 可从学籍数据库调用',
-    total_duration int         default 0        null
+    total_duration int         default 0        null,
+    gender         varchar(10)                  null
 );
 
 create table comment
@@ -81,7 +83,7 @@ create table comment
         primary key,
     description    text                                null,
     time           timestamp default CURRENT_TIMESTAMP null,
-    activity       varchar(255)                        null,
+    activity       varchar(255)                        not null,
     department     varchar(255)                        null comment '部门账号',
     parent_comment varchar(255)                        null,
     student        varchar(25)                         null comment '学号，主键',
@@ -100,7 +102,7 @@ create table image
     id         varchar(255) not null
         primary key,
     name       varchar(255) null comment '图片描述，即html image标签的alt属性',
-    url        varchar(255) null,
+    url        text         null,
     activity   varchar(255) null,
     comment    varchar(255) null,
     department varchar(255) null comment '部门账号',
@@ -130,7 +132,8 @@ create table record
     evaluation  varchar(255)  null comment '0  不通过，见audit_level；
 若不通过，给评级部门必须填写不通过的理由（不超过255字）；',
     info        varchar(255)  null,
-    is_passed   bit           null,
+    is_passed   tinyint(1)    null comment '非0：已被录取（true）；
+0：非录取状态（false）',
     stars       int default 0 not null comment '公益劳动结束后，
 学生反馈评星
 （0，1，2，3，4，5）

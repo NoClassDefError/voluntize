@@ -25,7 +25,7 @@ public class Participate extends BaseController {
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult cancel(String recordId) {
-        return new HttpResult("cancel", participateService.cancel(recordId));
+        return new HttpResult("cancel:" + participateService.cancel(recordId));
     }
 
     @RequestMapping(value = "/appraise", method = RequestMethod.POST)

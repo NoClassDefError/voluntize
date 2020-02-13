@@ -41,6 +41,7 @@ public class DepartmentQuery extends BaseController {
 
     @RequestMapping(value = "/records", method = RequestMethod.POST)
     public List<RecordVoDpm> getRecords(String periodId) {
+//        System.out.println(periodId);
         ArrayList<RecordVoDpm> recordVos = new ArrayList<>();
         for (Record record : participateService.getRecord(periodId))
             recordVos.add(new RecordVoDpm(record));
