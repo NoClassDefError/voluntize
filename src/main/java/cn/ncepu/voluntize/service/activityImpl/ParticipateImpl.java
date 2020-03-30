@@ -125,6 +125,20 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    public String deny(String records) {
+        Record record = recordRepository.findById(records).orElse(null);
+        if (record != null) {
+            if (record.getPeriod().getParent().getParentActivity().getStatusId() != 2)
+                return "Cannot accept! The activity is not in the status for participation.";
+            record.setStatus(Record.RecordStatus.APPLIED);
+            record.setPassed(false);
+            recordRepository.save(record);
+            return "success";
+        }else
+        return "not found";
+    }
+
+    @Override
     public void evaluate(List<EvaluateVo> records) {
         boolean flag = true;
         for (EvaluateVo evaluateVo : records) {

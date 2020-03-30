@@ -40,7 +40,7 @@ public class ActivityManage extends BaseController {
     @ResponseBody
     public HttpResult setAutoSendActivity(boolean autoSendActivity) {
         context.setAttribute("autoSendActivity", autoSendActivity);
-        return new HttpResult("AutoSendActivity enable:" + autoSendActivity);
+        return new HttpResult("AutoSendActivityEnable:" + autoSendActivity);
     }
 
     @RequestMapping("/confirm")
@@ -50,9 +50,12 @@ public class ActivityManage extends BaseController {
                 activityService.changeStatus(activityId, Activity.ActivityStatus.SEND));
     }
 
+
+
     @RequestMapping(value = "/findConfirming", method = RequestMethod.POST)
     @ResponseBody
     public List<ActivityVo> findConfirmingActivities() {
+        if((boolean) context.getAttribute("autoSendActivity")) return null;
         List<ActivityVo> activityVos = new ArrayList<>();
         for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING))
             activityVos.add(new ActivityVo(activity));

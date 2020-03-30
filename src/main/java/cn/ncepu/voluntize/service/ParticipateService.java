@@ -34,6 +34,8 @@ public interface ParticipateService {
      */
     String accept(List<String> records);
 
+    String deny(String records);
+
     /**
      * 老师给予学生成绩
      * Integer为成绩等级，0 不通过 1 通过 2 良好 3 优秀

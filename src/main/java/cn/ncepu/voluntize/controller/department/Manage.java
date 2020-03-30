@@ -65,6 +65,12 @@ public class Manage extends BaseController {
         participateService.accept(recordId);
     }
 
+    @RequestMapping("/deny")
+    @ResponseBody
+    public HttpResult deny(String record) {
+        return new HttpResult("deny:" + participateService.deny(record));
+    }
+
     /**
      * 结束录用，开始活动
      */

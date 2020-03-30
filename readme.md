@@ -324,60 +324,128 @@ http://192.168.43.1:8888/volunteer/department/updateDepartment
     email
     profiles //与上个接口相同
 
-#### 获取已发送的活动信息  [2020.2.6 修改]
+#### 获取已发送的活动信息
 http://192.168.43.1:8888/volunteer/department/query/released
 
 发送 post 无内容
 
 返回 json
-``` 
-
+```
 [
     {
-        "id": "001",//该条活动的id
-        "name": "2019图书馆公益活动",//活动名
-        "description": "搬运书籍，贴标签等",//活动描述
-        "departmentName": "图书馆（主）",//部门名
-        "status": 1,//当前所处的时期——审核期
+        "id": "001",
+        "name": "2019图书馆公益活动",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
         "stations": [
             {
+                "id": "1001",
+                "name": "主C 101",
+                "linkman": "张三",
+                "phoneNum": "61772591",
+                "description": "adoifudnxiudsaoyfuiaofnyuadiof",
+                "parentId": "001",
                 "periods": [
                     {
-                        
-                        "startDate": "2020-01-11 02:23:37.0",//开始时间
-                        "endDate": "2020-01-20 02:22:58.0",//结束时间
-                        "equDuration": 20,//等效时长
-                        "amountRequired": 20//所需人数
+                        "id": "1",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-11 02:23:37.0",
+                        "endDate": "2020-01-20 02:22:58.0",
+                        "timePeriod": "上午8点开始，下午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 20
                     },
+                    {
+                        "id": "2",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-14 02:26:00.0",
+                        "endDate": "2020-01-20 02:25:25.0",
+                        "timePeriod": "下午2点开始，上午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 10
+                    }
                 ]
             },
+            {
+                "id": "1002",
+                "name": "图书馆主馆101",
+                "linkman": "李四",
+                "phoneNum": "61773253",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            },
+            {
+                "id": "1003",
+                "name": "图书馆主馆305",
+                "linkman": "王五",
+                "phoneNum": "61773241",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            }
         ]
-    }
+    },
     {
-        "id": "002",//该条活动的id
-        "name": "图书馆搬书",//活动名
-        "description": "搬运书籍，贴标签等",//活动描述
-        "departmentName": "图书馆（主c）",//部门名
-        "status": 1,//当前所处的时期——审核期
-        "stations": [
-            {
-                "periods": [
-                    {
-                        
-                        "startDate": "2020-02-11 02:23:37.0",//开始时间
-                        "endDate": "2020-01-20 02:22:58.0",//结束时间
-                        "equDuration": 20,//等效时长
-                        "amountRequired": 20//所需人数
-                    },
-                ]
-            },
-        ]
+        "id": "003",
+        "name": "2018图书馆公益活动",
+        "semester": "2018-2019第二学期",
+        "description": "为了增强学生实践精神，并减小学校各部门工作负担。。。",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 4,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "0779c44d-4034-47d0-93bf-2d49829ed7ed",
+        "name": "2019图书馆公益活动4",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "6e1cd45a-0f16-4444-9f8b-3231f1cf5335",
+        "name": "2019图书馆公益活动2",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
+    },
+    {
+        "id": "9c2a048a-4b07-48c9-bba4-ce3f1f6345ed",
+        "name": "2019图书馆公益活动3",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": []
     }
-                
 ]
 ```
 
-#### 获取特定活动时间段的报名记录  [2020.2.6 修改]
+#### 获取特定活动时间段的报名记录
 http://192.168.43.1:8888/volunteer/department/query/records
 
 发送 post application/x-www-form-urlencoded
@@ -391,10 +459,10 @@ periodId 时间段
 [
     {
         "id": "02",
-        "volunteerId": "120181080702",//学生学号
+        "volunteerId": "120181080702",
         "periodId": "1",
-        "info": "玩耍……",//学生的自我介绍
-        
+        "info": "玩耍……",
+        "status": 2,
         "auditLevel": 0,
         "evaluation": "被录取而一直未到",
         "stars": 0,
@@ -428,7 +496,7 @@ periodId 时间段
 ]
 ```
 
-#### 获取特定学生信息  [2020.2.6 修改]
+#### 获取特定学生信息 
 http://192.168.43.1:8888/volunteer/department/query/studentInfo
 
 发送 post application/x-www-form-urlencoded
@@ -440,39 +508,47 @@ studentId 学生学号
 返回 json
 ```
 {
-    "studentNum": "120171020201",//学号
-    "name": "葛翰臣",//姓名
-    "major": "电气工程及其自动化",//专业
-    "grade": "2017级",//年级
-    "classs": "电气1710"，//班级
-    "phoneNum": 136546546,//学生手机号
-    "school": "电气学院",//学院
-    “sex”："男"//性别
-    “record”：[
-        "info":"我觉得我能胜任"//学生报名时的个人介绍
+    "studentNum": "120171020201",
+    "idNum": "341003199908170034",
+    "name": "葛翰臣",
+    "major": "电气工程及其自动化",
+    "grade": "大三",
+    "classs": "电气1710",
+    "phoneNum": null,
+    "email": "Macswelle@outlook.com",
+    "school": "电气学院",
+    "totalDuration": 0,
+    "profiles": [
+        {
+            "name": null,
+            "url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E5%A4%B4%E5%83%8F&step_word=&hs=0&pn=42&spn=0&di=53570&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=3117110987%2C173625746&os=2075175500%2C824963435&simid=0%2C0&adpicid=0&lpn=0&ln=3718&fr=&fmq=1579421350054_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=head&bdtype=0&oriquery=&objurl=http%3A%2F%2Fimg2.woyaogexing.com%2F2018%2F03%2F10%2F9a68831f24d2985b!360x360_big.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bo5yw52jxtg2_z%26e3Bv54AzdH3Fp57xtwg2AzdH3FojtxtgAzdH3Fda8bAzdH3Fclmaac_z%26e3Bip4s&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined"
+        }
     ]
 }
 ```
 
 
-#### 新建活动  [2020.2.6 修改]
+#### 新建活动
 http://192.168.43.1:8888/volunteer/department/service/saveActivity
 
 发送 post application/json
 
 ```
 id //添加id时为修改，不添加为新增
-name//活动名称 
-description//活动内容介绍
-departmentId//部门id
-
+name 
+semester 
+description
+departmentId
+images //json数组，图片对象，包含name,url两个属性
 ```
 示例：
 ```
 {
-    "name": "2019图书馆公益活动4",//活动名称 
-    "description": "搬运书籍，贴标签等",//活动内容介绍
-    "departmentId": "6177001",//部门id
+    "name": "2019图书馆公益活动4",
+    "semester": "2019-2020第一学期",
+    "description": "搬运书籍，贴标签等",
+    "departmentId": "6177001",
+    "images": []
 }
 ```
 
@@ -482,53 +558,57 @@ departmentId//部门id
 {"save activity": "0779c44d-4034-47d0-93bf-2d49829ed7ed"}
 ```
 
-#### 为已有活动添加活动地点  [2020.2.6 修改]
+
+#### 为已有活动添加活动地点
 http://192.168.43.1:8888/volunteer/department/service/saveStation
 
 发送 post application/json
 
 ```
 id//添加id时为修改，不添加为新增
-name//劳动地点
-linkman//联系人
-phoneNum//联系人的电话或手机号
+name
+linkman
+phoneNum
+description
 parentId //活动的id
 ```
 
 ```
 {
-    "name": "主C 101",//劳动地点
-    "linkman": "张三",//联系人
-    "phoneNum": "61772591",//联系人的电话或手机号
-    "parentId": "6177001"//活动的id
+    "name": "主C 101",
+    "linkman": "张三",
+    "phoneNum": "61772591",
+    "description": "",
+    "parentId": "6177001"
 }
 ```
 返回  json 其中包含报存活动地点的id信息
 
-#### 为已有活动地点添加时间段  [2020.2.6 修改]
+#### 为已有活动地点添加时间段
 http://192.168.43.1:8888/volunteer/department/service/savePeriod
 
 发送 post application/json
 
 ```
-
-startDate//开始日期，格式： 2020-01-11 02:23:37.0
+id//添加id时为修改，不添加为新增
+parentStationId//不能为空
+startDate//起始日期，格式： 2020-01-11 02:23:37.0
 endDate//结束日期
-timePeriod//每日工作时间，以字符串表示每天几点开始几点结束
-requirements//录取要求
+timePeriod//以字符串表示每天几点开始几点结束
+requirements//需求
 equDuration//等效时长
-amountRequired//所需人数
+amountRequired//需要人数
 ```
 
 示例：
 ```
 {
-    "startDate": "2020-01-11 02:23:37.0",//开始日期
-    "endDate": "2020-01-20 02:22:58.0",//结束日期
-    "timePeriod": "上午8点开始，下午不用来",//每日工作时间，
-    "requirements": “男同学优先录取”,//录取要求
-    "equDuration": 20,//等效时长
-    "amountRequired": 20//所需人数
+    "startDate": "2020-01-11 02:23:37.0",
+    "endDate": "2020-01-20 02:22:58.0",
+    "timePeriod": "上午8点开始，下午不用来",
+    "requirements": null,
+    "equDuration": 20,
+    "amountRequired": 20
 }
 ```
 返回  json 其中包含报存活动时间段的id信息
@@ -556,45 +636,26 @@ http://192.168.43.1:8888/volunteer/department/service/approve
 
 不返回内容
 
-#### 批量评价打分  [2020.2.6 修改]
+#### 批量评价打分  
 http://192.168.43.1:8888/volunteer/department/service/evaluate
 
 发送 json数组
 ```
 recordId//报名记录（record）的id
 evaluate//评语
-auditLevel//4个等级，不通过：0 ，通过：1，良好：2，优秀：3
-示例：
-[
-    {
-        recordId:001//报名记录（record）的id
-        evaluate:null//评语
-        auditLevel：3//等级
-    }
-    {
-        recordId:001//报名记录（record）的id
-        evaluate:该同学很热情//评语
-        auditLevel：3//等级
-    }
-    {
-        recordId//报名记录（record）的id
-        evaluate：“一直没来”//评语，等级为“0”，必须填理由
-        auditLevel：0//等级
-    }
-
-]
+auditLevel//5个等级
 ```
 
+实例：
 
-
+```
+    [
+        {"recordId":"1234456","evaluate":"some words here...","auditLevel":5},
+        {"recordId":"123qs464536","evaluate":"some words here...","auditLevel":1}
+    ]
+```
 
 不返回内容
-
-
-
-
-
-
 ### 学生接口
 #### 修改学生信息
 http://192.168.43.1:8888/volunteer/student/updateStudent
@@ -855,6 +916,94 @@ http://192.168.43.1:8888/volunteer/admin/user/delete
 {"deleteUser":"No such user."}
 ```
 
+#### 删除活动
+http://192.168.43.1:8888/volunteer/admin/activity/delete
+
+发送 post application/x-www-form-urlencoded
+
+    id 所删除活动的id
+
+返回 无内容
+
+#### 保存活动
+用于保存和修改活动信息，管理员拥有绝对权限
+http://192.168.43.1:8888/volunteer/admin/activity/save
+
+发送 post json
+ 
+！要在查询活动的结果基础上做修改
+
+```
+ {
+        "id": "001",
+        "name": "2019图书馆公益活动",
+        "semester": "2019-2020第一学期",
+        "description": "搬运书籍，贴标签等",
+        "departmentId": "6177001",
+        "departmentName": "图书馆（主）",
+        "status": 0,
+        "images": [],
+        "stations": [
+            {
+                "id": "1001",
+                "name": "主C 101",
+                "linkman": "张三",
+                "phoneNum": "61772591",
+                "description": "adoifudnxiudsaoyfuiaofnyuadiof",
+                "parentId": "001",
+                "periods": [
+                    {
+                        "id": "1",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-11 02:23:37.0",
+                        "endDate": "2020-01-20 02:22:58.0",
+                        "timePeriod": "上午8点开始，下午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 20
+                    },
+                    {
+                        "id": "2",
+                        "parentStationId": "1001",
+                        "parentStationName": "主C 101",
+                        "parentActivityId": "001",
+                        "parentActivityName": "2019图书馆公益活动",
+                        "startDate": "2020-01-14 02:26:00.0",
+                        "endDate": "2020-01-20 02:25:25.0",
+                        "timePeriod": "下午2点开始，上午不用来",
+                        "requirements": null,
+                        "equDuration": 20,
+                        "amountRequired": 10
+                    }
+                ]
+            },
+            {
+                "id": "1002",
+                "name": "图书馆主馆101",
+                "linkman": "李四",
+                "phoneNum": "61773253",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            },
+            {
+                "id": "1003",
+                "name": "图书馆主馆305",
+                "linkman": "王五",
+                "phoneNum": "61773241",
+                "description": "任意内容",
+                "parentId": "001",
+                "periods": []
+            }
+        ]
+    }
+```
+
+返回 json 
+
 #### 获取待审核的活动
 http://192.168.43.1:8888/volunteer/admin/activity/findConfirming
 
@@ -1008,5 +1157,5 @@ password:lW2Y36sHhSDFz5QtLsCT57Q/sU3uayv2mKL+DWgk/nwCR3YVJz2lrndolv8XHv0RupBLlum
 ### 2020.1.19
 #12 00：41 更新数据表结构与项目
 
-###2020.1.28
+### 2020.1.28
 #13 01：53 对表内容补充了部分注释 

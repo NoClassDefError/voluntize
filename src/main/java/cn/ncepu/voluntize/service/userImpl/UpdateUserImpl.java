@@ -30,13 +30,12 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         if (!optional.isPresent()) return false;
         //先对vo中的信息进行检验
         Student origin = optional.get();
-        Student newStu = (Student) origin.clone();
 
         //设定基本信息
-        newStu.setStudentNum(studentId);
-        newStu.setEmail(student.getEmail());
-        newStu.setName(student.getName());
-        newStu.setGrade(student.getPhoneNum());
+        origin.setStudentNum(studentId);
+        origin.setEmail(student.getEmail());
+        origin.setName(student.getName());
+        origin.setGrade(student.getPhoneNum());
 
         //构造并设定image对象
         ArrayList<Image> images = new ArrayList<>();
@@ -45,10 +44,10 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
             image1.setStudent(origin);
             images.add(image1);
         }
-        newStu.setProfiles(images);
+        origin.setProfiles(images);
         //其他信息保持不变
 
-        studentRepository.save(newStu);
+        studentRepository.save(origin);
         return true;
     }
 
@@ -63,17 +62,18 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         Optional<Department> optional = departmentRepository.findById(depId);
         if (!optional.isPresent()) return false;
         Department origin = optional.get();
-        Department newDep = (Department) origin.clone();
-        newDep.setId(depId);
-        newDep.setManager(department.getManager());
-        newDep.setPhoneNum(department.getPhoneNum());
+        origin.setId(depId);
+        origin.setManager(department.getManager());
+        origin.setPhoneNum(department.getPhoneNum());
+        origin.setEmail(department.getEmail());
         ArrayList<Image> images = new ArrayList<>();
         for (ImageVo image : department.getImages()) {
             Image image1 = image.toImage();
             image1.setDepartment(origin);
             images.add(image1);
         }
-        newDep.setImages(images);
+        origin.setImages(images);
+        departmentRepository.save(origin);
         return true;
     }
     @Override
