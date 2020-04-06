@@ -7,6 +7,7 @@ import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.ImageVo;
+import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,26 +47,56 @@ public class ActivityImpl implements ActivityService {
     @Autowired
     private ScheduledExecutorService scheduledExecutorService;
 
+    @Autowired
+    private HttpSession session;
+
+    public String create2(CreateActivityVo activityVo) {
+        Activity activity = new Activity();
+        ActivityPeriod activityPeriod = new ActivityPeriod();
+        ActivityStation activityStation = new ActivityStation();
+        //新增
+        if (context.getAttribute("autoSendActivity").equals(true))
+            activity.setStatus(Activity.ActivityStatus.STARTED);
+        else activity.setStatus(Activity.ActivityStatus.SEND);
+        Department department = departmentRepository.findById((String) session.getAttribute("UserId")).orElse(null);
+
+        activity.setDepartment(department);
+        activity.setDescription(activityVo.getDescription());
+        activity.setName(activityVo.getName());
+        //添加定时器
+        Runnable task = () -> {
+            activity.setStatus(Activity.ActivityStatus.SEND);
+            activityRepository.save(activity);
+            LoggerFactory.getLogger(this.getClass()).info("Task executed, starting activity. Id=" + activity.getId());
+        };
+        scheduledExecutorService.schedule(task, 3, TimeUnit.DAYS);
+        Activity ac = activityRepository.save(activity);
+
+        activityStation.setLinkman(activityVo.getLinkman());
+        activityStation.setParentActivity(ac);
+        activityStation.setName(activityVo.getStationName());
+        activityStation.setPhoneNum(activityVo.getPhoneNum());
+        ActivityStation station = activityStationRepository.save(activityStation);
+
+        activityPeriod.setTimePeriod(activityVo.getTimePeriod());
+        activityPeriod.setEndDate(Timestamp.valueOf(activityVo.getEndDate()));
+        activityPeriod.setStartDate(Timestamp.valueOf(activityVo.getStartDate()));
+        activityPeriod.setTimePeriod(activityVo.getTimePeriod());
+        activityPeriod.setEquDuration(activityVo.getEquDuration());
+        activityPeriod.setAmountRequired(activityVo.getAmountRequired());
+        activityPeriod.setParent(station);
+
+        activityPeriodRepository.save(activityPeriod);
+        return "success";
+    }
+
     @Override
-    public String createOrUpdate(ActivityVo activity) {
-        if (activity.getId() == null) {
-            //新增
-            if (context.getAttribute("autoSendActivity").equals(true))
-                activity.setStatus(1);
-            else activity.setStatus(0);
-            //添加定时器
-            Runnable task = () -> {
-                activity.setStatus(2);
-                activityRepository.save(convertActivityVo(new Activity(), activity));
-                LoggerFactory.getLogger(this.getClass()).info("Task executed, starting activity. Id=" + activity.getId());
-            };
-            scheduledExecutorService.schedule(task, 3, TimeUnit.DAYS);
-            return activityRepository.save(convertActivityVo(new Activity(), activity)).getId();
+    public String update(ActivityVo activity) {
+        if (activity.getId() != null) {
+            Optional<Activity> optional = activityRepository.findById(activity.getId());
+            if (optional.isPresent())
+                return activityRepository.save(convertActivityVo(optional.get(), activity)).getId();
         }
-        Optional<Activity> optional = activityRepository.findById(activity.getId());
-        if (optional.isPresent())
-            //修改
-            return activityRepository.save(convertActivityVo(optional.get(), activity)).getId();
         return "not found";
     }
 

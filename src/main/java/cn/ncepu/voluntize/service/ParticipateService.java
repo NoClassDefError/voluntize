@@ -30,7 +30,7 @@ public interface ParticipateService {
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的
      * 一次性评论完ActivityPeriod下所有record
-     * @return
+     *
      */
     String accept(List<String> records);
 

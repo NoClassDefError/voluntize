@@ -87,10 +87,10 @@ public class Student implements Cloneable {
      * 志愿记录，一对多关联ActivityPeriod。<br>
      * 报名则计入志愿记录，但未必报名成功。
      */
-    @OneToMany(mappedBy = "volunteer", targetEntity = Record.class)
+    @OneToMany(mappedBy = "volunteer", targetEntity = Record.class, cascade = CascadeType.REMOVE)
     private List<Record> participated;
 
-    @OneToMany(mappedBy = "student", targetEntity = Comment.class)
+    @OneToMany(mappedBy = "student", targetEntity = Comment.class, cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     /**

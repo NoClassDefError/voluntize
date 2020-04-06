@@ -108,20 +108,22 @@ public class ParticipateImpl implements ParticipateService {
     @Override
     public String accept(List<String> records) {
         boolean flag = true;
+//        System.out.println(records);
+        List<String> notfounds = new ArrayList<>();
         for (String id : records) {
             Record record = recordRepository.findById(id).orElse(null);
             if (record != null) {
                 if (flag) {
                     flag = false;
-                    if (record.getPeriod().getParent().getParentActivity().getStatusId() != 2)
-                        return "Cannot accept! The activity is not in the status for participation.";
+                    if (record.getPeriod().getParent().getParentActivity().getStatusId() != 1)
+                        return "录取失败，该活动当前不在报名期";
                 }
                 record.setStatus(Record.RecordStatus.PASSED);
                 record.setPassed(true);
                 recordRepository.save(record);
-            }
+            } else notfounds.add(id);
         }
-        return "success";
+        return "除了这些学生的报名记录没找到外，其它学生都已经成功录取" + notfounds;
     }
 
     @Override
@@ -134,8 +136,8 @@ public class ParticipateImpl implements ParticipateService {
             record.setPassed(false);
             recordRepository.save(record);
             return "success";
-        }else
-        return "not found";
+        } else
+            return "not found";
     }
 
     @Override

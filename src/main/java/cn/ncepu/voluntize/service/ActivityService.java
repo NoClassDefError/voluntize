@@ -4,19 +4,20 @@ import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
+import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ActivityService {
-
+    String create2(CreateActivityVo activityVo);
     /**
      * 添加或更新志愿活动
      *
      * @param activity 保存的activity
      * @return 保存activity的Id
      */
-    String createOrUpdate(ActivityVo activity);
+    String update(ActivityVo activity);
 
     String updateStation(ActivityStationVo activityStationVo);
 

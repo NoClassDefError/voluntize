@@ -21,11 +21,11 @@ public class UserManage {
     public HttpResult saveUser(@RequestBody UserUpdateVoAdmin vo) {
         if (new Integer(1).equals(vo.getCategory()))
             return new HttpResult("saveUser:" + updateUserService.updateStudent(vo),
-                    "category:student");
+                    "category:学生");
         else if (new Integer(2).equals(vo.getCategory()))
             return new HttpResult("saveUser:" + updateUserService.updateDepartment(vo),
-                    "category:department");
-        return new HttpResult("saveUser:No such category.");
+                    "category:部门");
+        return new HttpResult("saveUser:没有这个类型");
     }
 
     @RequestMapping("/delete")

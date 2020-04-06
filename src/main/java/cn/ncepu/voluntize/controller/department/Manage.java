@@ -6,6 +6,7 @@ import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
+import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/department/service")
@@ -27,22 +27,27 @@ public class Manage extends BaseController {
     @Autowired
     private ParticipateService participateService;
 
+    @RequestMapping("/createActivity")
+    @ResponseBody
+    public HttpResult createActivity(@RequestBody CreateActivityVo activityVo) {
+        return new HttpResult("release activity:" + activityService.create2(activityVo) );
+    }
+
     @RequestMapping("/saveActivity")
     @ResponseBody
-    public HttpResult releaseOrUpdate(@RequestBody ActivityVo activityVo) {
-        AtomicReference<String> result = new AtomicReference<>(activityService.createOrUpdate(activityVo));
-        return new HttpResult("release activity:" + result);
+    public HttpResult update(@RequestBody ActivityVo activityVo) {
+         return new HttpResult("release activity:" + activityService.update(activityVo) );
     }
 
     @RequestMapping("/saveStation")
     @ResponseBody
-    public HttpResult saveStation(@RequestBody ActivityStationVo activityStationVo) {
+    public HttpResult updateStation(@RequestBody ActivityStationVo activityStationVo) {
         return new HttpResult("release activity station:" + activityService.updateStation(activityStationVo));
     }
 
     @RequestMapping("/savePeriod")
     @ResponseBody
-    public HttpResult savePeriod(@RequestBody ActivityPeriodVo activityPeriodVo) {
+    public HttpResult updatePeriod(@RequestBody ActivityPeriodVo activityPeriodVo) {
         return new HttpResult("release activity period:" + activityService.updatePeriod(activityPeriodVo));
     }
 
@@ -61,8 +66,9 @@ public class Manage extends BaseController {
      * 录用
      */
     @RequestMapping("/approve")
-    public void approve(@RequestBody List<String> recordId) {
-        participateService.accept(recordId);
+    public HttpResult approve(@RequestBody List<String> recordId) {
+        System.out.println(recordId);
+        return new HttpResult("approve:" + participateService.accept(recordId));
     }
 
     @RequestMapping("/deny")

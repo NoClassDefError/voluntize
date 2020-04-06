@@ -864,7 +864,7 @@ http://192.168.43.1:8888/volunteer/admin/user/save
 发送  post application/json
 账户密码也在此修改，包含属性有：
 ```
-    private String id;//新增时可不填id，自动生成
+    private String id;
     private Integer category;//1为学生，2为部门
     private String name;//学生名或部门名
     private String password;//若不提供，则初始密码为123456

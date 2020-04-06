@@ -104,6 +104,8 @@ public class Activity {
             case 3:
                 this.status = ActivityStatus.FINISHED;
                 break;
+            case 4:
+                this.status = ActivityStatus.NOT_PASS;
         }
         this.statusId = statusId;
     }
@@ -119,6 +121,6 @@ public class Activity {
      * 共4个阶段
      */
     public enum ActivityStatus {
-        CONFIRMING, SEND, STARTED, FINISHED
+        CONFIRMING, SEND, STARTED, FINISHED, NOT_PASS
     }
 }

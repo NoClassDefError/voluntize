@@ -53,12 +53,13 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
 
     /**
      * 修改部门信息，与上个方法基本相同
+     *
      * @param department DepartmentUpdateVo
      * @return 修改是否成功
      */
     @Override
     public boolean updateDepartment(DepartmentUpdateVo department) {
-        String depId = (String)session.getAttribute("UserId");
+        String depId = (String) session.getAttribute("UserId");
         Optional<Department> optional = departmentRepository.findById(depId);
         if (!optional.isPresent()) return false;
         Department origin = optional.get();
@@ -76,11 +77,12 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         departmentRepository.save(origin);
         return true;
     }
+
     @Override
     public String updateStudent(UserUpdateVoAdmin voAdmin) {
         //department表中的id不能与student的重复
         if (departmentRepository.findById(voAdmin.getId()).isPresent())
-            return "A student's id cannot be the same as a department's.";
+            return "学生的id不能和部门的一样";
         Student student = new Student();
         student.setStudentNum(voAdmin.getId());
         student.setName(voAdmin.getName());
@@ -98,7 +100,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
     @Override
     public String updateDepartment(UserUpdateVoAdmin voAdmin) {
         if (studentRepository.findById(voAdmin.getId()).isPresent())
-            return "A department's id cannot be the same as a student's.";
+            return "部门的id不能和学生的一样";
         Department department = new Department();
         department.setId(voAdmin.getId());
         department.setManager(voAdmin.getManager());
@@ -112,12 +114,12 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
     public String deleteUser(String id) {
         if (studentRepository.findById(id).isPresent()) {
             studentRepository.deleteById(id);
-            return "A student account deleted.";
+            return "学生账户" + id + "已删除";
         }
         if (departmentRepository.findById(id).isPresent()) {
             departmentRepository.deleteById(id);
-            return "A department account deleted.";
+            return "部门账户" + id + "已删除";
         }
-        return "Id not found.";
+        return "没有找到这个账户";
     }
 }

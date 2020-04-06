@@ -6,6 +6,7 @@ import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.util.RsaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;

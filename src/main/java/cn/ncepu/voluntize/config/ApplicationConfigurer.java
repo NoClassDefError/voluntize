@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class ApplicationConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyInterceptor());
+        registry.addInterceptor(new MyInterceptor()).excludePathPatterns("/errors");
     }
 
     @Override
