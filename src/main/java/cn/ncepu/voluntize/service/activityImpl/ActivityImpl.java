@@ -63,6 +63,15 @@ public class ActivityImpl implements ActivityService {
         activity.setDepartment(department);
         activity.setDescription(activityVo.getDescription());
         activity.setName(activityVo.getName());
+        activity.setSemester(activityVo.getSemester());
+        if (activityVo.getImageUrl() != null) {
+            ArrayList<Image> images = new ArrayList<>();
+            Image image = new Image();
+            image.setUrl(activityVo.getImageUrl());
+            images.add(image);
+            activity.setImages(images);
+        }
+
         //添加定时器
         Runnable task = () -> {
             activity.setStatus(Activity.ActivityStatus.SEND);
@@ -84,6 +93,7 @@ public class ActivityImpl implements ActivityService {
         activityPeriod.setTimePeriod(activityVo.getTimePeriod());
         activityPeriod.setEquDuration(activityVo.getEquDuration());
         activityPeriod.setAmountRequired(activityVo.getAmountRequired());
+        activityPeriod.setRequirements(activityVo.getRequirements());
         activityPeriod.setParent(station);
 
         activityPeriodRepository.save(activityPeriod);
