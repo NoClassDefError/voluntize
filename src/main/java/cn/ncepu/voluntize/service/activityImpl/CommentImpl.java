@@ -61,7 +61,6 @@ public class CommentImpl implements CommentService {
         ArrayList<Image> images = new ArrayList<>();
         if (commentVo.getImageVos() != null) commentVo.getImageVos().forEach((vo) -> images.add(vo.toImage()));
         comment1.setImages(images);
-        comment1.setTime(new Timestamp(new Date().getTime()));
         if ("Student".equals(session.getAttribute("UserCategory")))
             comment1.setStudent(studentRepository.findById((String) session.getAttribute("UserId")).orElse(null));
         else if ("Department".equals(session.getAttribute("UserCategory")))

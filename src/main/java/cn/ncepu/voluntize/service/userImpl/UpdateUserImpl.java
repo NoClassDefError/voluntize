@@ -35,16 +35,18 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         origin.setStudentNum(studentId);
         origin.setEmail(student.getEmail());
         origin.setName(student.getName());
-        origin.setGrade(student.getPhoneNum());
+        origin.setPhoneNum(student.getPhoneNum());
 
         //构造并设定image对象
-        ArrayList<Image> images = new ArrayList<>();
-        for (ImageVo image : student.getProfiles()) {
-            Image image1 = image.toImage();
-            image1.setStudent(origin);
-            images.add(image1);
+        if (student.getProfiles() != null) {
+            ArrayList<Image> images = new ArrayList<>();
+            for (ImageVo image : student.getProfiles()) {
+                Image image1 = image.toImage();
+                image1.setStudent(origin);
+                images.add(image1);
+            }
+            origin.setProfiles(images);
         }
-        origin.setProfiles(images);
         //其他信息保持不变
 
         studentRepository.save(origin);
@@ -52,7 +54,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
     }
 
     /**
-     * 修改部门信息，与上个方法基本相同
+     * 部门本身的接口
      *
      * @param department DepartmentUpdateVo
      * @return 修改是否成功
@@ -67,17 +69,22 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         origin.setManager(department.getManager());
         origin.setPhoneNum(department.getPhoneNum());
         origin.setEmail(department.getEmail());
-        ArrayList<Image> images = new ArrayList<>();
-        for (ImageVo image : department.getImages()) {
-            Image image1 = image.toImage();
-            image1.setDepartment(origin);
-            images.add(image1);
+        if (department.getImages() != null) {
+            ArrayList<Image> images = new ArrayList<>();
+            for (ImageVo image : department.getImages()) {
+                Image image1 = image.toImage();
+                image1.setDepartment(origin);
+                images.add(image1);
+            }
+            origin.setImages(images);
         }
-        origin.setImages(images);
         departmentRepository.save(origin);
         return true;
     }
 
+    /**
+     * 管理员的修改接口
+     */
     @Override
     public String updateStudent(UserUpdateVoAdmin voAdmin) {
         //department表中的id不能与student的重复
@@ -89,7 +96,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         student.setGrade(voAdmin.getGrade());
         student.setGender(voAdmin.getGender());
         student.setClasss(voAdmin.getClasss());
-        student.setIdNum(voAdmin.getIdNum());
+//        student.setIdNum(voAdmin.getIdNum());
         student.setMajor(voAdmin.getMajor());
         student.setSchool(voAdmin.getSchool());
         if (voAdmin.getPassword() == null) student.setPassword("123456");
@@ -97,6 +104,9 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         return studentRepository.save(student).getStudentNum();
     }
 
+    /**
+     * 管理员的修改接口
+     */
     @Override
     public String updateDepartment(UserUpdateVoAdmin voAdmin) {
         if (studentRepository.findById(voAdmin.getId()).isPresent())
@@ -110,6 +120,9 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         return departmentRepository.save(department).getId();
     }
 
+    /**
+     * 管理员的删除接口
+     */
     @Override
     public String deleteUser(String id) {
         if (studentRepository.findById(id).isPresent()) {

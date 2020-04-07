@@ -37,8 +37,9 @@ public interface ActivityService {
      * @param status 活动阶段
      * @return 活动
      */
-    List<Activity> findStatus(Activity.ActivityStatus status);
+    Page<Activity> findStatus(Activity.ActivityStatus status, int page);
 
+    List<Activity> findStatus(Activity.ActivityStatus status);
 
     Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size);
 
@@ -49,7 +50,7 @@ public interface ActivityService {
     /**
      * 在假设活动与时间段一一对应时
      */
-    List<Activity> findDepartment(String departmentId, Integer status);
+    Page<Activity> findDepartment(String departmentId, Integer status, int page);
 
     Activity findById(String activityId);
 

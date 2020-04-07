@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
     //默认不用原生sql语句，不能用*号
-    @Query(value = "select c from Comment c where c.activity.id=?1")
+    @Query(value = "select c from Comment c where c.activity.id=?1 order by c.time")
     Page<Comment> findByActivityId(String activity, Pageable pageable);
 }

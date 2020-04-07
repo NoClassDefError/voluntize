@@ -142,10 +142,10 @@ public class JsonUtils {
 
     @Test
     public void jsonTest() throws JsonProcessingException {
-        List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.CONFIRMING);
-        activities.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
-        activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
-        System.out.println(new ObjectMapper().writeValueAsString(activities));
+//        List<Activity> activities = activityService.findStatus(Activity.ActivityStatus.CONFIRMING);
+//        activities.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
+//        activities.addAll(activityService.findStatus(Activity.ActivityStatus.FINISHED));
+//        System.out.println(new ObjectMapper().writeValueAsString(activities));
 //        System.out.println(objectToJson(activities,1));
     }
 }

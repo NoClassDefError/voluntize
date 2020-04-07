@@ -30,25 +30,25 @@ public class Manage extends BaseController {
     @RequestMapping("/createActivity")
     @ResponseBody
     public HttpResult createActivity(@RequestBody CreateActivityVo activityVo) {
-        return new HttpResult("release activity:" + activityService.create2(activityVo) );
+        return new HttpResult("release:" + activityService.create2(activityVo) );
     }
 
     @RequestMapping("/saveActivity")
     @ResponseBody
     public HttpResult update(@RequestBody ActivityVo activityVo) {
-         return new HttpResult("release activity:" + activityService.update(activityVo) );
+         return new HttpResult("release:" + activityService.update(activityVo) );
     }
 
     @RequestMapping("/saveStation")
     @ResponseBody
     public HttpResult updateStation(@RequestBody ActivityStationVo activityStationVo) {
-        return new HttpResult("release activity station:" + activityService.updateStation(activityStationVo));
+        return new HttpResult("release:" + activityService.updateStation(activityStationVo));
     }
 
     @RequestMapping("/savePeriod")
     @ResponseBody
     public HttpResult updatePeriod(@RequestBody ActivityPeriodVo activityPeriodVo) {
-        return new HttpResult("release activity period:" + activityService.updatePeriod(activityPeriodVo));
+        return new HttpResult("release:" + activityService.updatePeriod(activityPeriodVo));
     }
 
     @RequestMapping(value = "/cancel")
@@ -67,7 +67,7 @@ public class Manage extends BaseController {
      */
     @RequestMapping("/approve")
     public HttpResult approve(@RequestBody List<String> recordId) {
-        System.out.println(recordId);
+        logger.info("approved "+recordId);
         return new HttpResult("approve:" + participateService.accept(recordId));
     }
 

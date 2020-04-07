@@ -13,9 +13,9 @@ import javax.servlet.http.HttpSession;
 @RestController
 public abstract class BaseController {
     @Autowired
-    HttpSession session;
+    public HttpSession session;
 
-    Logger logger;
+    public Logger logger;
     public BaseController(){
         logger= LoggerFactory.getLogger(this.getClass());
     }

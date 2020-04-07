@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"activity", "parentComment", "sonComment", "images", "department", "student"})
 @JsonIgnoreProperties({"activity", "parentComment", "sonComment", "images", "department", "student"})
 public class Comment {
@@ -58,8 +62,9 @@ public class Comment {
      * 发布时间
      */
     @Basic
-    @Column(name = "time", columnDefinition = "timestamp default current_timestamp")
-    private Timestamp time;
+    @Column(name = "time", columnDefinition = "long")
+    @CreatedDate
+    private Long time;
 
     /**
      * 评论图片

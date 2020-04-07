@@ -6,7 +6,6 @@ import lombok.Data;
 public class CreateActivityVo {
     private String name;
     private String description;
-    private String semester;
 
     private String startDate;
     private String endDate;

@@ -12,7 +12,7 @@ import java.util.List;
  * 用于数据库关联查询，学生的部分数据从学校已有数据库导入
  *
  * @author Ge Hanchen
- * @since 0.0.1
+ * @since 2019.12
  */
 @Entity
 @Data
@@ -31,9 +31,9 @@ public class Student implements Cloneable {
     /**
      * 身份证号
      */
-    @Basic
-    @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null comment '身份证号'")
-    private String idNum;
+//    @Basic
+//    @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null comment '身份证号'")
+//    private String idNum;
 
     @Basic
     @Column(name = "gender", columnDefinition = "varchar(10) comment '性别'")

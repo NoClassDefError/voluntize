@@ -56,14 +56,13 @@ public class ActivityImpl implements ActivityService {
         ActivityStation activityStation = new ActivityStation();
         //新增
         if (context.getAttribute("autoSendActivity").equals(true))
-            activity.setStatus(Activity.ActivityStatus.STARTED);
-        else activity.setStatus(Activity.ActivityStatus.SEND);
+            activity.setStatus(Activity.ActivityStatus.SEND);
+        else activity.setStatus(Activity.ActivityStatus.CONFIRMING);
         Department department = departmentRepository.findById((String) session.getAttribute("UserId")).orElse(null);
 
         activity.setDepartment(department);
         activity.setDescription(activityVo.getDescription());
         activity.setName(activityVo.getName());
-        activity.setSemester(activityVo.getSemester());
         if (activityVo.getImageUrl() != null) {
             ArrayList<Image> images = new ArrayList<>();
             Image image = new Image();
@@ -132,7 +131,6 @@ public class ActivityImpl implements ActivityService {
 
     private Activity convertActivityVo(Activity origin, ActivityVo activity) {
         origin.setName(activity.getName());
-        origin.setSemester(activity.getSemester());
         origin.setDescription(activity.getDescription());
         origin.setStatusId(activity.getStatus());
         if (activity.getDepartmentId() == null) origin.setDepartment(null);
@@ -196,12 +194,18 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> findStatus(Activity.ActivityStatus status) {
+    public Page<Activity> findStatus(Activity.ActivityStatus status, int page) {
 //      放弃使用QBE的方法
 //        Activity activity = new Activity();
 //        activity.setStatus(status[0]);
 //        Example<Activity> example = Example.of(activity);
-        return activityRepository.findByStatus(status.ordinal());
+
+        return activityRepository.findByStatus(status.ordinal(), PageRequest.of(page, 10));
+    }
+
+    @Override
+    public List<Activity> findStatus(Activity.ActivityStatus status){
+        return activityRepository.findByStatus2(status.ordinal());
     }
 
     @Override
@@ -238,9 +242,9 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> findDepartment(String departmentId, Integer status) {
-        if (status == null) return activityRepository.findByDepartmentId(departmentId);
-        else return activityRepository.findByDepartmentId(departmentId, status);
+    public Page<Activity> findDepartment(String departmentId, Integer status, int page) {
+        if (status == null) return activityRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
+        else return activityRepository.findByDepartmentId(departmentId, status, PageRequest.of(page, 10));
     }
 
     @Override

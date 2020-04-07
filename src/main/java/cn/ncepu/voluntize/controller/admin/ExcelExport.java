@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -22,12 +25,18 @@ public class ExcelExport {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping("/students")
+    @RequestMapping("/stu")
     public void exportStudents(HttpServletResponse response) throws IOException {
         String fileName = "students_all";
         List<StudentVo> students = loginService.findAllStu();
-        ExcelUtils<StudentVo> utils = new ExcelUtils<StudentVo>(){};
+        ExcelUtils<StudentVo> utils = new ExcelUtils<StudentVo>() {
+        };
         XSSFWorkbook workbook = utils.exportExcel(students, fileName);
+        File file = new File("C:\\Users\\DELL\\Desktop\\" + fileName + ".xlsx");
+        if (file.createNewFile()) {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            utils.writeToStream(workbook, fileOutputStream);
+        }
         response.setCharacterEncoding("UTF-8");
         response.setContentType("multipart/form-data");
         response.setHeader("Content-Disposition",

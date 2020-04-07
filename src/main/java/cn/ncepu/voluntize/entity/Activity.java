@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -20,6 +23,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties({"images", "comments", "stations", "department", "status"})
 @ToString(exclude = {"images", "comments", "stations", "department", "status"})
 public class Activity {
@@ -54,9 +58,14 @@ public class Activity {
     @Column(name = "name")
     private String name;
 
+//    @Basic
+//    @Column(name = "semester", columnDefinition = "varchar(255) comment '学期，例如：“2019-2020学年第一学期”'")
+//    private String semester;
+
+    @CreatedDate
     @Basic
-    @Column(name = "semester", columnDefinition = "varchar(255) comment '学期，例如：“2019-2020学年第一学期”'")
-    private String semester;
+    @Column(name = "create_time", columnDefinition = "long")
+    private Long createTime;
 
     @Basic
     @Column(name = "description", columnDefinition = "text")

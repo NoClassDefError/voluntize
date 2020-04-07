@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.ncepu</groupId>
     <artifactId>voluntize</artifactId>
-    <version>2020.2</version>
+    <version>2020.4</version>
     <name>voluntize</name>
     <description>A website for voluntary activities in NCEPU.</description>
 

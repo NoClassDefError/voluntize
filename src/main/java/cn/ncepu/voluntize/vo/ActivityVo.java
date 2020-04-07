@@ -34,7 +34,7 @@ public class ActivityVo {
             this.id = activity.getId();
             this.status = activity.getStatusId();
             this.name = activity.getName();
-            this.semester = activity.getSemester();
+
             this.description = activity.getDescription();
             this.departmentId = activity.getDepartment().getId();
             this.departmentName = activity.getDepartment().getName();

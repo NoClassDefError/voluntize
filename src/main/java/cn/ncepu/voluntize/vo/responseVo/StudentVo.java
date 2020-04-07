@@ -113,7 +113,7 @@ public class StudentVo {
     //不绑定records，records要单独分页返回
     public StudentVo(Student student) {
         studentNum = student.getStudentNum();
-        idNum = student.getIdNum();
+//        idNum = student.getIdNum();
         name = student.getName();
         major = student.getMajor();
         grade = student.getGrade();

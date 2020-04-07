@@ -7,6 +7,7 @@ import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,9 +17,12 @@ import java.util.Optional;
 @Service
 public class LoginImpl extends BaseUserImpl implements LoginService {
 
+    @Value("${application.adminPassword}")
+    private String adminPassword;
+
     public UserInfoVo login(LoginVo user) {
         //判断是否是管理员
-        if ("admin".equals(user.getId()) && "admin".equals(user.getPassword()))
+        if ("admin".equals(user.getId()) && adminPassword.equals(user.getPassword()))
             return new UserInfoVo(0, null, null);
         //判断用户身份
         Optional<Student> optional1 = studentRepository.findById(user.getId());

@@ -36,6 +36,7 @@ public class ActivityPeriodVo {
         this.timePeriod = period.getTimePeriod();
         this.amountRequired = period.getAmountRequired();
         this.equDuration = period.getEquDuration();
+        this.requirements = period.getRequirements();
         //在此查找该活动的报名记录
         this.amountSigned = period.getRecords().size();
 //        amountPassed = recordRepository.findPassedByPeriod(period.getId()).size();

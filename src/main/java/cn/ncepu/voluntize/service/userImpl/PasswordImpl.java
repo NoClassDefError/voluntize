@@ -41,17 +41,16 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
         Optional<Student> optional = studentRepository.findById(id);
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (optional.isPresent()) {
-            send(optional.get().getEmail(), encrypt(optional.get().getStudentNum()));
-            return true;
+            return send(optional.get().getEmail(), encrypt(optional.get().getStudentNum()));
         } else if (optionalDepartment.isPresent()) {
-            send(optionalDepartment.get().getEmail(), encrypt(optionalDepartment.get().getId()));
-            return true;
+            return send(optionalDepartment.get().getEmail(), encrypt(optionalDepartment.get().getId()));
         }
         return false;
     }
 
-    private void send(String emailAddress, String password) {
-        String verifyAddress = context.getAttribute("path") + "/password/verify?password="
+    private boolean send(String emailAddress, String password) {
+        if ( emailAddress==null) return false;
+        String verifyAddress = context.getAttribute("path") + "/password/verify?code="
                 + password;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailHost);
@@ -59,6 +58,7 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
         message.setSubject("华北电力大学志愿服务系统：密码找回验证邮件");
         message.setText("请在5分钟内点击修改密码：\n" + verifyAddress);
         mailSender.send(message);
+        return true;
     }
 
     @Override
@@ -77,12 +77,14 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
         Optional<Student> optional = studentRepository.findById(id);
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (optional.isPresent()) {
-            optional.get().setPassword(password);
-            studentRepository.save(optional.get());
+            Student student = optional.get();
+            student.setPassword(password);
+            studentRepository.save(student);
             return true;
         } else if (optionalDepartment.isPresent()) {
-            optionalDepartment.get().setPassword(password);
-            departmentRepository.save(optionalDepartment.get());
+            Department department = optionalDepartment.get();
+            department.setPassword(password);
+            departmentRepository.save(department);
             return true;
         }
         return false;

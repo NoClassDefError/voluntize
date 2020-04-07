@@ -26,14 +26,14 @@ public class DepartmentQuery extends BaseController {
     @Autowired
     private ParticipateService participateService;
 
-    @Autowired
-    private HttpSession session;
-
     @RequestMapping(value = "/released", method = RequestMethod.POST)
-    public List<ActivityVo> getActivity(Integer status) {
+    public List<ActivityVo> getActivity(Integer status, Integer page) {
+        if (page == null) page = 0;
+        System.out.println(session.getAttribute("UserId"));
+        System.out.println(activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
         if ("Department".equals(session.getAttribute("UserCategory"))) {
             ArrayList<ActivityVo> activityVos = new ArrayList<>();
-            for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId"), status))
+            for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId"), status, page))
                 activityVos.add(new ActivityVo(activity));
             return activityVos;
         } else return null;

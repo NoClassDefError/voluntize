@@ -68,17 +68,19 @@ public class ActivityManage extends BaseController {
 
     @RequestMapping(value = "/findConfirming", method = RequestMethod.POST)
     @ResponseBody
-    public List<ActivityVo> findConfirmingActivities() {
+    public List<ActivityVo> findConfirmingActivities(Integer page) {
+        if (page == null) page = 1;
         if ((boolean) context.getAttribute("autoSendActivity")) return null;
         List<ActivityVo> activityVos = new ArrayList<>();
-        for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING))
+        for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING, page))
             activityVos.add(new ActivityVo(activity));
         return activityVos;
     }
 
     @RequestMapping("/findOthers")
     @ResponseBody
-    public List<ActivityVo> findOthers(int page) {
+    public List<ActivityVo> findOthers(Integer page) {
+        if (page == null) page = 0;
         List<ActivityVo> activityVos = new ArrayList<>();
         for (Activity activity : activityService.notToFindStatus(Activity.ActivityStatus.CONFIRMING, page, 10))
             activityVos.add(new ActivityVo(activity));
@@ -96,7 +98,6 @@ public class ActivityManage extends BaseController {
                     recordVos.add(new RecordVoDpm(record));
                 return recordVos;
             } catch (NullPointerException e) {
-                Logger logger = LoggerFactory.getLogger(this.getClass());
                 logger.error("The activity " + activityId + " does not have it's own station or period, NullPointerException thrown.");
                 return null;
             }

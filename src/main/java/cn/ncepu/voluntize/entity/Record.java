@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * <h2>志愿记录实体类</h2>
@@ -22,6 +26,7 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="record")
 @ToString(exclude = {"status", "period", "volunteer"})
 @JsonIgnoreProperties({"status", "period", "volunteer"})
@@ -59,6 +64,11 @@ public class Record {
     @Column(name = "status_id", nullable = false, columnDefinition = "int default 0 comment '标志任一公益劳动项目所处状态\n0  已报名 \n1 已审核\n2 已授分甚至评价'")
     private int statusId;
 
+    @Basic
+    @Column(name = "create_time", columnDefinition = "long")
+    @CreatedDate
+    private Long createTime;
+
     /**
      * 使用枚举标志志愿所处阶段，但不被直接存在数据库中
      */
@@ -69,7 +79,7 @@ public class Record {
      * 被允许加入活动，初始值为空
      */
     @Basic
-    @Column(name = "is_passed",columnDefinition = "tinyint(1) null comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
+    @Column(name = "is_passed",columnDefinition = "tinyint(1) default 0 comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
     private boolean isPassed;
 
     /**
