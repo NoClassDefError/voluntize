@@ -18,7 +18,8 @@ import java.sql.Timestamp;
  * <ul>
  *     <li>已报名</li>
  *     <li>已审核</li>
- *     <li>已授分甚至评价</li>
+ *     <li>已授分</li>
+ *     <li>已评价</li>
  * </ul>
  *
  * @author Ge Hanchen

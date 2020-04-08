@@ -81,6 +81,6 @@ public class ActivityPeriod {
      * 志愿记录 如有学生报名则增加一条志愿记录
      */
     @JSONField(serialize = false)
-    @OneToMany(targetEntity = Record.class, mappedBy = "period", cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = Record.class, mappedBy = "period", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Record> records;
 }

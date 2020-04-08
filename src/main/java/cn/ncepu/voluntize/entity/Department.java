@@ -46,16 +46,16 @@ public class Department {
     /**
      * 部门图册
      */
-    @OneToMany(mappedBy = "department", targetEntity = Image.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "department", targetEntity = Image.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Image> images;
 
     /**
      * 该部门发布的所有志愿活动信息
      */
-    @OneToMany(mappedBy = "department", targetEntity = Activity.class,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "department", targetEntity = Activity.class,cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private List<Activity> activities;
 
-    @OneToMany(mappedBy = "department", targetEntity = Comment.class,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "department", targetEntity = Comment.class,cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     @Override

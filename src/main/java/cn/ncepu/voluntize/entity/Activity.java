@@ -79,13 +79,13 @@ public class Activity {
      * 志愿活动图册
      * TODO 级联保存与删除问题
      */
-    @OneToMany(targetEntity = Image.class, mappedBy = "activity", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Image.class, mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> images;
 
     /**
      * 志愿活动的评论区，只有在报名阶段以后才允许评论
      */
-    @OneToMany(targetEntity = Comment.class, mappedBy = "activity", cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "activity", cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     /**

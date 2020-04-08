@@ -1,6 +1,5 @@
 package cn.ncepu.voluntize.controller;
 
-import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,38 +14,6 @@ public class ChangePassword extends BaseController {
 
     @Autowired
     PasswordService passwordService;
-
-    @Autowired
-    LoginService loginService;
-
-    /**
-     * 邮件验证用户身份，之后跳转至密码修改页面
-     *
-     * @param code 包含用户信息的加密字符串
-     * @return 密码修改页面或错误页面
-     */
-    @RequestMapping(value = "/verify", method = RequestMethod.GET)
-    public String verifyByMail(String code) {
-        String id = passwordService.checkEmail(code);
-        if (id != null) {
-            session.setAttribute("userId", id);
-            String userCategory = "";
-            switch (loginService.login(id).userCategory) {
-                case 0:
-                    userCategory = "Admin";
-                    break;
-                case 1:
-                    userCategory = "Student";
-                    break;
-                case 2:
-                    userCategory = "Department";
-            }
-            session.setAttribute("UserCategory", userCategory);
-            //
-            return "changePassword";
-        }
-        return "verifyFailed";
-    }
 
     /**
      * 修改密码接口，根据session中的用户信息判断用户身份
@@ -67,11 +34,12 @@ public class ChangePassword extends BaseController {
 
     @RequestMapping(value = "/changePasswordByMail", method = RequestMethod.POST)
     @ResponseBody
-    public HttpResult changePasswordByMail(String newPassword){
-        if (passwordService.changePassword(newPassword))
+    public HttpResult changePasswordByMail(String newPassword) {
+        if (session.getAttribute("verified") != null && passwordService.changePassword(newPassword))
             return new HttpResult("changePassword:success");
         else return new HttpResult("changePassword:error");
     }
+
     /**
      * 向特定用户发送修改密码验证邮件
      *

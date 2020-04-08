@@ -6,12 +6,17 @@ import cn.ncepu.voluntize.vo.requestVo.LoginVo;
 import cn.ncepu.voluntize.service.PasswordService;
 import cn.ncepu.voluntize.util.DesUtils;
 import cn.ncepu.voluntize.util.RandomUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import java.util.Optional;
 import java.util.Timer;
@@ -49,15 +54,30 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
     }
 
     private boolean send(String emailAddress, String password) {
-        if ( emailAddress==null) return false;
-        String verifyAddress = context.getAttribute("path") + "/password/verify?code="
-                + password;
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(mailHost);
-        message.setTo(emailAddress);
-        message.setSubject("华北电力大学志愿服务系统：密码找回验证邮件");
-        message.setText("请在5分钟内点击修改密码：\n" + verifyAddress);
-        mailSender.send(message);
+        if (emailAddress == null) return false;
+        String verifyAddress = context.getAttribute("path") + "/password/verify";
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(mailHost);
+            helper.setTo(emailAddress);
+            helper.setSubject("华北电力大学公益劳动服务系统：密码找回验证邮件");
+            helper.setText("<h1>请在5分钟内点击修改密码：</h1>" +
+                    "<form method='post' action='" + verifyAddress + "'>\n" +
+                    "    <input type='hidden' name='code' value='" + password + "'>\n" +
+                    "    <input type='submit' name='点击修改密码'>\n" +
+                    "</form>", true);
+            Runnable runnable = () -> {
+                mailSender.send(message);
+                Logger logger = LoggerFactory.getLogger(this.getClass());
+                logger.info("Email send!");
+            };
+            new Thread(runnable).start();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
