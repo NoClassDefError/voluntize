@@ -18,4 +18,7 @@ public interface RecordRepository extends JpaRepository<Record, String> {
 
     @Query("select r from Record r where r.period.id=?1 and r.isPassed=true order by r.createTime")
     List<Record> findPassedByPeriod(String period);
+
+    @Query("select count(r) from Record r where r.period.id=?1 and r.isPassed=true")
+    Integer getAmountPassed(String period);
 }

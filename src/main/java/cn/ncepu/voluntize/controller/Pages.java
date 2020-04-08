@@ -3,6 +3,8 @@ package cn.ncepu.voluntize.controller;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,19 @@ import java.net.URLDecoder;
  * 返回页面的控制器
  */
 @Controller
+@RefreshScope
 public class Pages extends BaseController {
     @Autowired
-    PasswordService passwordService;
+    private PasswordService passwordService;
 
     @Autowired
-    LoginService loginService;
+    private LoginService loginService;
+
+    @Value("${frontend.login}")
+    private String login;
+
+    @Value("${frontend.reset}")
+    private String reset;
 
     @RequestMapping(value = "/errors", method = RequestMethod.GET)
     public String error(Model model, @RequestParam(name = "message") String message) throws UnsupportedEncodingException {
@@ -32,7 +41,7 @@ public class Pages extends BaseController {
 
     @RequestMapping(value = "/")
     public String index() {
-        return "../static/index.html";
+        return "forward:" + login;
     }
 
     /**
@@ -42,7 +51,7 @@ public class Pages extends BaseController {
      * @return 密码修改页面或错误页面
      */
     @RequestMapping(value = "/verify", method = RequestMethod.GET)
-    public String verifyByMail(Model model,@RequestParam("code") String code) {
+    public String verifyByMail(Model model, @RequestParam("code") String code) {
         String id = passwordService.checkEmail(code);
         if (id != null) {
             session.setAttribute("userId", id);
@@ -59,9 +68,10 @@ public class Pages extends BaseController {
             }
             session.setAttribute("UserCategory", userCategory);
             session.setAttribute("verified", true);
-            return "http://localhost:9528/#/reset?sessionid=asdasf";
+//            model.addAttribute("message","验证成功，但没能找到修改密码页面");
+            return "forward:" + reset;
         }
-        model.addAttribute("message","验证失败了");
+        model.addAttribute("message", "验证失败了");
         return "error";
     }
 }

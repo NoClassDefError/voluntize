@@ -115,6 +115,9 @@ public class Activity {
                 break;
             case 4:
                 this.status = ActivityStatus.NOT_PASS;
+                break;
+            case 5:
+                this.status = ActivityStatus.DEAD;
         }
         this.statusId = statusId;
     }
@@ -125,11 +128,12 @@ public class Activity {
      *     <li>CONFIRMING 部门已发送等待审核</li>
      *     <li>SEND 开始报名</li>
      *     <li>STARTED 录用并开始活动</li>
-     *     <li>FINISHED 结束并评价</li>
+     *     <li>FINISHED 正在评价</li>
+     *     <li>DEAD 结束</li>
      * </ul>
      * 共4个阶段
      */
     public enum ActivityStatus {
-        CONFIRMING, SEND, STARTED, FINISHED, NOT_PASS
+        CONFIRMING, SEND, STARTED, FINISHED, NOT_PASS, DEAD
     }
 }

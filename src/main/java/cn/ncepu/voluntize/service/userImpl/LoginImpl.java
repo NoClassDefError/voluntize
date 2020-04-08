@@ -2,18 +2,20 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
-import cn.ncepu.voluntize.vo.requestVo.LoginVo;
-import cn.ncepu.voluntize.vo.responseVo.StudentVo;
-import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
+import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentExcelVo;
+import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RefreshScope
 @Service
 public class LoginImpl extends BaseUserImpl implements LoginService {
 
@@ -57,9 +59,9 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
     }
 
     @Override
-    public List<StudentVo> findAllStu(){
-        List<StudentVo> studentVos = new ArrayList<>();
-        for(Student student : studentRepository.findAll()) studentVos.add(new StudentVo(student));
+    public List<StudentExcelVo> findAllStu(){
+        List<StudentExcelVo> studentVos = new ArrayList<>();
+        for(Student student : studentRepository.findAll()) studentVos.add(new StudentExcelVo(student));
         return studentVos;
     }
 }

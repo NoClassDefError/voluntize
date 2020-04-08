@@ -5,7 +5,7 @@ import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
-import cn.ncepu.voluntize.vo.ActivityVo;
+import cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo;
 import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
 import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +26,21 @@ public class DepartmentQuery extends BaseController {
     private ParticipateService participateService;
 
     @RequestMapping(value = "/released", method = RequestMethod.POST)
-    public List<ActivityVo> getActivity(Integer status, Integer page) {
+    public List<ActivityResponseVo> getActivity(Integer status, Integer page) {
         if (page == null) page = 0;
-        System.out.println(session.getAttribute("UserId"));
-        System.out.println(activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
+        logger.debug("" + session.getAttribute("UserId"));
+        logger.debug("" + activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
         if ("Department".equals(session.getAttribute("UserCategory"))) {
-            ArrayList<ActivityVo> activityVos = new ArrayList<>();
+            ArrayList<ActivityResponseVo> activityVos = new ArrayList<>();
             for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId"), status, page))
-                activityVos.add(new ActivityVo(activity));
+                activityVos.add(new ActivityResponseVo(activity));
             return activityVos;
         } else return null;
+    }
+
+    @RequestMapping(value = "/pages", method = RequestMethod.POST)
+    public Integer getActivity2(Integer status) {
+        return activityService.findDepartment((String) session.getAttribute("UserId"), status, 0).getTotalPages();
     }
 
     @RequestMapping(value = "/records", method = RequestMethod.POST)

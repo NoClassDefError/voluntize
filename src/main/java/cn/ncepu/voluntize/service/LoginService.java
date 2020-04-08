@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.service;
 
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
+import cn.ncepu.voluntize.vo.responseVo.StudentExcelVo;
 import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
@@ -20,5 +21,5 @@ public interface LoginService {
 
     UserInfoVoAdmin findUser(String userId);
 
-    List<StudentVo> findAllStu();
+    List<StudentExcelVo> findAllStu();
 }

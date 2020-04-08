@@ -2,6 +2,7 @@ package cn.ncepu.voluntize.controller.admin;
 
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.util.ExcelUtils;
+import cn.ncepu.voluntize.vo.responseVo.StudentExcelVo;
 import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -28,9 +29,9 @@ public class ExcelExport {
     @RequestMapping("/stu")
     public void exportStudents(HttpServletResponse response) throws IOException {
         String fileName = "students_all";
-        List<StudentVo> students = loginService.findAllStu();
-        ExcelUtils<StudentVo> utils = new ExcelUtils<StudentVo>() {
-        };
+        List<StudentExcelVo> students = loginService.findAllStu();
+        ExcelUtils<StudentExcelVo> utils = new ExcelUtils<StudentExcelVo>() {
+        };//这个花括号不能少，否则获取不到泛型
         XSSFWorkbook workbook = utils.exportExcel(students, fileName);
         File file = new File("C:\\Users\\DELL\\Desktop\\" + fileName + ".xlsx");
         if (file.createNewFile()) {

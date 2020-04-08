@@ -204,7 +204,7 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> findStatus(Activity.ActivityStatus status){
+    public List<Activity> findStatus(Activity.ActivityStatus status) {
         return activityRepository.findByStatus2(status.ordinal());
     }
 
@@ -243,7 +243,10 @@ public class ActivityImpl implements ActivityService {
 
     @Override
     public Page<Activity> findDepartment(String departmentId, Integer status, int page) {
-        if (status == null) return activityRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
+        if (status == null || status == 7)
+            return activityRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
+        else if (status == 6)
+            return activityRepository.findByDepartmentIdSpecial(departmentId, PageRequest.of(page, 10));
         else return activityRepository.findByDepartmentId(departmentId, status, PageRequest.of(page, 10));
     }
 

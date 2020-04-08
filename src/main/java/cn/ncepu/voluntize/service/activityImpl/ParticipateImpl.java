@@ -36,9 +36,6 @@ public class ParticipateImpl implements ParticipateService {
     @Autowired
     private ActivityPeriodRepository activityPeriodRepository;
 
-    @Autowired
-    private ActivityService activityService;
-
     /**
      * 添加多对多关联，不需要更新Student表与ActivityPeriod表
      */
@@ -142,20 +139,22 @@ public class ParticipateImpl implements ParticipateService {
 
     @Override
     public void evaluate(List<EvaluateVo> records) {
-        boolean flag = true;
+//        boolean flag = true;
         for (EvaluateVo evaluateVo : records) {
             Record record1 = recordRepository.findById(evaluateVo.getRecordId()).orElse(null);
             if (record1 != null) {
-                record1.setStatus(Record.RecordStatus.EVALUATED);
-                record1.setAuditLevel(evaluateVo.getAuditLevel());
-                record1.setEvaluation(evaluateVo.getEvaluate());
-                recordRepository.save(record1);
-                if (flag) {
-                    activityService.changeStatus(
-                            record1.getPeriod().getParent().getParentActivity().getId(),
-                            Activity.ActivityStatus.FINISHED);
-                    flag = false;
+                if(record1.getPeriod().getParent().getParentActivity().getStatus()==Activity.ActivityStatus.FINISHED){
+                    record1.setStatus(Record.RecordStatus.EVALUATED);
+                    record1.setAuditLevel(evaluateVo.getAuditLevel());
+                    record1.setEvaluation(evaluateVo.getEvaluate());
+                    recordRepository.save(record1);
                 }
+//                if (flag) {
+//                    activityService.changeStatus(
+//                            record1.getPeriod().getParent().getParentActivity().getId(),
+//                            Activity.ActivityStatus.FINISHED);
+//                    flag = false;
+//                }
             }
         }
     }

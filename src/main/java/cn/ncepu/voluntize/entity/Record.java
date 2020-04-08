@@ -28,7 +28,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="record")
+@Table(name = "record")
 @ToString(exclude = {"status", "period", "volunteer"})
 @JsonIgnoreProperties({"status", "period", "volunteer"})
 public class Record {
@@ -56,7 +56,7 @@ public class Record {
      * 学生报名时的备注信息
      */
     @Basic
-    @Column(name = "info",columnDefinition = "text comment '学生报名时的备注信息'")
+    @Column(name = "info", columnDefinition = "text comment '学生报名时的备注信息'")
     private String info;
     /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
@@ -80,7 +80,7 @@ public class Record {
      * 被允许加入活动，初始值为空
      */
     @Basic
-    @Column(name = "is_passed",columnDefinition = "tinyint(1) default 0 comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
+    @Column(name = "is_passed", columnDefinition = "tinyint(1) default 1 comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
     private boolean isPassed;
 
     /**
@@ -141,6 +141,6 @@ public class Record {
     }
 
     public enum RecordStatus {
-        APPLIED, PASSED, EVALUATED,COMMENTED
+        APPLIED, PASSED, EVALUATED, COMMENTED
     }
 }

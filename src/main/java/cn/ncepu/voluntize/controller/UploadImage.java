@@ -3,6 +3,7 @@ package cn.ncepu.voluntize.controller;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 @RestController
+@RefreshScope
 public class UploadImage extends BaseController {
     @Value("${application.uploadDir}")
     private String uploadDir;

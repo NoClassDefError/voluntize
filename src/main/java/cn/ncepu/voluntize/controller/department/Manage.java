@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.controller.department;
 
 import cn.ncepu.voluntize.controller.BaseController;
+import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityPeriodVo;
@@ -88,5 +89,15 @@ public class Manage extends BaseController {
     @RequestMapping("/evaluate")
     public void evaluate(@RequestBody List<EvaluateVo> evaluateVos) {
         participateService.evaluate(evaluateVos);
+    }
+
+    @RequestMapping("/terminate")
+    public HttpResult terminateActivity(String activityId){
+        return new HttpResult(activityService.changeStatus(activityId, Activity.ActivityStatus.DEAD));
+    }
+
+    @RequestMapping("/startEvaluation")
+    public HttpResult finishActivity(String activityId){
+        return new HttpResult(activityService.changeStatus(activityId, Activity.ActivityStatus.FINISHED));
     }
 }

@@ -4,18 +4,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-import java.net.Inet4Address;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Component
+@RefreshScope
 public class StartUpConfig implements CommandLineRunner {
 
     @Autowired
@@ -31,7 +30,6 @@ public class StartUpConfig implements CommandLineRunner {
     public ScheduledExecutorService getScheduledExecutorService(){
         return Executors.newSingleThreadScheduledExecutor();
     }
-
 
     @Override
     public void run(String... args) {
