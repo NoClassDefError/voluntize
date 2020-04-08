@@ -55,7 +55,7 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
 
     private boolean send(String emailAddress, String password) {
         if (emailAddress == null) return false;
-        String verifyAddress = context.getAttribute("path") + "/password/verify";
+        String verifyAddress = context.getAttribute("path") + "/password/verify?code=";
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -63,11 +63,11 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
             helper.setFrom(mailHost);
             helper.setTo(emailAddress);
             helper.setSubject("华北电力大学公益劳动服务系统：密码找回验证邮件");
-            helper.setText("<h1>请在5分钟内点击修改密码：</h1>" +
-                    "<form method='post' action='" + verifyAddress + "'>\n" +
+            helper.setText("<h1>请在5分钟内点击按钮或超链接修改密码：</h1>" +
+                    "<form method='get' action='" + verifyAddress + "'>\n" +
                     "    <input type='hidden' name='code' value='" + password + "'>\n" +
-                    "    <input type='submit' name='点击修改密码'>\n" +
-                    "</form>", true);
+                    "    <input type='submit' value='点击修改密码'>\n" +
+                    "</form>\n" + verifyAddress + password, true);
             Runnable runnable = () -> {
                 mailSender.send(message);
                 Logger logger = LoggerFactory.getLogger(this.getClass());

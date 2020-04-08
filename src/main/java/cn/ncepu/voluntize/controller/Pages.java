@@ -2,8 +2,6 @@ package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.service.PasswordService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +41,7 @@ public class Pages extends BaseController {
      * @param code 包含用户信息的加密字符串
      * @return 密码修改页面或错误页面
      */
-    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    @RequestMapping(value = "/verify", method = RequestMethod.GET)
     public String verifyByMail(Model model,@RequestParam("code") String code) {
         String id = passwordService.checkEmail(code);
         if (id != null) {
@@ -63,7 +61,7 @@ public class Pages extends BaseController {
             session.setAttribute("verified", true);
             return "http://localhost:9528/#/reset?sessionid=asdasf";
         }
-        model.addAttribute("验证失败了");
+        model.addAttribute("message","验证失败了");
         return "error";
     }
 }

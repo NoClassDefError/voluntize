@@ -37,7 +37,7 @@ public class ActivityVo {
             this.description = activity.getDescription();
             this.departmentId = activity.getDepartment().getId();
             this.departmentName = activity.getDepartment().getName();
-            for (Image image : activity.getImages()) images.add(new ImageVo(image));
+//            for (Image image : activity.getImages()) images.add(new ImageVo(image));
             for (ActivityStation station : activity.getStations()) stations.add(new ActivityStationVo(station));
         } catch (NullPointerException e) {
             throw new EntityNotFoundException("No activity found!");
