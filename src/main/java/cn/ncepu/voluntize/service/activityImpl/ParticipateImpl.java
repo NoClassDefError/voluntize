@@ -1,13 +1,11 @@
 package cn.ncepu.voluntize.service.activityImpl;
 
-import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.repository.ActivityPeriodRepository;
 import cn.ncepu.voluntize.repository.RecordRepository;
 import cn.ncepu.voluntize.repository.StudentRepository;
-import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
@@ -53,6 +51,7 @@ public class ParticipateImpl implements ParticipateService {
                 if (recordRepository.findOne(Example.of(record)).isPresent())
                     return "You've already participated.";//检验不能重复报名
                 record.setStatus(Record.RecordStatus.APPLIED);
+                record.setPassed(true);
                 record.setStars(0);
                 recordRepository.save(record);
                 return "success";
@@ -124,39 +123,30 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    public String deny(String records) {
-        Record record = recordRepository.findById(records).orElse(null);
-        if (record != null) {
-            if (record.getPeriod().getParent().getParentActivity().getStatusId() != 2)
-                return "Cannot accept! The activity is not in the status for participation.";
-            record.setStatus(Record.RecordStatus.APPLIED);
-            record.setPassed(false);
-            recordRepository.save(record);
-            return "success";
-        } else
-            return "not found";
-    }
-
-    @Override
-    public void evaluate(List<EvaluateVo> records) {
+    public String evaluate(List<EvaluateVo> records) {
 //        boolean flag = true;
+        List<String> notfounds = new ArrayList<>();
         for (EvaluateVo evaluateVo : records) {
             Record record1 = recordRepository.findById(evaluateVo.getRecordId()).orElse(null);
             if (record1 != null) {
-                if(record1.getPeriod().getParent().getParentActivity().getStatus()==Activity.ActivityStatus.FINISHED){
-                    record1.setStatus(Record.RecordStatus.EVALUATED);
-                    record1.setAuditLevel(evaluateVo.getAuditLevel());
-                    record1.setEvaluation(evaluateVo.getEvaluate());
-                    recordRepository.save(record1);
+                if (record1.getPeriod().getParent().getParentActivity().getStatusId() != 3) {
+                    return "评分失败，活动不在评分期";
                 }
+                record1.setStatus(Record.RecordStatus.EVALUATED);
+                record1.setAuditLevel(evaluateVo.getAuditLevel());
+                record1.setEvaluation(evaluateVo.getEvaluate());
+                recordRepository.save(record1);
 //                if (flag) {
 //                    activityService.changeStatus(
 //                            record1.getPeriod().getParent().getParentActivity().getId(),
 //                            Activity.ActivityStatus.FINISHED);
 //                    flag = false;
 //                }
+            } else {
+                notfounds.add(evaluateVo.getRecordId());
             }
         }
+        return "除了这些学生的报名记录没找到外，其它学生都已经成功评分" + notfounds;
     }
 
     @Override

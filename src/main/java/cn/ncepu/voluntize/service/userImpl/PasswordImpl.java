@@ -32,6 +32,12 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
     @Value("${spring.mail.username}")
     private String mailHost;
 
+    @Value("${application.verify}")
+    private int verifyTime;
+
+    @Value("${frontend.reset}")
+    private String reset;
+
     @Override
     public boolean verifyByOrigin(String password) {
         String id = (String) session.getAttribute("UserId");
@@ -55,7 +61,8 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
 
     private boolean send(String emailAddress, String password) {
         if (emailAddress == null) return false;
-        String verifyAddress = context.getAttribute("path") + "/password/verify?code=";
+//        String verifyAddress = context.getAttribute("path") + "/password/verify?code=";
+        String verifyAddress = reset + "?code=";
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -63,11 +70,8 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
             helper.setFrom(mailHost);
             helper.setTo(emailAddress);
             helper.setSubject("华北电力大学公益劳动服务系统：密码找回验证邮件");
-            helper.setText("<h1>请在5分钟内点击按钮或超链接修改密码：</h1>" +
-                    "<form method='get' action='" + verifyAddress + "'>\n" +
-                    "    <input type='hidden' name='code' value='" + password + "'>\n" +
-                    "    <input type='submit' value='点击修改密码'>\n" +
-                    "</form>\n" + verifyAddress + password, true);
+            helper.setText("<h3>请在" + verifyTime/1000/60 + "分钟内复制此超链接至浏览器以修改密码，若非本人操作请忽略(๑´ڡ`๑)</h3>" +
+                    verifyAddress + password, true);
             Runnable runnable = () -> {
                 mailSender.send(message);
                 Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -86,7 +90,8 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
         try {
             return decrypt(password);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger logger = LoggerFactory.getLogger(this.getClass());
+            logger.info("不能解码，邮件验证超时");
             return null;
         }
     }
@@ -94,6 +99,11 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
     @Override
     public boolean changePassword(String password) {
         String id = (String) session.getAttribute("UserId");
+        return changePassword(id, password);
+    }
+
+    @Override
+    public boolean changePassword(String id, String password) {
         Optional<Student> optional = studentRepository.findById(id);
         Optional<Department> optionalDepartment = departmentRepository.findById(id);
         if (optional.isPresent()) {
@@ -134,7 +144,7 @@ public class PasswordImpl extends BaseUserImpl implements PasswordService {
                 secretKey = RandomUtil.getRandomString(10);
                 this.cancel();
             }
-        }, 300000);
+        }, verifyTime);
         return result;
     }
 

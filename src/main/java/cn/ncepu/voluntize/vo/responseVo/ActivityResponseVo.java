@@ -12,16 +12,18 @@ public class ActivityResponseVo {
     private String activityName;
     private String stationName;
     private int activityStatus;
-    private Integer amountSigned;
-    private Integer amountPassed = 0;
+    private int amountRequired;
+    private String description;
 
     public ActivityResponseVo(Activity activity){
         this.activityId = activity.getId();
+        this.description = activity.getDescription();
         this.activityName = activity.getName();
         this.activityStatus = activity.getStatusId();
         ActivityStation activityStation = activity.getStations().get(0);
         this.stationId = activityStation.getId();
         this.stationName = activityStation.getName();
         this.periodId = activityStation.getPeriods().get(0).getId();
+        this.amountRequired = activityStation.getPeriods().get(0).getAmountRequired();
     }
 }

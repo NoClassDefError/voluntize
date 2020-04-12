@@ -31,13 +31,13 @@ public class Manage extends BaseController {
     @RequestMapping("/createActivity")
     @ResponseBody
     public HttpResult createActivity(@RequestBody CreateActivityVo activityVo) {
-        return new HttpResult("release:" + activityService.create2(activityVo) );
+        return new HttpResult("release:" + activityService.create2(activityVo));
     }
 
     @RequestMapping("/saveActivity")
     @ResponseBody
     public HttpResult update(@RequestBody ActivityVo activityVo) {
-         return new HttpResult("release:" + activityService.update(activityVo) );
+        return new HttpResult("release:" + activityService.update(activityVo));
     }
 
     @RequestMapping("/saveStation")
@@ -68,14 +68,8 @@ public class Manage extends BaseController {
      */
     @RequestMapping("/approve")
     public HttpResult approve(@RequestBody List<String> recordId) {
-        logger.info("approved "+recordId);
+        logger.info("approved " + recordId);
         return new HttpResult("approve:" + participateService.accept(recordId));
-    }
-
-    @RequestMapping("/deny")
-    @ResponseBody
-    public HttpResult deny(String record) {
-        return new HttpResult("deny:" + participateService.deny(record));
     }
 
     /**
@@ -87,17 +81,17 @@ public class Manage extends BaseController {
     }
 
     @RequestMapping("/evaluate")
-    public void evaluate(@RequestBody List<EvaluateVo> evaluateVos) {
-        participateService.evaluate(evaluateVos);
+    public HttpResult evaluate(@RequestBody List<EvaluateVo> evaluateVos) {
+        return new HttpResult("evaluate:" + participateService.evaluate(evaluateVos));
     }
 
     @RequestMapping("/terminate")
-    public HttpResult terminateActivity(String activityId){
-        return new HttpResult(activityService.changeStatus(activityId, Activity.ActivityStatus.DEAD));
+    public HttpResult terminateActivity(String activityId) {
+        return new HttpResult("terminate:" + activityService.changeStatus(activityId, Activity.ActivityStatus.DEAD));
     }
 
     @RequestMapping("/startEvaluation")
-    public HttpResult finishActivity(String activityId){
-        return new HttpResult(activityService.changeStatus(activityId, Activity.ActivityStatus.FINISHED));
+    public HttpResult finishActivity(String activityId) {
+        return new HttpResult("evaluation:" + activityService.changeStatus(activityId, Activity.ActivityStatus.FINISHED));
     }
 }

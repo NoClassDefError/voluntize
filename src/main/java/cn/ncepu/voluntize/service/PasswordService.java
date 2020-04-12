@@ -27,4 +27,6 @@ public interface PasswordService {
     String checkEmail(String password);
 
     boolean changePassword(String password);
+
+    boolean changePassword(String id, String password);
 }

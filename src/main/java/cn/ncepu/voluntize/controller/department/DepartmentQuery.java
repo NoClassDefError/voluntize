@@ -28,8 +28,9 @@ public class DepartmentQuery extends BaseController {
     @RequestMapping(value = "/released", method = RequestMethod.POST)
     public List<ActivityResponseVo> getActivity(Integer status, Integer page) {
         if (page == null) page = 0;
-        logger.debug("" + session.getAttribute("UserId"));
-        logger.debug("" + activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
+        logger.info("" + session.getAttribute("UserId"));
+        logger.info("" + activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
+        logger.info("status:" + status + " page:" + page);
         if ("Department".equals(session.getAttribute("UserCategory"))) {
             ArrayList<ActivityResponseVo> activityVos = new ArrayList<>();
             for (Activity activity : activityService.findDepartment((String) session.getAttribute("UserId"), status, page))

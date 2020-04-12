@@ -241,8 +241,13 @@ public class ActivityImpl implements ActivityService {
         } else return "not found";
     }
 
+    /**
+     * status == 6 表示状态为123的活动
+     * status == 7 表示所有活动
+     */
     @Override
     public Page<Activity> findDepartment(String departmentId, Integer status, int page) {
+//        System.out.println(status+" "+page);
         if (status == null || status == 7)
             return activityRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
         else if (status == 6)

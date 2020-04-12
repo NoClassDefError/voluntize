@@ -29,7 +29,9 @@ public class MyInterceptor implements HandlerInterceptor {
         logger.info("Request content type: " + request.getContentType());
 //        logger.info("Request content" );
         logger.info("Session id = " + session.getId());
-        String userAgentAndIP = request.getHeader("User-Agent") + " " + request.getRemoteAddr();
+        //经过反向代理，ip地址可能发生改变，于是不再判断ip地址
+//        String userAgentAndIP = request.getHeader("User-Agent") + " " + request.getRemoteAddr();
+        String userAgentAndIP = request.getHeader("User-Agent");
         if (session.getAttribute("UserAgentAndIP") == null) {
             session.setAttribute("UserAgentAndIP", userAgentAndIP);
             logger.info("UserAgent&IP set:" + userAgentAndIP);

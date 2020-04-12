@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+</head>
+<body>
+<h2 th:text="'您好，'+${userCategory + id}+'，您已登录，请修改密码(⁎⁍̴̛ᴗ⁍̴̛⁎)：'"></h2>
+<form th:action="@{/password/changePasswordByMail}" method="post">
+    <input type="password" name="newPassword">
+    <input type="submit" value="修改">
+</form>
+<a th:href="@{/}">返回主页重新登录</a>
+</body>
+</html>
