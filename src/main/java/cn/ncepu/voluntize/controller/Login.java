@@ -2,17 +2,20 @@ package cn.ncepu.voluntize.controller;
 
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
 import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
+import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.util.RsaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.util.Date;
 
 @RestController
 public class Login extends BaseController {
@@ -68,6 +71,7 @@ public class Login extends BaseController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public String logout() {
         session.removeAttribute("UserId");
+        session.removeAttribute("UserCategory");
         logger.info("logout");
         return "index";
     }
@@ -92,6 +96,26 @@ public class Login extends BaseController {
             session.setAttribute("publicKey", keyPair.getPublic());
             session.setAttribute("privateKey", keyPair.getPrivate());
             return RsaUtils.keyToString(keyPair.getPublic());
+        }
+    }
+
+    @RequestMapping(value = "/unlock")
+    @ResponseBody
+    public HttpResult unlock(String checkCode){
+        // 获得验证码对象
+        Object cko = session.getAttribute("simpleCaptcha");
+        if (cko == null) return new HttpResult("unlock:请输入验证码！");
+        String captcha = cko.toString();
+        // 验证码有效时长为1分钟
+        Date now = new Date();
+        long codeTime = Long.parseLong(session.getAttribute("codeTime") + "");
+        // 判断验证码输入是否正确
+        if (StringUtils.isEmpty(checkCode) || !(checkCode.equalsIgnoreCase(captcha)))
+            return new HttpResult("unlock:验证码错误，请重新输入！");
+        else if ((now.getTime() - codeTime) / 1000 / 60 > 1) return new HttpResult("unlock:验证码已失效，请重新输入！");
+        else {
+            session.setAttribute("locked", false);
+            return new HttpResult("unlock:success");
         }
     }
 }

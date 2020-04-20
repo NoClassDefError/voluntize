@@ -25,5 +25,7 @@ public interface UpdateUserService {
 
     String updateDepartment(UserUpdateVoAdmin voAdmin);
 
+    String resetPassword(String userId);
+
     String deleteUser(String id);
 }

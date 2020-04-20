@@ -13,7 +13,7 @@ public class ApplicationConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MyInterceptor()).excludePathPatterns("/errors");
-        registry.addInterceptor(fangshuaInterceptor()).addPathPatterns("/login");
+        registry.addInterceptor(dDosInterceptor()).addPathPatterns("/login");
     }
 
     @Override
@@ -25,8 +25,8 @@ public class ApplicationConfigurer implements WebMvcConfigurer {
     }
 
     @Bean
-    public FangshuaInterceptor fangshuaInterceptor(){
-        return new FangshuaInterceptor();
+    public DDosInterceptor dDosInterceptor(){
+        return new DDosInterceptor();
     }
 
     @Bean

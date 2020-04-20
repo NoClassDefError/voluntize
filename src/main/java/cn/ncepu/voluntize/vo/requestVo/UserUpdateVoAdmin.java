@@ -13,6 +13,7 @@ public class UserUpdateVoAdmin {
     private String gender;
     private String idNum;
     private String manager;
-    private String password;//若不提供，则初始密码为123456
+    private Integer totalDuration;
     private String school;
+    //    private String password;//若不提供，则初始密码为123456
 }

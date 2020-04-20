@@ -59,8 +59,9 @@ public class ActivityImpl implements ActivityService {
             activity.setStatus(Activity.ActivityStatus.SEND);
         else activity.setStatus(Activity.ActivityStatus.CONFIRMING);
         Department department = departmentRepository.findById((String) session.getAttribute("UserId")).orElse(null);
-
-        activity.setDepartment(department);
+        if (department == null) return "没找到这个部门";
+        else
+            activity.setDepartment(department);
         activity.setDescription(activityVo.getDescription());
         activity.setName(activityVo.getName());
         if (activityVo.getImageUrl() != null) {
@@ -199,7 +200,7 @@ public class ActivityImpl implements ActivityService {
 //        Activity activity = new Activity();
 //        activity.setStatus(status[0]);
 //        Example<Activity> example = Example.of(activity);
-
+        System.out.println(status.ordinal());
         return activityRepository.findByStatus(status.ordinal(), PageRequest.of(page, 10));
     }
 

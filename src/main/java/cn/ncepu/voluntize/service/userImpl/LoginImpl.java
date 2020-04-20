@@ -2,11 +2,11 @@ package cn.ncepu.voluntize.service.userImpl;
 
 import cn.ncepu.voluntize.entity.Department;
 import cn.ncepu.voluntize.entity.Student;
+import cn.ncepu.voluntize.repository.RecordRepository;
 import cn.ncepu.voluntize.service.LoginService;
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
-import cn.ncepu.voluntize.vo.responseVo.StudentExcelVo;
-import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
-import cn.ncepu.voluntize.vo.responseVo.UserInfoVoAdmin;
+import cn.ncepu.voluntize.vo.responseVo.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
     }
 
     @Override
-    public UserInfoVoAdmin findUser(String userId){
+    public UserInfoVoAdmin findUser(String userId) {
         Optional<Student> optional1 = studentRepository.findById(userId);
         Optional<Department> optional2 = departmentRepository.findById(userId);
         return optional1.map(student -> new UserInfoVoAdmin(1, student, null))
@@ -59,9 +59,29 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
     }
 
     @Override
-    public List<StudentExcelVo> findAllStu(){
+    public List<StudentExcelVo> findAllStu() {
         List<StudentExcelVo> studentVos = new ArrayList<>();
-        for(Student student : studentRepository.findAll()) studentVos.add(new StudentExcelVo(student));
+        for (Student student : studentRepository.findAll()) studentVos.add(new StudentExcelVo(student));
+        return studentVos;
+    }
+
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @Override
+    public List<DepartmentExcelVo> findAllDep() {
+        List<DepartmentExcelVo> studentVos = new ArrayList<>();
+//        return departmentRepository.getDepartmentExcelVo();
+        for (Department department : departmentRepository.findAll()) {
+//            DepartmentExcelVo vo = new DepartmentExcelVo();
+//            vo.setId(student.getId());
+//            vo.setName(student.getName());
+//            vo.setAveStar(recordRepository.getAveStarForDepartment(student.getId()));
+            DepartmentExcelVo vo = recordRepository.getAveStarForDepartment(department.getId());
+            if (vo.getId() != null)
+                studentVos.add(vo);
+//            studentVos.add(vo);
+        }
         return studentVos;
     }
 }

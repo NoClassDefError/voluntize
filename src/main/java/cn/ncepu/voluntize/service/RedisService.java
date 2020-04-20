@@ -22,7 +22,7 @@ public class RedisService {
         redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
-    public void incur(String key,int timeout) {
+    public void incur(String key, int timeout) {
         Integer i = redisTemplate.opsForValue().get(key);
         if (i != null) {
             i++;

@@ -32,16 +32,17 @@ public class Pages extends BaseController {
     @Value("${frontend.login}")
     private String login;
 
-    @RequestMapping(value = "/errors", method = RequestMethod.GET)
+    @RequestMapping(value = "/")
+    public void index(HttpServletResponse response) throws IOException {
+        response.sendRedirect(login);
+    }
+
+    @Deprecated
+//    @RequestMapping(value = "/errors", method = RequestMethod.GET)
     public String error(Model model, @RequestParam(name = "message") String message) throws UnsupportedEncodingException {
         String m = URLDecoder.decode(message, "utf-8");
         model.addAttribute("message", m);
         return "error";
-    }
-
-    @RequestMapping(value = "/")
-    public void index(HttpServletResponse response) throws IOException {
-        response.sendRedirect(login);
     }
 
     /**

@@ -67,11 +67,12 @@ public class ActivityManage extends BaseController {
     @RequestMapping(value = "/findConfirming", method = RequestMethod.POST)
     @ResponseBody
     public List<ActivityVo> findConfirmingActivities(Integer page) {
-        if (page == null) page = 1;
+        if (page == null) page = 0;
         if ((boolean) context.getAttribute("autoSendActivity")) return null;
         List<ActivityVo> activityVos = new ArrayList<>();
         for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING, page))
             activityVos.add(new ActivityVo(activity));
+//        System.out.println(activityVos);
         return activityVos;
     }
 

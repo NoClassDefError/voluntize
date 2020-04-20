@@ -90,6 +90,9 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         //department表中的id不能与student的重复
         if (departmentRepository.findById(voAdmin.getId()).isPresent())
             return "学生的id不能和部门的一样";
+        String result;
+        if (studentRepository.findById(voAdmin.getId()).isPresent()) result = "---status:账号已存在，已修改其信息";
+        else result = "---status:添加学生";
         Student student = new Student();
         student.setStudentNum(voAdmin.getId());
         student.setName(voAdmin.getName());
@@ -99,9 +102,11 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
 //        student.setIdNum(voAdmin.getIdNum());
         student.setMajor(voAdmin.getMajor());
         student.setSchool(voAdmin.getSchool());
-        if (voAdmin.getPassword() == null) student.setPassword("123456");
-        else student.setPassword(voAdmin.getPassword());
-        return studentRepository.save(student).getStudentNum();
+        student.setTotalDuration(voAdmin.getTotalDuration());
+        student.setPassword("123456");
+//        if (voAdmin.getPassword() == null) student.setPassword("123456");
+//        else student.setPassword(voAdmin.getPassword());
+        return studentRepository.save(student).getStudentNum() + result;
     }
 
     /**
@@ -111,13 +116,32 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
     public String updateDepartment(UserUpdateVoAdmin voAdmin) {
         if (studentRepository.findById(voAdmin.getId()).isPresent())
             return "部门的id不能和学生的一样";
+        String result;
+        if (departmentRepository.findById(voAdmin.getId()).isPresent()) result = "---status:账号已存在，已修改其信息";
+        else result = "---status:添加部门";
         Department department = new Department();
         department.setId(voAdmin.getId());
         department.setManager(voAdmin.getManager());
         department.setName(voAdmin.getName());
-        if (voAdmin.getPassword() == null) department.setPassword("123456");
-        else department.setPassword(voAdmin.getPassword());
-        return departmentRepository.save(department).getId();
+        department.setPassword("123456");
+//        if (voAdmin.getPassword() == null) department.setPassword("123456");
+//        else department.setPassword(voAdmin.getPassword());
+        return departmentRepository.save(department).getId() + result;
+    }
+
+    @Override
+    public String resetPassword(String userId) {
+        Student student = studentRepository.findById(userId).orElse(null);
+        Department department = departmentRepository.findById(userId).orElse(null);
+        if (student != null) {
+            student.setPassword("123456");
+            studentRepository.save(student);
+            return student.getStudentNum();
+        } else if (department != null) {
+            department.setPassword("123456");
+            departmentRepository.save(department);
+            return department.getId();
+        } else return "not found";
     }
 
     /**
