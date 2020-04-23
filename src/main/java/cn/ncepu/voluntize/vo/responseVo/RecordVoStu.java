@@ -16,7 +16,10 @@ public class RecordVoStu {
     private Integer stars;
     private String comment;
 
-    public RecordVoStu(Record record){
+    public RecordVoStu() {
+    }
+
+    public RecordVoStu(Record record) {
         activityVo = new ActivityVo(record.getPeriod().getParent().getParentActivity());
         this.id = record.getId();
         this.auditLevel = record.getAuditLevel();

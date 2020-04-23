@@ -1150,6 +1150,13 @@ mysqldump导出数据库，或者直接复制数据文件）
 
 ### 加密问题
 
+### Page对象反序列化问题
+
+Page对象要被序列化缓存在redis中，但在从redis取出时会无法反序列化，
+因为Page对象没有空构造器。
+
+https://stackoverflow.com/questions/52490399/spring-boot-page-deserialization-pageimpl-no-constructor?noredirect=1&lq=1
+
 #### 数据库密码加密
  F:\maven\repository\com\alibaba\druid\1.1.10> java -cp druid-1.1.10.jar com.alibaba.druid.filter.config.ConfigTools 123456
 

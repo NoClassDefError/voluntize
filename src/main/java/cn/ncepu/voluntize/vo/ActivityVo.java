@@ -1,16 +1,12 @@
 package cn.ncepu.voluntize.vo;
 
+import cn.ncepu.voluntize.entity.Activity;
+import cn.ncepu.voluntize.entity.ActivityStation;
 import lombok.Data;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import cn.ncepu.voluntize.entity.Image;
-import cn.ncepu.voluntize.entity.Activity;
-import cn.ncepu.voluntize.entity.ActivityPeriod;
-import cn.ncepu.voluntize.entity.ActivityStation;
-
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用于显示Activity信息，一般情况下总是与Period和Station合并显示，但也有Period单独显示的情况
@@ -19,7 +15,6 @@ import javax.persistence.EntityNotFoundException;
 public class ActivityVo {
     private String id;
     private String name;
-    private String semester;
     private String description;
     private String departmentId;
     private String departmentName;//前端修改无效
@@ -44,7 +39,5 @@ public class ActivityVo {
         }
     }
 
-    public ActivityVo() {
-
-    }
+    public ActivityVo(){}
 }

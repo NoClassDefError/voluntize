@@ -10,13 +10,13 @@ import java.util.List;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, String> {
-//    @Query(value = "select new cn.ncepu.voluntize.vo.responseVo.DepartmentExcelVo(d.id,d.name, avg(r.stars))" +
-//            "from Department d" +
-//            "         left join Activity on Department.id = Activity.department" +
-//            "         left join ActivityStation on Activity.id = ActivityStation.parentActivity " +
-//            "         left join ActivityPeriod on ActivityStation.id = ActivityPeriod.parent " +
-//            "         left join Record r on ActivityPeriod.id = Record.period " +
-//            "where r.statusId = 3 " +
-//            "group by d.id")
-//    List<DepartmentExcelVo> getDepartmentExcelVo();
+    @Query(value = "select new cn.ncepu.voluntize.vo.responseVo.DepartmentExcelVo(d.id, d.name, avg(r.stars))" +
+            " from Department d" +
+            " left join Activity a on d.id = a.department " +
+            " left join ActivityStation ast on a.id = ast.parentActivity " +
+            " left join ActivityPeriod ap on ast.id = ap.parent " +
+            " left join Record r on ap.id = r.period " +
+            "where r.statusId = 3 " +
+            "group by d.id")
+    List<DepartmentExcelVo> getDepartmentExcelVo();
 }

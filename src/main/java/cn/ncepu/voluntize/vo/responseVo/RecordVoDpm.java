@@ -19,7 +19,10 @@ public class RecordVoDpm {
     private Integer stars;
     private String comment;
 
-    public RecordVoDpm(Record record){
+    public RecordVoDpm() {
+    }
+
+    public RecordVoDpm(Record record) {
         this.id = record.getId();
         this.auditLevel = record.getAuditLevel();
         this.comment = record.getComment();

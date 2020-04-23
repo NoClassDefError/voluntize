@@ -5,6 +5,8 @@ import cn.ncepu.voluntize.entity.Student;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +20,13 @@ public interface ParticipateService {
     String cancel(String recordId);
 
     /**
-     * 为了防止数据过大。禁止Record夹在Activity转成的json里
-     * 专门设置查询方法
+     * 给部门用的
      */
-    ArrayList<Record> getRecord(String periodId, Record.RecordStatus status);
+    List<RecordVoDpm> getRecord(String periodId, Record.RecordStatus status);
 
-    ArrayList<Record> getRecord(String periodId);
+    List<RecordVoDpm> getRecord(String periodId);
 
-    List<Record> getRecordByStu(Integer status);
+    List<RecordVoStu> getRecordByStu(Integer status);
 
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的

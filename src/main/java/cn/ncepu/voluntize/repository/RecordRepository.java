@@ -2,6 +2,8 @@ package cn.ncepu.voluntize.repository;
 
 import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.vo.responseVo.DepartmentExcelVo;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,14 +13,17 @@ import java.util.List;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, String> {
-    @Query("select r from Record r where r.statusId=?2 and r.volunteer.studentNum=?1 order by r.createTime")
-    List<Record> findByStudent(String studentId, int status);
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.statusId=?2 and r.volunteer.studentNum=?1 order by r.createTime")
+    List<RecordVoStu> findByStudent(String studentId, int status);
 
-    @Query("select r from Record r where r.volunteer.studentNum=?1 order by r.createTime")
-    List<Record> findByStudent(String studentId);
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.volunteer.studentNum=?1 order by r.createTime")
+    List<RecordVoStu> findByStudent(String studentId);
 
-    @Query("select r from Record r where r.period.id=?1 and r.isPassed=true order by r.createTime")
-    List<Record> findPassedByPeriod(String period);
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 and r.statusId=?2 order by r.createTime")
+    List<RecordVoDpm> findByPeriod(String period, int status);
+
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 order by r.createTime")
+    List<RecordVoDpm> findByPeriod(String period);
 
     @Query("select count(r) from Record r where r.period.id=?1 and r.isPassed=true")
     Integer getAmountPassed(String period);

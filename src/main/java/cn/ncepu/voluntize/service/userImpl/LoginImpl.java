@@ -8,6 +8,8 @@ import cn.ncepu.voluntize.vo.requestVo.LoginVo;
 import cn.ncepu.voluntize.vo.responseVo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 @RefreshScope
 @Service
+@CacheConfig(cacheNames = "loginService")
 public class LoginImpl extends BaseUserImpl implements LoginService {
 
     @Value("${application.adminPassword}")
@@ -65,23 +68,8 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         return studentVos;
     }
 
-    @Autowired
-    private RecordRepository recordRepository;
-
     @Override
     public List<DepartmentExcelVo> findAllDep() {
-        List<DepartmentExcelVo> studentVos = new ArrayList<>();
-//        return departmentRepository.getDepartmentExcelVo();
-        for (Department department : departmentRepository.findAll()) {
-//            DepartmentExcelVo vo = new DepartmentExcelVo();
-//            vo.setId(student.getId());
-//            vo.setName(student.getName());
-//            vo.setAveStar(recordRepository.getAveStarForDepartment(student.getId()));
-            DepartmentExcelVo vo = recordRepository.getAveStarForDepartment(department.getId());
-            if (vo.getId() != null)
-                studentVos.add(vo);
-//            studentVos.add(vo);
-        }
-        return studentVos;
+        return departmentRepository.getDepartmentExcelVo();
     }
 }

@@ -3,6 +3,7 @@ package cn.ncepu.voluntize.vo;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import cn.ncepu.voluntize.entity.ActivityStation;
 import lombok.Data;
+import lombok.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,5 @@ public class ActivityStationVo {
         for (ActivityPeriod period : station.getPeriods()) periods.add(new ActivityPeriodVo(period));
     }
 
-    public ActivityStationVo() {
-
-    }
+    public ActivityStationVo(){}
 }

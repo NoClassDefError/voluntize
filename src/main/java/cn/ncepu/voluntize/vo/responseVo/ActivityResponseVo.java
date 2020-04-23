@@ -2,10 +2,12 @@ package cn.ncepu.voluntize.vo.responseVo;
 
 import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.entity.ActivityStation;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class ActivityResponseVo {
+
     private String activityId;
     private String stationId;
     private String periodId;
@@ -14,6 +16,9 @@ public class ActivityResponseVo {
     private int activityStatus;
     private int amountRequired;
     private String description;
+
+    public ActivityResponseVo(){
+    }
 
     public ActivityResponseVo(Activity activity){
         this.activityId = activity.getId();

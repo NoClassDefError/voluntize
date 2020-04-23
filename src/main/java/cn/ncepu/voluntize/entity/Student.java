@@ -3,6 +3,9 @@ package cn.ncepu.voluntize.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheConfig;
 
 import javax.persistence.*;
 import java.util.List;

@@ -8,10 +8,14 @@ import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.ImageVo;
 import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
+import cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
@@ -24,6 +28,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@CacheConfig(cacheNames = "activityService")
 public class ActivityImpl implements ActivityService {
 
     @Autowired
@@ -50,6 +55,7 @@ public class ActivityImpl implements ActivityService {
     @Autowired
     private HttpSession session;
 
+    @Override
     public String create2(CreateActivityVo activityVo) {
         Activity activity = new Activity();
         ActivityPeriod activityPeriod = new ActivityPeriod();
@@ -100,6 +106,7 @@ public class ActivityImpl implements ActivityService {
         return "success";
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public String update(ActivityVo activity) {
         if (activity.getId() != null) {
@@ -110,6 +117,7 @@ public class ActivityImpl implements ActivityService {
         return "not found";
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public String updateStation(ActivityStationVo activityStationVo) {
         if (activityStationVo.getId() == null)
@@ -120,6 +128,7 @@ public class ActivityImpl implements ActivityService {
                         .orElse(new ActivityStation()), activityStationVo)).getId();
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public String updatePeriod(ActivityPeriodVo activityPeriodVo) {
         if (activityPeriodVo.getId() == null)
@@ -173,17 +182,20 @@ public class ActivityImpl implements ActivityService {
         return period;
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public void deleteActivity(String id) {
 //        System.out.println(id);
         activityRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public void deleteActivityPeriod(String id) {
         activityPeriodRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public void deleteActivityStation(String id) {
         activityStationRepository.deleteById(id);
@@ -195,26 +207,28 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public Page<Activity> findStatus(Activity.ActivityStatus status, int page) {
+    public List<ActivityVo> findStatus(Activity.ActivityStatus status, int page) {
 //      放弃使用QBE的方法
 //        Activity activity = new Activity();
 //        activity.setStatus(status[0]);
 //        Example<Activity> example = Example.of(activity);
         System.out.println(status.ordinal());
+//        return new MyPageImpl<>(page1.getContent(), page1.getPageable());
         return activityRepository.findByStatus(status.ordinal(), PageRequest.of(page, 10));
     }
 
+
     @Override
-    public List<Activity> findStatus(Activity.ActivityStatus status) {
-        return activityRepository.findByStatus2(status.ordinal());
+    public List<ActivityVo> findStatus(Activity.ActivityStatus status) {
+        return activityRepository.findByStatus(status.ordinal());
     }
 
     @Override
-    public Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size) {
-        return activityRepository.notToFindByStatus(status.ordinal(),
-                PageRequest.of(page, size));
+    public List<ActivityVo> notToFindStatus(Activity.ActivityStatus status, Pageable pageable) {
+        return activityRepository.notToFindByStatus(status.ordinal(), pageable);
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public String startActivity(String activityId) {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -232,6 +246,7 @@ public class ActivityImpl implements ActivityService {
         } else return "not found";
     }
 
+    @CacheEvict(value = "activityService")
     @Override
     public String changeStatus(String activityId, Activity.ActivityStatus status) {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -247,13 +262,15 @@ public class ActivityImpl implements ActivityService {
      * status == 7 表示所有活动
      */
     @Override
-    public Page<Activity> findDepartment(String departmentId, Integer status, int page) {
+    @Cacheable(value = "activityService", key="'depRls:'+#p0+','+#p1+','+#p2")
+    public List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Integer page) {
 //        System.out.println(status+" "+page);
+        Pageable pageable = page == null ? Pageable.unpaged() : PageRequest.of(page, 10);
         if (status == null || status == 7)
-            return activityRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
+            return activityRepository.findByDepartmentId(departmentId, pageable);
         else if (status == 6)
-            return activityRepository.findByDepartmentIdSpecial(departmentId, PageRequest.of(page, 10));
-        else return activityRepository.findByDepartmentId(departmentId, status, PageRequest.of(page, 10));
+            return activityRepository.findByDepartmentIdSpecial(departmentId, pageable);
+        else return activityRepository.findByDepartmentId(departmentId, status, pageable);
     }
 
     @Override

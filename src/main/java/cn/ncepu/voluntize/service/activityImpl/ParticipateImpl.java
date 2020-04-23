@@ -10,7 +10,11 @@ import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.requestVo.AppraiseVo;
 import cn.ncepu.voluntize.vo.requestVo.EvaluateVo;
 import cn.ncepu.voluntize.vo.requestVo.ParticipateVo;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
+import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+//@CacheConfig(cacheNames = "recordService")
 public class ParticipateImpl implements ParticipateService {
 
     @Autowired
@@ -75,25 +80,26 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    public ArrayList<Record> getRecord(String periodId, Record.RecordStatus status) {
-        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
-        if (activityPeriod.isPresent()) {
-            ArrayList<Record> result = new ArrayList<>();
-            for (Record record : activityPeriod.get().getRecords())
-                if (record.getStatus().equals(status)) result.add(record);
-            return result;
-        }
-        return null;
+    public List<RecordVoDpm> getRecord(String periodId, Record.RecordStatus status) {
+//        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
+//        if (activityPeriod.isPresent()) {
+//            ArrayList<Record> result = new ArrayList<>();
+//            for (Record record : activityPeriod.get().getRecords())
+//                if (record.getStatus().equals(status)) result.add(record);
+//            return result;
+//        }
+        return recordRepository.findByPeriod(periodId,status.ordinal());
     }
 
     @Override
-    public ArrayList<Record> getRecord(String periodId) {
-        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
-        return activityPeriod.map(period -> new ArrayList<>(period.getRecords())).orElse(null);
+    public List<RecordVoDpm> getRecord(String periodId) {
+        return recordRepository.findByPeriod(periodId);
+//        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
+//        return activityPeriod.map(period -> new ArrayList<>(period.getRecords())).orElse(null);
     }
 
     @Override
-    public List<Record> getRecordByStu(Integer status) {
+    public List<RecordVoStu> getRecordByStu(Integer status) {
         String studentId = (String) session.getAttribute("UserId");
         if (studentId == null) return null;
 //        System.out.println(status);

@@ -5,18 +5,16 @@ import cn.ncepu.voluntize.vo.ActivityPeriodVo;
 import cn.ncepu.voluntize.vo.ActivityStationVo;
 import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
+import cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ActivityService {
     String create2(CreateActivityVo activityVo);
-    /**
-     * 添加或更新志愿活动
-     *
-     * @param activity 保存的activity
-     * @return 保存activity的Id
-     */
+
     String update(ActivityVo activity);
 
     String updateStation(ActivityStationVo activityStationVo);
@@ -31,26 +29,17 @@ public interface ActivityService {
 
     List<Activity> findAll();
 
-    /**
-     * 查找特定阶段的活动
-     *
-     * @param status 活动阶段
-     * @return 活动
-     */
-    Page<Activity> findStatus(Activity.ActivityStatus status, int page);
+    List<ActivityVo> findStatus(Activity.ActivityStatus status, int page);
 
-    List<Activity> findStatus(Activity.ActivityStatus status);
+    List<ActivityVo> findStatus(Activity.ActivityStatus status);
 
-    Page<Activity> notToFindStatus(Activity.ActivityStatus status, int page, int size);
+    List<ActivityVo> notToFindStatus(Activity.ActivityStatus status, Pageable pageable);
 
     String startActivity(String activityId);
 
     String changeStatus(String activityId, Activity.ActivityStatus status);
 
-    /**
-     * 在假设活动与时间段一一对应时
-     */
-    Page<Activity> findDepartment(String departmentId, Integer status, int page);
+    List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Integer page);
 
     Activity findById(String activityId);
 

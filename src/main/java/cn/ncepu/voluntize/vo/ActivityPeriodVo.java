@@ -3,6 +3,7 @@ package cn.ncepu.voluntize.vo;
 import cn.ncepu.voluntize.entity.ActivityPeriod;
 import cn.ncepu.voluntize.repository.RecordRepository;
 import lombok.Data;
+import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +46,5 @@ public class ActivityPeriodVo {
         });
     }
 
-    public ActivityPeriodVo() {
-
-    }
+    public ActivityPeriodVo(){}
 }
