@@ -207,25 +207,59 @@ public class ActivityImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityVo> findStatus(Activity.ActivityStatus status, int page) {
+    public List<ActivityVo> findStatus(Activity.ActivityStatus status, Pageable pageable) {
 //      放弃使用QBE的方法
 //        Activity activity = new Activity();
 //        activity.setStatus(status[0]);
 //        Example<Activity> example = Example.of(activity);
-        System.out.println(status.ordinal());
+        System.out.println("ActivityImpl$findStatus:status==" + status.ordinal());
 //        return new MyPageImpl<>(page1.getContent(), page1.getPageable());
-        return activityRepository.findByStatus(status.ordinal(), PageRequest.of(page, 10));
+        return activityRepository.findByStatus(status.ordinal(), pageable);
     }
 
-
+    /**
+     * 给学生主页活动查询用的，只查询报名阶段的和进行中阶段的
+     */
     @Override
-    public List<ActivityVo> findStatus(Activity.ActivityStatus status) {
-        return activityRepository.findByStatus(status.ordinal());
+    public List<ActivityVo> findStatusSpecial(Pageable pageable) {
+        return activityRepository.findByStatus(pageable);
     }
 
     @Override
     public List<ActivityVo> notToFindStatus(Activity.ActivityStatus status, Pageable pageable) {
         return activityRepository.notToFindByStatus(status.ordinal(), pageable);
+    }
+
+    /**
+     * /department/released接口所调用的
+     * status == 6 表示状态为123的活动
+     * status == 7 表示所有活动
+     */
+    @Override
+    @Cacheable(value = "activityService", key = "'depRls:'+#p0+','+#p1+','+#p2.hashCode()")
+    public List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Pageable pageable) {
+//        System.out.println(status+" "+page);
+        if (status == null || status == 7)
+            return activityRepository.findByDepartmentId(departmentId, pageable);
+        else if (status == 6)
+            return activityRepository.findByDepartmentIdSpecial(departmentId, pageable);
+        else return activityRepository.findByDepartmentId(departmentId, status, pageable);
+    }
+
+    @Override
+    public Activity findById(String activityId) {
+        return activityRepository.findById(activityId).orElse(null);
+    }
+
+    @Override
+    public Activity findByPeriod(String periodId) {
+        Optional<ActivityPeriod> period = activityPeriodRepository.findById(periodId);
+        return period.map(activityPeriod -> activityPeriod.getParent().getParentActivity()).orElse(null);
+    }
+
+    @Override
+    public Activity findByStation(String stationId) {
+        return activityStationRepository.findById(stationId).map(ActivityStation::getParentActivity).orElse(null);
     }
 
     @CacheEvict(value = "activityService")
@@ -255,37 +289,5 @@ public class ActivityImpl implements ActivityService {
             activityRepository.save(activity);
             return "success";
         } else return "not found";
-    }
-
-    /**
-     * status == 6 表示状态为123的活动
-     * status == 7 表示所有活动
-     */
-    @Override
-    @Cacheable(value = "activityService", key="'depRls:'+#p0+','+#p1+','+#p2")
-    public List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Integer page) {
-//        System.out.println(status+" "+page);
-        Pageable pageable = page == null ? Pageable.unpaged() : PageRequest.of(page, 10);
-        if (status == null || status == 7)
-            return activityRepository.findByDepartmentId(departmentId, pageable);
-        else if (status == 6)
-            return activityRepository.findByDepartmentIdSpecial(departmentId, pageable);
-        else return activityRepository.findByDepartmentId(departmentId, status, pageable);
-    }
-
-    @Override
-    public Activity findById(String activityId) {
-        return activityRepository.findById(activityId).orElse(null);
-    }
-
-    @Override
-    public Activity findByPeriod(String periodId) {
-        Optional<ActivityPeriod> period = activityPeriodRepository.findById(periodId);
-        return period.map(activityPeriod -> activityPeriod.getParent().getParentActivity()).orElse(null);
-    }
-
-    @Override
-    public Activity findByStation(String stationId) {
-        return activityStationRepository.findById(stationId).map(ActivityStation::getParentActivity).orElse(null);
     }
 }

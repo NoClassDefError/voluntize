@@ -29,9 +29,9 @@ public interface ActivityService {
 
     List<Activity> findAll();
 
-    List<ActivityVo> findStatus(Activity.ActivityStatus status, int page);
+    List<ActivityVo> findStatus(Activity.ActivityStatus status, Pageable pageable);
 
-    List<ActivityVo> findStatus(Activity.ActivityStatus status);
+    List<ActivityVo> findStatusSpecial(Pageable pageable);
 
     List<ActivityVo> notToFindStatus(Activity.ActivityStatus status, Pageable pageable);
 
@@ -39,7 +39,7 @@ public interface ActivityService {
 
     String changeStatus(String activityId, Activity.ActivityStatus status);
 
-    List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Integer page);
+    List<ActivityResponseVo> findDepartment(String departmentId, Integer status, Pageable pageable);
 
     Activity findById(String activityId);
 

@@ -8,6 +8,8 @@ import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
 import cn.ncepu.voluntize.vo.responseVo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,19 +27,17 @@ public class DepartmentQuery extends BaseController {
 
     @RequestMapping(value = "/released", method = RequestMethod.POST)
     public List<ActivityResponseVo> getActivity(Integer status, Integer page) {
-        if (page == null) page = 0;
-        logger.info("" + session.getAttribute("UserId"));
-//        logger.info("" + activityService.findDepartment((String) session.getAttribute("UserId"), status, page));
-        logger.info("status:" + status + " page:" + page);
-        if ("Department".equals(session.getAttribute("UserCategory"))) {
-            return activityService.findDepartment((String) session.getAttribute("UserId"), status, page);
-        } else return null;
+        Pageable pageable = page == null ? Pageable.unpaged() : PageRequest.of(page, 10);
+//        logger.info("" + session.getAttribute("UserId"));
+//        logger.info("status:" + status + " page:" + page);
+        if ("Department".equals(session.getAttribute("UserCategory")))
+            return activityService.findDepartment((String) session.getAttribute("UserId"), status, pageable);
+        else return null;
     }
 
     @RequestMapping(value = "/pages", method = RequestMethod.POST)
-    @Cacheable(value = "activityService", key = "'depRlsPg:'+#p0")
     public Integer getPages(Integer status) {
-        return activityService.findDepartment((String) session.getAttribute("UserId"), status, null).size() / 10 + 1;
+        return activityService.findDepartment((String) session.getAttribute("UserId"), status, Pageable.unpaged()).size() / 10 + 1;
     }
 
     @RequestMapping(value = "/records", method = RequestMethod.POST)

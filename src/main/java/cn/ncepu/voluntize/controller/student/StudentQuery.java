@@ -1,8 +1,6 @@
 package cn.ncepu.voluntize.controller.student;
 
 import cn.ncepu.voluntize.controller.BaseController;
-import cn.ncepu.voluntize.entity.Activity;
-import cn.ncepu.voluntize.entity.Record;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityVo;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,16 +28,13 @@ public class StudentQuery extends BaseController {
     private ParticipateService participateService;
 
     /**
-     * 首页展示的志愿活动，除了审核阶段的志愿活动，其它都可以显示
-     *
+     * 首页展示的志愿活动，显示报名阶段的和进行中阶段的
      */
     @RequestMapping(value = "/findIndexActivities", method = RequestMethod.POST)
     @ResponseBody
-    @Cacheable(value = "activityService",key = "'stuIdx'")
-    public List<ActivityVo> findIndexActivities() {
-//        activityVos.addAll(activityService.findStatus(Activity.ActivityStatus.SEND));
-//        activityVos.addAll(activityService.findStatus(Activity.ActivityStatus.STARTED));
-        return activityService.notToFindStatus(Activity.ActivityStatus.CONFIRMING, Pageable.unpaged());
+    @Cacheable(value = "activityService", key = "'stuIdx:'+#p0")
+    public List<ActivityVo> findIndexActivities(Integer page) {
+        return activityService.findStatusSpecial(page == null ? Pageable.unpaged() : PageRequest.of(page, 10));
     }
 
     /**
@@ -57,7 +51,7 @@ public class StudentQuery extends BaseController {
 //                recordVos.add(new RecordVoStu(record));
 //            return recordVos;
 //        } else return null;
-        return participateService.getRecordByStu(status);
+        return participateService.getRecordByStu(status, (String) session.getAttribute("UserId"));
     }
 
 }

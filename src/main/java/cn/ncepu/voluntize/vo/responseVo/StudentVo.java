@@ -21,6 +21,7 @@ public class StudentVo {
     private int totalDuration;
 
     private ArrayList<ImageVo> profiles = new ArrayList<>();
+
     //不需要查找comments，comments只需从activity下找
     //不绑定records，records要单独分页返回
     public StudentVo(Student student) {
@@ -36,6 +37,10 @@ public class StudentVo {
         gender = student.getGender();
         totalDuration = student.getTotalDuration();
         for (Image image : student.getProfiles()) profiles.add(new ImageVo(image));
+
+    }
+
+    public StudentVo() {
 
     }
 }

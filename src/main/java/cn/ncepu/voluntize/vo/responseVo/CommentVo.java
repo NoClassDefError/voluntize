@@ -35,4 +35,8 @@ public class CommentVo {
         this.time = comment.getTime().toString();
         for (Image image : comment.getImages()) images.add(new ImageVo(image));
     }
+
+    public CommentVo() {
+
+    }
 }

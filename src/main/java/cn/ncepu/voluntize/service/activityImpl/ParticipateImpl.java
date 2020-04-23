@@ -15,6 +15,7 @@ import cn.ncepu.voluntize.vo.responseVo.RecordVoStu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-//@CacheConfig(cacheNames = "recordService")
+@CacheConfig(cacheNames = "recordService")
 public class ParticipateImpl implements ParticipateService {
-
-    @Autowired
-    private HttpSession session;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -43,9 +41,10 @@ public class ParticipateImpl implements ParticipateService {
      * 添加多对多关联，不需要更新Student表与ActivityPeriod表
      */
     @Override
-    public String participate(ParticipateVo participateVo) {
+    @CacheEvict("recordService")
+    public String participate(ParticipateVo participateVo, String userId) {
         Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getPeriodId());
-        Optional<Student> student = studentRepository.findById((String) session.getAttribute("UserId"));
+        Optional<Student> student = studentRepository.findById(userId);
         if (student.isPresent() && activityPeriod.isPresent()) {
             int status = activityPeriod.get().getParent().getParentActivity().getStatusId();
             if (status == 1) {
@@ -66,6 +65,7 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    @CacheEvict("recordService")
     public String cancel(String recordId) {
         recordRepository.deleteById(recordId);
 //        Optional<Record> record = recordRepository.findById(recordId);
@@ -80,6 +80,7 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    @Cacheable(value = "recordService", key = "'getRecDpm:'+#p0+','+#p1")
     public List<RecordVoDpm> getRecord(String periodId, Record.RecordStatus status) {
 //        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
 //        if (activityPeriod.isPresent()) {
@@ -88,10 +89,11 @@ public class ParticipateImpl implements ParticipateService {
 //                if (record.getStatus().equals(status)) result.add(record);
 //            return result;
 //        }
-        return recordRepository.findByPeriod(periodId,status.ordinal());
+        return recordRepository.findByPeriod(periodId, status.ordinal());
     }
 
     @Override
+    @Cacheable(value = "recordService", key = "'getRecDpm:'+#p0")
     public List<RecordVoDpm> getRecord(String periodId) {
         return recordRepository.findByPeriod(periodId);
 //        Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(periodId);
@@ -99,8 +101,9 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    public List<RecordVoStu> getRecordByStu(Integer status) {
-        String studentId = (String) session.getAttribute("UserId");
+    @Cacheable(value = "recordService", key = "'getRecStu:'+#p0+','+#p1")
+    public List<RecordVoStu> getRecordByStu(Integer status, String studentId) {
+//        String studentId = (String) session.getAttribute("UserId");
         if (studentId == null) return null;
 //        System.out.println(status);
         if (status == null) return recordRepository.findByStudent(studentId);
@@ -108,9 +111,9 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
+    @CacheEvict("recordService")
     public String accept(List<String> records) {
         boolean flag = true;
-//        System.out.println(records);
         List<String> notfounds = new ArrayList<>();
         for (String id : records) {
             Record record = recordRepository.findById(id).orElse(null);
@@ -128,7 +131,11 @@ public class ParticipateImpl implements ParticipateService {
         return "除了这些学生的报名记录没找到外，其它学生都已经成功录取" + notfounds;
     }
 
+    /**
+     * 老师给予学生评分
+     */
     @Override
+    @CacheEvict("recordService")
     public String evaluate(List<EvaluateVo> records) {
 //        boolean flag = true;
         List<String> notfounds = new ArrayList<>();
@@ -155,8 +162,12 @@ public class ParticipateImpl implements ParticipateService {
         return "除了这些学生的报名记录没找到外，其它学生都已经成功评分" + notfounds;
     }
 
+    /**
+     * 学生给予老师反馈，是record表中的，不是comment表中的那个评论
+     */
     @Override
-    public String appraise(AppraiseVo evaluateVo) {
+    @CacheEvict("recordService")
+    public String comment(AppraiseVo evaluateVo) {
         Optional<Record> record = recordRepository.findById(evaluateVo.getRecordId());
         if (record.isPresent()) {
             Record record1 = record.get();
@@ -171,7 +182,6 @@ public class ParticipateImpl implements ParticipateService {
 
     @Override
     public Student studentInfo(String id) {
-        Optional<Student> optional = studentRepository.findById(id);
-        return optional.orElse(null);
+        return studentRepository.findById(id).orElse(null);
     }
 }

@@ -19,6 +19,7 @@ public class StudentExcelVo {
     private String email;
     private String school;
     private int totalDuration;
+
     public StudentExcelVo(Student student) {
         studentNum = student.getStudentNum();
 //        idNum = student.getIdNum();
@@ -31,5 +32,9 @@ public class StudentExcelVo {
         school = student.getSchool();
         gender = student.getGender();
         totalDuration = student.getTotalDuration();
+    }
+
+    public StudentExcelVo() {
+
     }
 }

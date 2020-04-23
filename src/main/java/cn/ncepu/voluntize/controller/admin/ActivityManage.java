@@ -11,6 +11,7 @@ import cn.ncepu.voluntize.vo.responseVo.RecordVoDpm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,23 +72,23 @@ public class ActivityManage extends BaseController {
     @ResponseBody
     @Cacheable(value = "activityService", key = "'admFdCfm:'+#p0")
     public List<ActivityVo> findConfirmingActivities(Integer page) {
-        if (page == null) page = 0;
+        Pageable pageable = page == null ? Pageable.unpaged() : PageRequest.of(page, 10);
         if ((boolean) context.getAttribute("autoSendActivity")) return null;
 //        for (Activity activity : activityService.findStatus(Activity.ActivityStatus.CONFIRMING, page))
 //            activityVos.add(new ActivityVo(activity));
 //        System.out.println(activityVos);
-        return activityService.findStatus(Activity.ActivityStatus.CONFIRMING, page);
+        return activityService.findStatus(Activity.ActivityStatus.CONFIRMING, pageable);
     }
 
     @RequestMapping("/findOthers")
     @ResponseBody
     @Cacheable(value = "activityService", key = "'admFdOth:'+#p0")
     public List<ActivityVo> findOthers(Integer page) {
-        if (page == null) page = 0;
+        Pageable pageable = page == null ? Pageable.unpaged() : PageRequest.of(page, 10);
 //        List<ActivityVo> activityVos = new ArrayList<>();
 //        for (Activity activity : activityService.notToFindStatus())
 //            activityVos.add(new ActivityVo(activity));
-        return activityService.notToFindStatus(Activity.ActivityStatus.CONFIRMING, PageRequest.of(page, 10));
+        return activityService.notToFindStatus(Activity.ActivityStatus.CONFIRMING, pageable);
     }
 
     @RequestMapping(value = "/records", method = RequestMethod.POST)

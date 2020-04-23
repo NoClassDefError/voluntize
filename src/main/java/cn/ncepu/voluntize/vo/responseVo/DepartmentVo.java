@@ -29,4 +29,8 @@ public class DepartmentVo {
         manager = department.getManager();
         for (Image image : department.getImages()) images.add(new ImageVo(image));
     }
+
+    public DepartmentVo() {
+
+    }
 }

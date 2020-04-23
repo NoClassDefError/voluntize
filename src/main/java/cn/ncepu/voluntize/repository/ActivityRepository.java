@@ -29,8 +29,8 @@ public interface ActivityRepository extends JpaRepository<Activity, String> {
     @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=:status order by a.createTime")
     List<ActivityVo> findByStatus(@Param("status") int status, Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=:status order by a.createTime")
-    List<ActivityVo> findByStatus(@Param("status") int status);
+    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=1 or a.statusId=2 order by a.createTime")
+    List<ActivityVo> findByStatus(Pageable pageable);
 
     @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId<>?1 order by a.createTime")
     List<ActivityVo> notToFindByStatus(int notStatus, Pageable pageable);

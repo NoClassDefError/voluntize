@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ParticipateService {
-    String participate(ParticipateVo participateVo);
+    String participate(ParticipateVo participateVo, String uerId);
 
     /**
      * 取消报名或退出活动
@@ -26,12 +26,11 @@ public interface ParticipateService {
 
     List<RecordVoDpm> getRecord(String periodId);
 
-    List<RecordVoStu> getRecordByStu(Integer status);
+    List<RecordVoStu> getRecordByStu(Integer status, String uerId);
 
     /**
      * 注意，accept与evaluate方法在前端均是批量操作的
      * 一次性评论完ActivityPeriod下所有record
-     *
      */
     String accept(List<String> records);
 
@@ -45,7 +44,7 @@ public interface ParticipateService {
     /**
      * 学生给予活动评价
      */
-    String appraise(AppraiseVo evaluateVo);
+    String comment(AppraiseVo evaluateVo);
 
     Student studentInfo(String id);
 }

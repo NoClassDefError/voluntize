@@ -18,7 +18,7 @@ public class Participate extends BaseController {
     @RequestMapping(value = "/participate", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult participate(@RequestBody ParticipateVo participateVo) {
-        String result = participateService.participate(participateVo);
+        String result = participateService.participate(participateVo, (String) session.getAttribute("UserId"));
         return new HttpResult("participate:" + result);
     }
 
@@ -31,6 +31,6 @@ public class Participate extends BaseController {
     @RequestMapping(value = "/appraise", method = RequestMethod.POST)
     @ResponseBody
     public HttpResult appraise(@RequestBody AppraiseVo appraiseVo) {
-        return new HttpResult("appraise:" + participateService.appraise(appraiseVo));
+        return new HttpResult("appraise:" + participateService.comment(appraiseVo));
     }
 }
