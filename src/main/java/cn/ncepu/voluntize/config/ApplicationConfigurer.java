@@ -24,7 +24,7 @@ import java.time.Duration;
 public class ApplicationConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyInterceptor()).excludePathPatterns("/errors");
+        registry.addInterceptor(new MyInterceptor());
         registry.addInterceptor(dDosInterceptor()).addPathPatterns("/login");
     }
 
@@ -66,18 +66,5 @@ public class ApplicationConfigurer implements WebMvcConfigurer {
         return RedisCacheManager
                 .builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
                 .cacheDefaults(defaultCacheConfig).build();
-    }
-
-    @Bean
-    public KeyGenerator wiselyKeyGenerator() {
-        return (target, method, params) -> {
-            StringBuilder sb = new StringBuilder();
-            sb.append(target.getClass().getName());
-            sb.append(method.getName());
-            for (Object obj : params) {
-                sb.append(obj.toString());
-            }
-            return sb.toString();
-        };
     }
 }

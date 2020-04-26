@@ -41,7 +41,7 @@ public class ParticipateImpl implements ParticipateService {
      * 添加多对多关联，不需要更新Student表与ActivityPeriod表
      */
     @Override
-    @CacheEvict("recordService")
+    @CacheEvict(value = "recordService", allEntries = true)
     public String participate(ParticipateVo participateVo, String userId) {
         Optional<ActivityPeriod> activityPeriod = activityPeriodRepository.findById(participateVo.getPeriodId());
         Optional<Student> student = studentRepository.findById(userId);
@@ -65,7 +65,7 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    @CacheEvict("recordService")
+    @CacheEvict(value = "recordService", allEntries = true)
     public String cancel(String recordId) {
         recordRepository.deleteById(recordId);
 //        Optional<Record> record = recordRepository.findById(recordId);
@@ -111,7 +111,7 @@ public class ParticipateImpl implements ParticipateService {
     }
 
     @Override
-    @CacheEvict("recordService")
+    @CacheEvict(value = "recordService", allEntries = true)
     public String accept(List<String> records) {
         boolean flag = true;
         List<String> notfounds = new ArrayList<>();
@@ -135,7 +135,7 @@ public class ParticipateImpl implements ParticipateService {
      * 老师给予学生评分
      */
     @Override
-    @CacheEvict("recordService")
+    @CacheEvict(value = "recordService", allEntries = true)
     public String evaluate(List<EvaluateVo> records) {
 //        boolean flag = true;
         List<String> notfounds = new ArrayList<>();
@@ -166,7 +166,7 @@ public class ParticipateImpl implements ParticipateService {
      * 学生给予老师反馈，是record表中的，不是comment表中的那个评论
      */
     @Override
-    @CacheEvict("recordService")
+    @CacheEvict(value = "recordService", allEntries = true)
     public String comment(AppraiseVo evaluateVo) {
         Optional<Record> record = recordRepository.findById(evaluateVo.getRecordId());
         if (record.isPresent()) {

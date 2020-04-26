@@ -18,11 +18,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 /**
- * 返回页面的控制器
+ * 返回页面的控制器，经过技术攻坚，前后端彻底分离，终于不需要在后台显示任何页面，
+ * 只需要将主页重定向。
  */
 @Controller
 @RefreshScope
-public class Pages extends BaseController {
+public class IndexDispatcher extends BaseController {
     @Autowired
     private PasswordService passwordService;
 
@@ -47,7 +48,7 @@ public class Pages extends BaseController {
 
     /**
      * 邮件验证用户身份，之后跳转至密码修改页面
-     * 老版本的密码修改方法，修改页面难以分离，现已废除
+     * 老版本的密码修改方法，修改页面难以与后台分离，现已废除
      *
      * @param code 包含用户信息的加密字符串
      * @return 密码修改页面或错误页面

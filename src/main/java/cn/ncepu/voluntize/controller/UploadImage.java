@@ -46,8 +46,7 @@ public class UploadImage extends BaseController {
         try {
             file.transferTo(dest);
             logger.info("上传成功后的文件路径是：" + filePath + fileName);
-            return new HttpResult("uploadImage:success", "url:" + context.getAttribute("path")
-                    + "/image/" + fileName);
+            return new HttpResult("uploadImage:success", "url:" + "/image/" + fileName);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }

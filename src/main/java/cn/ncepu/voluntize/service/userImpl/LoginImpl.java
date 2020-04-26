@@ -32,8 +32,11 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         //判断用户身份
         Optional<Student> optional1 = studentRepository.findById(user.getId());
         Optional<Department> optional2 = departmentRepository.findById(user.getId());
-        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword()))
-            return new UserInfoVo(1, optional1.get(), null);
+        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())){
+            Student student = optional1.get();
+            student.setTotalDuration(recordRepository.getDuration(student.getStudentNum()));
+            return new UserInfoVo(1, student, null);
+        }
         if (optional2.isPresent()) if (user.getPassword().equals(optional2.get().getPassword()))
             return new UserInfoVo(2, null, optional2.get());
         return new UserInfoVo(-1, null, null);
@@ -47,10 +50,15 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         //判断用户身份
         Optional<Student> optional1 = studentRepository.findById(userId);
         Optional<Department> optional2 = departmentRepository.findById(userId);
-        return optional1.map(student -> new UserInfoVo(1, student, null))
-                .orElseGet(() -> optional2.map(department -> new UserInfoVo(2, null, department))
-                        .orElseGet(() -> new UserInfoVo(-1, null, null)));
+        return optional1.map(student -> {
+            student.setTotalDuration(recordRepository.getDuration(student.getStudentNum()));
+            return new UserInfoVo(1, student, null);
+        }).orElseGet(() -> optional2.map(department -> new UserInfoVo(2, null, department))
+                .orElseGet(() -> new UserInfoVo(-1, null, null)));
     }
+
+    @Autowired
+    private RecordRepository recordRepository;
 
     @Override
     public UserInfoVoAdmin findUser(String userId) {

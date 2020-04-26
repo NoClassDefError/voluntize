@@ -23,20 +23,15 @@ public class StartUpConfig implements CommandLineRunner {
     @Autowired
     private Environment environment;
 
-    @Value("${application.ip}")
-    private String ip;
-
     @Bean
-    public ScheduledExecutorService getScheduledExecutorService(){
+    public ScheduledExecutorService getScheduledExecutorService() {
         return Executors.newSingleThreadScheduledExecutor();
     }
 
     @Override
     public void run(String... args) {
-        String url = "http://"+ ip + ":"
-                + environment.getProperty("local.server.port") + environment.getProperty("server.servlet.context-path");
-        context.setAttribute("path", url);
+        String uri = environment.getProperty("server.servlet.context-path");
         context.setAttribute("autoSendActivity", false);
-        LoggerFactory.getLogger(this.getClass()).info("Setting server url to context:" + url);
+        LoggerFactory.getLogger(this.getClass()).info("Setting server uri to context:" + uri);
     }
 }

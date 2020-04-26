@@ -16,6 +16,9 @@ public interface RecordRepository extends JpaRepository<Record, String> {
     @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.statusId=?2 and r.volunteer.studentNum=?1 order by r.createTime")
     List<RecordVoStu> findByStudent(String studentId, int status);
 
+    @Query("select sum(r.period.equDuration) from Record r where r.volunteer.studentNum=?1 and r.statusId>=2 and r.auditLevel<>0")
+    Integer getDuration(String studentId);
+
     @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.volunteer.studentNum=?1 order by r.createTime")
     List<RecordVoStu> findByStudent(String studentId);
 

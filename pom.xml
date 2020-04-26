@@ -12,6 +12,7 @@
     <artifactId>voluntize</artifactId>
     <version>2020.4</version>
     <name>voluntize</name>
+    <packaging>jar</packaging>
     <description>A website for voluntary activities in NCEPU.</description>
 
     <properties>
@@ -76,22 +77,36 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--移除嵌入式tomcat插件-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
+        <!--添加servlet-api的依赖，使用war包部署这个必须要有-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.tomcat</groupId>-->
+<!--            <artifactId>tomcat-servlet-api</artifactId>-->
+<!--            <version>8.0.36</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-<!--        hibernate 二级缓存，尝试了没有什么效果，就不用了-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate</groupId>-->
-<!--            <artifactId>hibernate-jcache</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.ehcache</groupId>-->
-<!--            <artifactId>ehcache</artifactId>-->
-<!--        </dependency>-->
+        <!--        hibernate 二级缓存，尝试了没有什么效果，就不用了-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.hibernate</groupId>-->
+        <!--            <artifactId>hibernate-jcache</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.ehcache</groupId>-->
+        <!--            <artifactId>ehcache</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>

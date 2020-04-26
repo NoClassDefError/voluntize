@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +55,7 @@ public class ActivityImpl implements ActivityService {
     private HttpSession session;
 
     @Override
+    @CacheEvict(value = "activityService", allEntries = true)
     public String create2(CreateActivityVo activityVo) {
         Activity activity = new Activity();
         ActivityPeriod activityPeriod = new ActivityPeriod();
@@ -106,7 +106,7 @@ public class ActivityImpl implements ActivityService {
         return "success";
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public String update(ActivityVo activity) {
         if (activity.getId() != null) {
@@ -117,7 +117,7 @@ public class ActivityImpl implements ActivityService {
         return "not found";
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public String updateStation(ActivityStationVo activityStationVo) {
         if (activityStationVo.getId() == null)
@@ -128,7 +128,7 @@ public class ActivityImpl implements ActivityService {
                         .orElse(new ActivityStation()), activityStationVo)).getId();
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public String updatePeriod(ActivityPeriodVo activityPeriodVo) {
         if (activityPeriodVo.getId() == null)
@@ -182,20 +182,20 @@ public class ActivityImpl implements ActivityService {
         return period;
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public void deleteActivity(String id) {
 //        System.out.println(id);
         activityRepository.deleteById(id);
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public void deleteActivityPeriod(String id) {
         activityPeriodRepository.deleteById(id);
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public void deleteActivityStation(String id) {
         activityStationRepository.deleteById(id);
@@ -212,7 +212,8 @@ public class ActivityImpl implements ActivityService {
 //        Activity activity = new Activity();
 //        activity.setStatus(status[0]);
 //        Example<Activity> example = Example.of(activity);
-        System.out.println("ActivityImpl$findStatus:status==" + status.ordinal());
+        System.out.println("ActivityImpl$findStatus:status==" + status);
+        if (status == null) return activityRepository.findByStatus(pageable);
 //        return new MyPageImpl<>(page1.getContent(), page1.getPageable());
         return activityRepository.findByStatus(status.ordinal(), pageable);
     }
@@ -262,7 +263,7 @@ public class ActivityImpl implements ActivityService {
         return activityStationRepository.findById(stationId).map(ActivityStation::getParentActivity).orElse(null);
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public String startActivity(String activityId) {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -280,7 +281,7 @@ public class ActivityImpl implements ActivityService {
         } else return "not found";
     }
 
-    @CacheEvict(value = "activityService")
+    @CacheEvict(value = "activityService", allEntries = true)
     @Override
     public String changeStatus(String activityId, Activity.ActivityStatus status) {
         Activity activity = activityRepository.findById(activityId).orElse(null);

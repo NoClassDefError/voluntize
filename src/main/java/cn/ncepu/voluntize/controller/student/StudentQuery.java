@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.controller.student;
 
 import cn.ncepu.voluntize.controller.BaseController;
+import cn.ncepu.voluntize.entity.Activity;
 import cn.ncepu.voluntize.service.ActivityService;
 import cn.ncepu.voluntize.service.ParticipateService;
 import cn.ncepu.voluntize.vo.ActivityVo;
@@ -34,7 +35,7 @@ public class StudentQuery extends BaseController {
     @ResponseBody
     @Cacheable(value = "activityService", key = "'stuIdx:'+#p0")
     public List<ActivityVo> findIndexActivities(Integer page) {
-        return activityService.findStatusSpecial(page == null ? Pageable.unpaged() : PageRequest.of(page, 10));
+        return activityService.findStatus(Activity.ActivityStatus.SEND, page == null ? Pageable.unpaged() : PageRequest.of(page, 10));
     }
 
     /**
