@@ -142,13 +142,15 @@ public class ParticipateImpl implements ParticipateService {
         for (EvaluateVo evaluateVo : records) {
             Record record1 = recordRepository.findById(evaluateVo.getRecordId()).orElse(null);
             if (record1 != null) {
-                if (record1.getPeriod().getParent().getParentActivity().getStatusId() != 3) {
-                    return "评分失败，活动不在评分期";
-                }
+                if (record1.getPeriod().getParent().getParentActivity().getStatusId() != 3) return "评分失败，活动不在评分期";
                 record1.setStatus(Record.RecordStatus.EVALUATED);
                 record1.setAuditLevel(evaluateVo.getAuditLevel());
                 record1.setEvaluation(evaluateVo.getEvaluate());
                 recordRepository.save(record1);
+                //更新学生总时长
+                Integer a = recordRepository.getTheDuration(record1.getVolunteer().getStudentNum());
+                if (a == null) a = 0;
+                studentRepository.updateTotalDuration(record1.getVolunteer().getStudentNum(), a);
 //                if (flag) {
 //                    activityService.changeStatus(
 //                            record1.getPeriod().getParent().getParentActivity().getId(),

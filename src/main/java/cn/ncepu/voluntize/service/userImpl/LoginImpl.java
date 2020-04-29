@@ -32,9 +32,13 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         //判断用户身份
         Optional<Student> optional1 = studentRepository.findById(user.getId());
         Optional<Department> optional2 = departmentRepository.findById(user.getId());
-        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())){
+        if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())) {
             Student student = optional1.get();
-            student.setTotalDuration(recordRepository.getDuration(student.getStudentNum()));
+            Integer a = recordRepository.getTheDuration(student.getStudentNum());
+//            System.out.println(recordRepository.getTheDuration(student.getStudentNum()));
+            if (a == null) a = 0;
+            student.setTotalDuration(a);
+            studentRepository.updateTotalDuration(user.getId(), a);
             return new UserInfoVo(1, student, null);
         }
         if (optional2.isPresent()) if (user.getPassword().equals(optional2.get().getPassword()))
@@ -51,7 +55,11 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         Optional<Student> optional1 = studentRepository.findById(userId);
         Optional<Department> optional2 = departmentRepository.findById(userId);
         return optional1.map(student -> {
-            student.setTotalDuration(recordRepository.getDuration(student.getStudentNum()));
+            Integer a = recordRepository.getTheDuration(student.getStudentNum());
+            if (a == null) a = 0;
+            student.setTotalDuration(a);
+//            System.out.println(a);
+            studentRepository.updateTotalDuration(userId, a);
             return new UserInfoVo(1, student, null);
         }).orElseGet(() -> optional2.map(department -> new UserInfoVo(2, null, department))
                 .orElseGet(() -> new UserInfoVo(-1, null, null)));

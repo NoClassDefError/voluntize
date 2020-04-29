@@ -91,7 +91,8 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         if (departmentRepository.findById(voAdmin.getId()).isPresent())
             return "学生的id不能和部门的一样";
         String result;
-        if (studentRepository.findById(voAdmin.getId()).isPresent()) result = "---status:账号已存在，已修改其信息";
+        if (studentRepository.findById(voAdmin.getId()).isPresent())
+            return "账号已存在，要修改学生信息只能靠excel导入的方法了，甲方不让管理员使用此接口修改学生信息";
         else result = "---status:添加学生";
         Student student = new Student();
         student.setStudentNum(voAdmin.getId());
@@ -117,7 +118,8 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         if (studentRepository.findById(voAdmin.getId()).isPresent())
             return "部门的id不能和学生的一样";
         String result;
-        if (departmentRepository.findById(voAdmin.getId()).isPresent()) result = "---status:账号已存在，已修改其信息";
+        if (departmentRepository.findById(voAdmin.getId()).isPresent())
+            return "账号已存在，甲方不让管理员通过此接口修改其信息。若要修改已存在部门账号的信息，嗯，只能先把它删掉重建，抱歉。";
         else result = "---status:添加部门";
         Department department = new Department();
         department.setId(voAdmin.getId());

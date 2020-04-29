@@ -90,18 +90,19 @@ public class Login extends BaseController {
     @RequestMapping(value = "/publicKey", method = RequestMethod.GET)
     public String getPublicKey() {
         if (session.getAttribute("publicKey") != null) {
-            return RsaUtils.keyToString((Key) session.getAttribute("publicKey"));
+            return RsaUtils.keyToBase64String((Key) session.getAttribute("publicKey"));
         } else {
             KeyPair keyPair = RsaUtils.genKeyPair(1024);
             session.setAttribute("publicKey", keyPair.getPublic());
             session.setAttribute("privateKey", keyPair.getPrivate());
-            return RsaUtils.keyToString(keyPair.getPublic());
+            logger.info("gen:private :" + keyPair.getPrivate().toString());
+            return RsaUtils.keyToBase64String(keyPair.getPublic());
         }
     }
 
     @RequestMapping(value = "/unlock")
     @ResponseBody
-    public HttpResult unlock(String checkCode){
+    public HttpResult unlock(String checkCode) {
         // 获得验证码对象
         Object cko = session.getAttribute("simpleCaptcha");
         if (cko == null) return new HttpResult("unlock:请输入验证码！");

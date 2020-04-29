@@ -51,14 +51,18 @@ public class MyInterceptor implements HandlerInterceptor {
         if (session.getAttribute("UserCategory") == null || "".equals(session.getAttribute("UserCategory"))) {
             category = "Visitor";
             logger.info("This is a visitor.");
-            response.addCookie(new Cookie("Is-Visitor", "true"));
+            Cookie isVisitor = new Cookie("Is-Visitor", "true");
+            isVisitor.setPath("/");
+            response.addCookie(isVisitor);
             session.setAttribute("UserCategory", category);
 //            if(path.contains("login")||path.contains("verify")){
 //                session.setAttribute("UserCategory",category);
 //            }else return false;
         } else {
             category = (String) session.getAttribute("UserCategory");
-            response.addCookie(new Cookie("Is-Visitor", "false"));
+            Cookie isVisitor = new Cookie("Is-Visitor", "false");
+            isVisitor.setPath("/");
+            response.addCookie(isVisitor);
             logger.info("This is a " + category);
         }
         if ((path.contains("student")) && !"Student".equals(category)) {

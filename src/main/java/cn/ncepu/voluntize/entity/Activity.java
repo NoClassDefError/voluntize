@@ -129,6 +129,7 @@ public class Activity {
      *     <li>SEND 开始报名</li>
      *     <li>STARTED 录用并开始活动</li>
      *     <li>FINISHED 正在评价</li>
+     *     <li>NOT_PASS 没有通过</li>
      *     <li>DEAD 结束</li>
      * </ul>
      * 共4个阶段

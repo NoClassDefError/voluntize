@@ -39,12 +39,12 @@ public class ParticipateTest {
     public void setUp() throws Exception {
         mock = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         //要先登录学生账号
-        String login = JSONObject.toJSONString(new LoginVo("002", "234567"));
-        RequestBuilder builder = MockMvcRequestBuilders.post("localhost:8888/volunteer/login")
-                .contentType(MediaType.APPLICATION_JSON).content(login);
-        mock.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andReturn();
+//        String login = JSONObject.toJSONString(new LoginVo("002", "234567"));
+//        RequestBuilder builder = MockMvcRequestBuilders.post("localhost:8888/volunteer/login")
+//                .contentType(MediaType.APPLICATION_JSON).content(login);
+//        mock.perform(builder).andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andReturn();
     }
 
     //    @Test

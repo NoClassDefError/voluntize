@@ -1,17 +1,33 @@
-# 华北电力大学志愿活动系统
+# Voluntize-华北电力大学公益劳动系统
 ![img](./readmeSrc/voluntize.png)
+
+## 简介
+在去年学期末，我校教务处与我们签订劳动合同，开发公益劳动网站。
+这样可以使每学期学生的公益劳动管理信息化，自动化。
+
 ## 软件概要设计
-本软件使用前后端分离的设计模式。不使用jsp，使用html网页中的js脚本进行前后端通信。
+软件后台架构为 spring boot + spring data jpa/redis + spring mvc，内嵌tomcat服务器独立运行。
+前端使用vue，运行于IIS服务器上。
+
+本软件使用前后端半分离的设计模式。不使用jsp，使用前端js脚本进行页面渲染。
+
+    传统java web开发步骤
+    1前后端根据需求商议业务逻辑
+    2后台设计好数据表，写好数据访问层和服务层。同时前端写好html页面
+    3后台将前端的html页面套成jsp或thymeleaf
+    4测试上线
     
-    在前后端分离模式下，如何解决模型与页面的绑定问题？
-    后台除了主页以外，不再负责控制页面的跳转与返回。页面的跳转皆有前端js完成。
+    前后端分离开发步骤
+    1前后端根据需求商议业务逻辑，拟定接口文档
+    2前后端根据接口文档分别开发，使用json相互通信
+    3前后端对接测试
 
-本软件使用maven管理依赖，tomcat作为web服务器。
+这里是voluntize的后台spring boot软件，本软件使用maven管理依赖。
 
-软件后台架构为 spring boot + spring data jpa + spring mvc。
-
-后台采用经典的分层结构，依次分为视图控制器controller，控制器操作的对象vo，
+后台采用经典的分层结构，依次分为拦截器interceptor,视图控制器controller，控制器操作的对象vo，
 持久实体类entity，数据库访问层repository，业务逻辑层service。
+
+![img](./readmeSrc/fenli.png)
 
 ## 软件详细设计
 ### 实体类设计
@@ -20,12 +36,14 @@
 
 志愿活动生命周期：
 <ul>
-<li>CONFIRMING 部门已发送等待审核</li>
-<li>SEND 审核并修改</li>
-<li>STARTED 录用并开始活动</li>
-<li>FINISHED 结束并评价</li>
+     <li>CONFIRMING 部门已发送等待审核</li>
+     <li>SEND 开始报名</li>
+     <li>STARTED 录用并开始活动</li>
+     <li>FINISHED 正在评价</li>
+     <li>NOT_PASS 没有通过</li>
+     <li>DEAD 结束</li>
 </ul>
-共5个阶段。
+共6个阶段。
 
 志愿活动的报名十分复杂，结合具体案例分析，例如，在2019级迎新活动中，有多个
 岗位，同一个岗位也可以分为不同地点，与时段。最终学生按照单一时间段报名。
@@ -73,41 +91,41 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
 
 ![img](./readmeSrc/dbo.png)
 
-### 业务逻辑设计
-#### 登录 
-
-设计UserVo类，用于接收用户填写信息。在业务逻辑中自动判断用户身份，跳转向不同主页。
-
-#### 账户信息修改
-
-由于密码修改的特殊逻辑，这里不修改密码，只修改其他信息。
-
-#### 密码修改
-
-在点击*找回密码邮件*中的超链接之后，或者在*修改密码页面*输入原来密码之后，
-就可以直接修改密码。
-
-找回密码邮件中的超链接应包含加密的用户信息，在跳转之后进行解码判断是什么用户， 
-从而修改密码。
-#### 添加志愿活动
-
-志愿活动的一次性添加
-
-志愿活动按照ActivityPeriod进行报名，但增删改均以Activity为大类。而志愿活动的
-查询既可以通过关联查询获得。
-
-志愿活动的修改与删除
-
 ### web作用域限定
-#### session作用域
+
+#### cookies作用域
+
+    JSESSIONID httpOnly=true path='/'
+    Is-Visitor path='/'
+
+#### session作用域 时间3600s
 
     UserId 学生或部门的id
     UserCategory "Student" "Department" "Admin"
+    publicKey 公钥
+    privateKey 私钥
+    DesKey 用于邮件验证
+    locked 会话锁
+    
 
 #### applicationContext作用域
 
     path 服务器地址
     autoSendActivity 活动是否要经过管理员审核
+
+### redis缓存
+    
+#### 序列化对象
+只缓存Vo，不缓存相互依赖的实体类
+
+    recordService缓存 RecordVoDpm RecordVoDpStu
+    activityService缓存 ActivityResponseVo
+    
+#### DDos防刷 
+可设置过期时间
+
+    key 访问者ip 
+    value 访问次数
 
 ## 前后端通信设计
 ### 拦截器
@@ -135,60 +153,46 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
     }
 ### 通用接口
 
-#### 登录，获取用户部分信息    [2020.2.6 修改]
+#### 获取公钥
+http://192.168.43.1:8888/volunteer/publicKey
+rsa加密公钥
+
+发送 get 无内容
+
+返回 publickey
+
+#### 登录，获取用户部分信息
 http://192.168.43.1:8888/volunteer/login
 
 发送 post application/json 
 
     id  //用户名
     password //密码
-    示例：{"id":"12345","password":"12345"}
+    encrypted //为false则密码不加密，否则要加密
+    示例：{"id":"12345","password":"12345","encrypted":"false"}
+    {"id":"12345","password":"cAWANkrwUbSoN2944FpPZPAOsK7B3Slzx6wID/JjzOzsAy+QVe3ab7RwyKLH9Dqo9ax61E...."}
+    
 返回 UserInfo转成的json
-    示例1：
-    {
-        "name"："教务处"//部门名
-        "manager":"李华"//负责人姓名
-        "e-mail":"12345@123.com"//负责人邮箱
-        "phone_num":123456798749//部门负责人联系电话
-    }
-    示例2：
-    {
-        “id”：120181080701//学号
-        “school”:"控计学院"//学院
-        “major”:"软件工程"//专业
-        "grade"："2018级"//年级
-        “class”:"软件1802"//班级
-        “name”："邵博深"//学生姓名
-        “sex”:“男”//性别
-        “phone_num”：15311780285//手机号
-    }
 
-前端应根据其中的userCategory属性跳转至
+    示例：
     {
-        "userCategory":1,合适的页面：-1-登录失败 0-管理员 1-学生 2-部门
-```
-        "student":{"studentNum":"120171020201",
-        ... 学生其他信息
-        },"department":null
+    "userCategory": 1,
+    "student": {
+        "studentNum": "002",
+        "idNum": null,
+        "gender": "男",
+        "name": "测试2",
+        "major": "核工程",
+        "grade": null,
+        "classs": null,
+        "phoneNum": "18810380138",
+        "email": "1003472560@qq.com",
+        "school": null,
+        "totalDuration": 44,
+        "profiles": []
+    },
+    "department": null
     }
-    {
-    "userCategory": 2,
-    "student": null,
-    "department": {
-        "id": "6177001",
-        "name": "图书馆（主）",
-        "phoneNum": null,
-        "email": null,
-        "manager": null,
-        "images": [
-            {
-                "name": null,
-                "url": "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=false&word=%E5%A4%B4%E5%83%8F&step_word=&hs=0&pn=36&spn=0&di=224840&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=4163580791%2C1286387910&os=1384471263%2C3542048267&simid=0%2C0&adpicid=0&lpn=0&ln=3718&fr=&fmq=1579421350054_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=head&bdtype=0&oriquery=&objurl=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201610%2F15%2F20161015073047_nTMaz.thumb.700_0.jpeg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3B17tpwg2_z%26e3Bv54AzdH3Fks52AzdH3F%3Ft1%3D08888ambb&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined"
-            }
-        ]
-    }
-    }
-```
 
 #### 登出
 http://192.168.43.1:8888/volunteer/logout
@@ -1151,14 +1155,18 @@ mysqldump导出数据库，或者直接复制数据文件）
 
 ### 加密问题
 
-### Page对象反序列化问题
+前端发来的加密信息是base64编码而不是Java默认的unicode编码，要先解码成byte[]
+
+    Base64.getDecoder().decode()
+
+### Page对象，Optional对象，实体类对象序列化与反序列化问题
 
 Page对象要被序列化缓存在redis中，但在从redis取出时会无法反序列化，
 因为Page对象没有空构造器。
 
 https://stackoverflow.com/questions/52490399/spring-boot-page-deserialization-pageimpl-no-constructor?noredirect=1&lq=1
 
-#### 数据库密码加密
+### 数据库密码加密
  F:\maven\repository\com\alibaba\druid\1.1.10> java -cp druid-1.1.10.jar com.alibaba.druid.filter.config.ConfigTools 123456
 
 privateKey:MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAnsU5HQBR8H7QhawjHu4rYOQ9mqCzdbN93+ChLRLsOZK9JZhhSw8Q7hyqw4LrK7Uisfjb1PVeyAQxh2rKEpA/CQIDAQABAkAa+6XDOgSy/LpvnVuyrAOPSfr2Ro15WXHxFHoP8QFYn0RqI819LkO4wKbhA43Hu2g6yesIrGE+85/QY62CFbUBAiEA6Rd9P+A8dJxOnsFO3wugIr/qWCne/sze4qJNjdCFznECIQCuX9VbxmXrdFGeMmoiY/8emik567uia9dT2/pkt0d2GQIhANpe7TJoi3rb7TQB+jgwFgg4L/4EzCt+F9nPIEUZ9CGhAiEAoqCaWmeksn3fiQ030y8zxpS8klp6uradMobc9oXAzjECIGTQ76BLr7U1aLWdzET+/VuIagfiflxpCPslFQDnd4oX
@@ -1166,26 +1174,3 @@ privateKey:MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAnsU5HQBR8H7QhawjHu4rY
 publicKey:MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ7FOR0AUfB+0IWsIx7uK2DkPZqgs3Wzfd/goS0S7DmSvSWYYUsPEO4cqsOC6yu1IrH429T1XsgEMYdqyhKQPwkCAwEAAQ==
 
 password:lW2Y36sHhSDFz5QtLsCT57Q/sU3uayv2mKL+DWgk/nwCR3YVJz2lrndolv8XHv0RupBLlumSpkYyEVC4v5pO6A==
-
-## 服务器运维记录
-
-### 2020.1.11 
-#1 13：41 安装了jdk，在C:\Program Files\Java，已配置环境变量。
-#2 14：38 安装了mysql server，在C:\Program Files\MySQL，用户名root，密码123456，端口3306。
-#3 14：38 创建了项目文件夹，在桌面，voluntize
-#4 21：02 将项目文件编译后加入服务器，在voluntize\voluntize_jar，项目启动命令：java -jar voluntize.jar
-#5 21：06 为了能解压jar包，安装winrar，在C:\Program Files\WinRAR
-#6 21：21 远程连接mysql失败，但本地客户端可以连接。经检验，服务器可以ping通，但telnet 3306端口无响应，猜测是防火墙问题
-#7 21：23 mysql 建库，create schema voluntize;
-
-### 2020.1.12
-#8 00：18 修复bug: 项目软件jdbc连接不上mysql；java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES),原因：直接修改jar包中的properties内容时，空格丢失。
-#9 00：32 项目部署成功，使用/test接口远程测试其相应，访问无响应，猜测是防火墙问题
-#10 00：40 试图将springboot项目注册成为windows后台服务，准备编写windows服务安装程序
-#11 01：24 配置服务器防火墙，发现防火墙早已关闭，修改数据库root用户权限：update user set host='%' where user='root';发现仍然不能远程连接，资料显示需要在阿里云服务器控制台中设置端口规则
-
-### 2020.1.19
-#12 00：41 更新数据表结构与项目
-
-### 2020.1.28
-#13 01：53 对表内容补充了部分注释 

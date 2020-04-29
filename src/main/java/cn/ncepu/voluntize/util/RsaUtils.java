@@ -2,6 +2,8 @@ package cn.ncepu.voluntize.util;
 
 import javax.crypto.Cipher;
 import java.security.*;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 public class RsaUtils {
@@ -12,19 +14,35 @@ public class RsaUtils {
 
         //获取公钥，并以base64格式打印出来
         PublicKey publicKey = keyPair.getPublic();
-        System.out.println("公钥：" + keyToString(publicKey));
+        String publicKeyStr = keyToBase64String(publicKey);
+        System.out.println("公钥：" + publicKeyStr);
+
+        //假设此时publicKey经过网络传输给了前端
+
+        //下面模拟前端解码Base64格式的publicKeyStr字符串
+        KeyFactory keyFactory = KeyFactory.getInstance("rsa");
+//        byte[] publicKeyByte =  publicKey.getEncoded();
+        byte[] publicKeyByte = Base64.getDecoder().decode(publicKeyStr);
+        PublicKey publicKey2 = keyFactory.generatePublic(new X509EncodedKeySpec(publicKeyByte));
+
+//        System.out.println(keyToBase64String(publicKey2));
+
+        //前端公钥加密
+        String data = "123456";
+        byte[] encryptedBytes = encrypt(data.getBytes(), publicKey2);
+
+//        System.out.println("加密后：" + new String(encryptedBytes));
+        String encry = new String(Base64.getEncoder().encode(encryptedBytes));
+        System.out.println("加密后：" + encry);
 
         //获取私钥，并以base64格式打印出来
         PrivateKey privateKey = keyPair.getPrivate();
-        System.out.println("私钥：" + keyToString(privateKey));
+        System.out.println("私钥：" + keyToBase64String(privateKey));
 
-        //公钥加密
-        String data = "hello world";
-        byte[] encryptedBytes = encrypt(data.getBytes(), publicKey);
-        System.out.println("加密后：" + new String(encryptedBytes));
+        //加密结果传回后台，后台使用Base64解码
 
         //私钥解密
-        byte[] decryptedBytes = decrypt(encryptedBytes, privateKey);
+        byte[] decryptedBytes = decrypt(Base64.getDecoder().decode(encry), privateKey);
         System.out.println("解密后：" + new String(decryptedBytes));
     }
 
@@ -54,7 +72,10 @@ public class RsaUtils {
         return cipher.doFinal(content);
     }
 
-    public static String keyToString(Key key){
+    /**
+     * 这个方法将key.getEncoded()转成String，它的返回值不能使用String.getBytes()方法解码。
+     */
+    public static String keyToBase64String(Key key){
         return new String(Base64.getEncoder().encode(key.getEncoded()));
     }
 }
