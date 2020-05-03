@@ -1,16 +1,19 @@
 package cn.ncepu.voluntize.controller;
 
+import cn.ncepu.voluntize.config.CategoryInterceptor;
+import cn.ncepu.voluntize.service.DDosRedisService;
+import cn.ncepu.voluntize.service.LoginService;
+import cn.ncepu.voluntize.util.RsaUtils;
 import cn.ncepu.voluntize.vo.requestVo.LoginVo;
 import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
 import cn.ncepu.voluntize.vo.responseVo.HttpResult;
 import cn.ncepu.voluntize.vo.responseVo.UserInfoVo;
-import cn.ncepu.voluntize.service.LoginService;
-import cn.ncepu.voluntize.util.RsaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Key;
 import java.security.KeyPair;
@@ -34,12 +37,22 @@ public class Login extends BaseController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public UserInfoVo login(@RequestBody LoginVo loginVo) {
+    public UserInfoVo login(HttpServletResponse response, @RequestBody LoginVo loginVo) {
         loginVo.decrypt((PrivateKey) session.getAttribute("privateKey"));
         UserInfoVo userInfoVo = service.login(loginVo);
+        //在这一回合立即set isVisitor
+//        Cookie isVisitor;
+//        if (userInfoVo.getUserCategory() == -1) isVisitor = new Cookie("Is-Visitor", "true");
+//        else isVisitor = new Cookie("Is-Visitor", "false");
+//        isVisitor.setPath("/");
+//        response.addCookie(isVisitor);
+
         session.setAttribute("UserId", loginVo.getId());
         String userCategory = "";
         switch (userInfoVo.userCategory) {
+            case -1:
+                userCategory = "";
+                break;
             case 0:
                 userCategory = "Admin";
                 break;
@@ -69,9 +82,12 @@ public class Login extends BaseController {
      * @return 主页未登录页面
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public String logout() {
+    public String logout(HttpServletResponse response) {
         session.removeAttribute("UserId");
         session.removeAttribute("UserCategory");
+//        Cookie isVisitor = new Cookie("Is-Visitor", "true");
+//        isVisitor.setPath("/");
+//        response.addCookie(isVisitor);
         logger.info("logout");
         return "index";
     }
@@ -100,9 +116,12 @@ public class Login extends BaseController {
         }
     }
 
+    @Autowired
+    DDosRedisService dDosRedisService;
+
     @RequestMapping(value = "/unlock")
     @ResponseBody
-    public HttpResult unlock(String checkCode) {
+    public HttpResult unlock(HttpServletRequest request,@RequestParam String checkCode) {
         // 获得验证码对象
         Object cko = session.getAttribute("simpleCaptcha");
         if (cko == null) return new HttpResult("unlock:请输入验证码！");
@@ -116,6 +135,11 @@ public class Login extends BaseController {
         else if ((now.getTime() - codeTime) / 1000 / 60 > 1) return new HttpResult("unlock:验证码已失效，请重新输入！");
         else {
             session.setAttribute("locked", false);
+            String ip = CategoryInterceptor.getRemoteIP(request);
+            String userAgentAndIP = request.getHeader("User-Agent") + " " + ip;
+            session.setAttribute("UserAgentAndIP", userAgentAndIP);
+            logger.info("UserAgent&IP reset:" + userAgentAndIP);
+            dDosRedisService.remove(ip);
             return new HttpResult("unlock:success");
         }
     }

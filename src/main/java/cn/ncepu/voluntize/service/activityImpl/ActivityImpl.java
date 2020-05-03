@@ -9,8 +9,11 @@ import cn.ncepu.voluntize.vo.ActivityVo;
 import cn.ncepu.voluntize.vo.ImageVo;
 import cn.ncepu.voluntize.vo.requestVo.CreateActivityVo;
 import cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +58,12 @@ public class ActivityImpl implements ActivityService {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Value("${activity.delay}")
+    private int delay = 72;
+
     @Override
     @CacheEvict(value = "activityService", allEntries = true)
     public String create2(CreateActivityVo activityVo) {
@@ -82,9 +92,17 @@ public class ActivityImpl implements ActivityService {
         Runnable task = () -> {
             activity.setStatus(Activity.ActivityStatus.SEND);
             activityRepository.save(activity);
-            LoggerFactory.getLogger(this.getClass()).info("Task executed, starting activity. Id=" + activity.getId());
+            Logger logger = LoggerFactory.getLogger(this.getClass());
+            logger.info("Task executed, starting activity. Id=" + activity.getId());
+            //此时需要再次清除缓存，手动
+            try {
+                Objects.requireNonNull(cacheManager.getCache("activityService")).clear();
+            } catch (NullPointerException e) {
+                logger.info("Cache evict error");
+            }
+            logger.info("Cache evicted");
         };
-        scheduledExecutorService.schedule(task, 3, TimeUnit.DAYS);
+        scheduledExecutorService.schedule(task, delay, TimeUnit.HOURS);
         Activity ac = activityRepository.save(activity);
 
         activityStation.setLinkman(activityVo.getLinkman());
@@ -104,6 +122,16 @@ public class ActivityImpl implements ActivityService {
 
         activityPeriodRepository.save(activityPeriod);
         return "success";
+    }
+
+
+    /**
+     * 在定时器中调用这个方法清理不顶用，注解未被执行
+     */
+    @CacheEvict(value = "activityService", allEntries = true)
+    @Deprecated
+    public void evictCache(Logger logger) {
+        logger.info("cache evicted");
     }
 
     @CacheEvict(value = "activityService", allEntries = true)

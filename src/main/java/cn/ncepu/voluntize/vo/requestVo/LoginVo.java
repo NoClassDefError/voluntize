@@ -30,11 +30,11 @@ public class LoginVo {
                 logger.info("decrypt: " + RsaUtils.keyToBase64String(privateKey) + " " + this.password);
             } else logger.warn("The front end did not encrypt the password.");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Encrypt failed");
         }
     }
 
     private String id;
     private String password;
-    private String encrypted;
+    private String encrypted="";
 }

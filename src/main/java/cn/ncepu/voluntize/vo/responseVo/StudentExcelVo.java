@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class StudentExcelVo {
     private String studentNum;
-    private String idNum;
     private String gender;
     private String name;
     private String major;
@@ -22,7 +21,6 @@ public class StudentExcelVo {
 
     public StudentExcelVo(Student student) {
         studentNum = student.getStudentNum();
-//        idNum = student.getIdNum();
         name = student.getName();
         major = student.getMajor();
         grade = student.getGrade();

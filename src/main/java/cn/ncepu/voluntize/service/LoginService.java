@@ -19,7 +19,7 @@ public interface LoginService {
 
     UserInfoVoAdmin findUser(String userId);
 
-    List<StudentExcelVo> findAllStu();
+    List<StudentExcelVo> findStuExcel(Integer grade);
 
-    List<DepartmentExcelVo> findAllDep();
+    List<DepartmentExcelVo> findDepExcel();
 }

@@ -17,21 +17,21 @@ import java.util.List;
  */
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, String> {
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 order by a.createTime desc")
     List<ActivityResponseVo> findByDepartmentId(String departmentId, Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 and a.statusId=?2 order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 and a.statusId=?2 order by a.createTime desc")
     List<ActivityResponseVo> findByDepartmentId(String departmentId, int status, Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 and a.statusId<4 order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.ActivityResponseVo(a) from Activity a where a.department.id=?1 and a.statusId<4 order by a.createTime desc")
     List<ActivityResponseVo> findByDepartmentIdSpecial(String departmentId, Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=:status order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=:status order by a.createTime desc")
     List<ActivityVo> findByStatus(@Param("status") int status, Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=1 or a.statusId=2 order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId=1 or a.statusId=2 order by a.createTime desc")
     List<ActivityVo> findByStatus(Pageable pageable);
 
-    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId<>?1 order by a.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.ActivityVo(a) from Activity a where a.statusId<>?1 order by a.createTime desc")
     List<ActivityVo> notToFindByStatus(int notStatus, Pageable pageable);
 }

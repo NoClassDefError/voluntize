@@ -78,14 +78,13 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
     }
 
     @Override
-    public List<StudentExcelVo> findAllStu() {
-        List<StudentExcelVo> studentVos = new ArrayList<>();
-        for (Student student : studentRepository.findAll()) studentVos.add(new StudentExcelVo(student));
-        return studentVos;
+    public List<StudentExcelVo> findStuExcel(Integer grade) {
+        if (grade == null) return studentRepository.findExcelAll();
+        else return studentRepository.findExcelByGrade(grade);
     }
 
     @Override
-    public List<DepartmentExcelVo> findAllDep() {
+    public List<DepartmentExcelVo> findDepExcel() {
         return departmentRepository.getDepartmentExcelVo();
     }
 }

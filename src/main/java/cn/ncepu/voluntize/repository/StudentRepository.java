@@ -1,6 +1,7 @@
 package cn.ncepu.voluntize.repository;
 
 import cn.ncepu.voluntize.entity.Student;
+import cn.ncepu.voluntize.vo.responseVo.StudentExcelVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,8 +19,11 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,String> {
 
-    @Override
-    List<Student> findAll();
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.StudentExcelVo(s) from Student s where s.grade=?1")
+    List<StudentExcelVo> findExcelByGrade(int grade);
+
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.StudentExcelVo(s) from Student s ")
+    List<StudentExcelVo> findExcelAll();
 
     @Transactional
     @Modifying

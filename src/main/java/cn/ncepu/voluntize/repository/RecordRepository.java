@@ -13,19 +13,19 @@ import java.util.List;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, String> {
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.statusId=?2 and r.volunteer.studentNum=?1 order by r.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.statusId=?2 and r.volunteer.studentNum=?1 order by r.createTime desc")
     List<RecordVoStu> findByStudent(String studentId, int status);
 
     @Query("select sum(r.period.equDuration) from Record r where r.volunteer.studentNum=?1 and r.statusId>=2 and r.auditLevel<>0")
     Integer getTheDuration(String studentId);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.volunteer.studentNum=?1 order by r.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoStu(r) from Record r where r.volunteer.studentNum=?1 order by r.createTime desc")
     List<RecordVoStu> findByStudent(String studentId);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 and r.statusId=?2 order by r.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 and r.statusId=?2 order by r.createTime desc")
     List<RecordVoDpm> findByPeriod(String period, int status);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 order by r.createTime")
+    @Query("select new cn.ncepu.voluntize.vo.responseVo.RecordVoDpm(r) from Record r where r.period.id=?1 order by r.createTime desc")
     List<RecordVoDpm> findByPeriod(String period);
 
     @Query("select count(r) from Record r where r.period.id=?1 and r.isPassed=true")

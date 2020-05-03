@@ -106,6 +106,9 @@ Image实体类用于储存图片，可以是Student或Department的头像，也�
     privateKey 私钥
     DesKey 用于邮件验证
     locked 会话锁
+    simpleCaptcha 验证码
+    codeTime 验证码有效时间
+    UserAgentAndIP 用户浏览器和IP地址
     
 
 #### applicationContext作用域

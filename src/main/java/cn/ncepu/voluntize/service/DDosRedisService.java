@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * set为-1表示IP被锁定
+ */
 @Service
-public class RedisService {
+public class DDosRedisService {
 
     @Autowired
     private RedisTemplate<String, Integer> redisTemplate;
@@ -29,5 +32,13 @@ public class RedisService {
             redisTemplate.opsForValue().set(key, i);
             redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
         }
+    }
+
+    public void set(String key) {
+        redisTemplate.opsForValue().set(key, -1);
+    }
+
+    public void remove(String key) {
+        redisTemplate.delete(key);
     }
 }

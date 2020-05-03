@@ -18,13 +18,13 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 
 @Component
-public class MyInterceptor implements HandlerInterceptor {
+public class CategoryInterceptor implements HandlerInterceptor {
 
     /**
      * 用于拦截部分请求进行权限验证
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws ServletException, IOException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURI();
         String category;
         HttpSession session = request.getSession();
@@ -33,23 +33,9 @@ public class MyInterceptor implements HandlerInterceptor {
         logger.info("Request content type: " + request.getContentType());
 //        logger.info("Request content" );
         logger.info("Session id = " + session.getId());
-        //经过反向代理，ip地址可能发生改变，于是不再判断ip地址
-//        String userAgentAndIP = request.getHeader("User-Agent") + " " + request.getRemoteAddr();
-        String userAgentAndIP = request.getHeader("User-Agent") + " " + getRemoteIP(request);
-        if (session.getAttribute("UserAgentAndIP") == null) {
-            session.setAttribute("UserAgentAndIP", userAgentAndIP);
-            logger.info("UserAgent&IP set:" + userAgentAndIP);
-        } else if (!session.getAttribute("UserAgentAndIP").equals(userAgentAndIP)) {
-            logger.info("Danger! UserAgent&IP was " + session.getAttribute("UserAgentAndIP") + "; Yet now " +
-                    userAgentAndIP);
-            sendJsonMessage(response, new HttpResult("intercept:1", "message:你的IP地址或浏览器种类刚刚发生了突变，但会话却没有变，" +
-                    "为了防止黑客劫持会话，已将会话锁定。请填写验证码以解锁会话。"));
-//            dispatchToError(request, response, "你的IP地址或浏览器种类刚刚发生了突变，但会话却没有变，" +
-//                    "为了防止黑客劫持会话，请换个浏览器（重建会话），或者在半小时后重新访问本网站。");
-            return false;
-        }
+
         if (session.getAttribute("UserCategory") == null || "".equals(session.getAttribute("UserCategory"))) {
-            category = "Visitor";
+            category = "";
             logger.info("This is a visitor.");
             Cookie isVisitor = new Cookie("Is-Visitor", "true");
             isVisitor.setPath("/");
@@ -103,9 +89,29 @@ public class MyInterceptor implements HandlerInterceptor {
         response.sendRedirect(request.getContextPath() + "/errors?message=" + s);
     }
 
-    static String getRemoteIP(HttpServletRequest request) {
-        if (request.getHeader("x-forwarded-for") == null) return request.getRemoteAddr();
-        return request.getHeader("x-forwarded-for").split(",")[0].split(":")[0];
+    public static String getRemoteIP(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        if (ip.equals("127.0.0.1") || ip.equals("192.168.1.110"))
+            ip = processIP(request.getHeader("x-forwarded-for"));
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+            ip = processIP(request.getHeader("Proxy-Client-IP"));
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+            ip = processIP(request.getHeader("WL-Proxy-Client-IP"));
+        return ip;
+    }
+
+    public static String processIP(String xff) {
+        int begin = 0, end = 0;
+        for (int i = 0; i < xff.length(); i++) {
+            if (xff.charAt(i) == '[') begin = i;
+            if (xff.charAt(i) == ']') {
+                end = i;
+                break;
+            }
+        }
+        if (end == 0) return xff;
+        return xff.substring(begin + 1, end);
+//        return xff.split("^\\[((:)|(\\d))*\\]")[0];
     }
 
     /**
