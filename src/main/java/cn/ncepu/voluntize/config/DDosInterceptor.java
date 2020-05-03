@@ -24,6 +24,9 @@ public class DDosInterceptor extends HandlerInterceptorAdapter {
     @Value("${fangshua.timeout}")
     private int timeout;
 
+    @Value("${frontend.ip}")
+    private String frontend;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //判断请求是否属于方法的请求
@@ -36,7 +39,7 @@ public class DDosInterceptor extends HandlerInterceptorAdapter {
                     return false;
                 }
             String key = CategoryInterceptor.getRemoteIP(request);//通常是以用户IP为键
-            if (key.equals("0:0:0:0:0:0:0:1")) key = request.getSession().getId();
+            if (key.equals(frontend)) key = request.getSession().getId();
             //如果是本地（前端）访问的此接口，则以sessionId为键
             Integer value = DDosRedisService.get(key);
             logger.info(key + " " + value);
