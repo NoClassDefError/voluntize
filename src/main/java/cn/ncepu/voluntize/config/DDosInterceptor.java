@@ -35,7 +35,9 @@ public class DDosInterceptor extends HandlerInterceptorAdapter {
                             "message:会话被锁定，请填写验证码解锁会话"));
                     return false;
                 }
-            String key = CategoryInterceptor.getRemoteIP(request);
+            String key = CategoryInterceptor.getRemoteIP(request);//通常是以用户IP为键
+            if (key.equals("0:0:0:0:0:0:0:1")) key = request.getSession().getId();
+            //如果是本地（前端）访问的此接口，则以sessionId为键
             Integer value = DDosRedisService.get(key);
             logger.info(key + " " + value);
             if (value != null && value == -1) {
@@ -46,7 +48,7 @@ public class DDosInterceptor extends HandlerInterceptorAdapter {
             //从redis中获取用户访问的次数
 //            System.out.println("service" + redisService);
             Integer count = DDosRedisService.get(key);
-            logger.info("key=" + key + "count=" + count);
+            logger.info("key=" + key + " count=" + count);
             if (count == null) DDosRedisService.set(key, timeout);
             else if (count < maxCount) DDosRedisService.incur(key, timeout);
             else {

@@ -33,6 +33,9 @@ public class IndexDispatcher extends BaseController {
     @Value("${frontend.login}")
     private String login;
 
+    /**
+     * 不建议通过后台访问主页
+     */
     @RequestMapping(value = "/")
     public void index(HttpServletResponse response) throws IOException {
         response.sendRedirect(login);
