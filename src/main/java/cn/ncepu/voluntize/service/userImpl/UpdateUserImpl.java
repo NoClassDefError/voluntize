@@ -156,8 +156,8 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
             return "学生账户" + id + "已删除";
         }
         if (departmentRepository.findById(id).isPresent()) {
-            departmentRepository.deleteById(id);
-            return "部门账户" + id + "已删除";
+            departmentRepository.closeDepartment(id);
+            return "部门账户" + id + "已注销";
         }
         return "没有找到这个账户";
     }

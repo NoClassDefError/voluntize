@@ -43,6 +43,10 @@ public class Department {
     @Column(name = "manager", columnDefinition = "varchar(255) comment '管理者姓名'")
     private String manager;
 
+    @Basic
+    @Column(name = "is_deleted", columnDefinition = "tinyint(1) default 0 not null")
+    private boolean isDeleted = false;
+
     /**
      * 部门图册
      */
