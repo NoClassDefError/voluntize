@@ -31,4 +31,7 @@ public interface DepartmentRepository extends JpaRepository<Department, String> 
     @Override
     @Query("select d from Department d where d.id=?1 and d.isDeleted=false")
     Optional<Department> findById(String id);
+
+    @Query("select d from Department d where d.id=?1 and d.isDeleted=true")
+    Optional<Department> findByIdCanceled(String id);
 }

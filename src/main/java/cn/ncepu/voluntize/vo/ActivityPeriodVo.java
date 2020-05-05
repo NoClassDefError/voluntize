@@ -41,9 +41,9 @@ public class ActivityPeriodVo {
         //在此查找该活动的报名记录
         this.amountSigned = period.getRecords().size();
 //        amountPassed = recordRepository.findPassedByPeriod(period.getId()).size();
-//        period.getRecords().forEach(record -> {
-//            if (record.isPassed()) amountPassed++;
-//        });
+        period.getRecords().forEach(record -> {
+            if (record.isPassed()) amountPassed++;
+        });
     }
 
     public ActivityPeriodVo(){}

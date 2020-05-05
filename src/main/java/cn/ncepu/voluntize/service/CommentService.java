@@ -9,6 +9,7 @@ public interface CommentService {
 
     void delete(String commentId);
 
-    ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getComments(String activityId, Integer size, Integer page);
+    ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getComments(String activityId, Integer page);
 
+    ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getIndexComments();
 }

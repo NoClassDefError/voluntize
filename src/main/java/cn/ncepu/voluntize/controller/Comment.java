@@ -21,7 +21,7 @@ public class Comment {
     @RequestMapping("/save")
     @ResponseBody
     public HttpResult comment(@RequestBody CommentVo commentVo) {
-        return new HttpResult("save:"+commentService.saveOrUpdate(commentVo));
+        return new HttpResult("save:" + commentService.saveOrUpdate(commentVo));
     }
 
     @RequestMapping("/delete")
@@ -31,7 +31,13 @@ public class Comment {
 
     @RequestMapping("/getComments")
     @ResponseBody
-    public ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getComments(String activity, int size, int page) {
-        return commentService.getComments(activity, size, page);
+    public ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getComments(String activity, int page) {
+        return commentService.getComments(activity, page);
+    }
+
+    @RequestMapping("/getIndexComments")
+    @ResponseBody
+    public ArrayList<cn.ncepu.voluntize.vo.responseVo.CommentVo> getComments() {
+        return commentService.getIndexComments();
     }
 }

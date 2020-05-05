@@ -39,4 +39,10 @@ public class UserManage {
     public HttpResult deleteUser(String id) {
         return new HttpResult("deleteUser:" + updateUserService.deleteUser(id));
     }
+
+    @RequestMapping("/deleteStuByGrade")
+    @ResponseBody
+    public HttpResult deleteStudents(int grade) {
+        return new HttpResult("deleteStuBy:" + updateUserService.deleteStuByGrade(grade));
+    }
 }

@@ -19,11 +19,14 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,String> {
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.StudentExcelVo(s) from Student s where s.grade=?1")
-    List<StudentExcelVo> findExcelByGrade(int grade);
+    /**
+     * 并不总是直接查出vo速度快
+     */
+    @Query("select s from Student s where s.grade=?1")
+    List<Student> findExcelByGrade(String grade);
 
-    @Query("select new cn.ncepu.voluntize.vo.responseVo.StudentExcelVo(s) from Student s ")
-    List<StudentExcelVo> findExcelAll();
+    @Query("select s from Student s where s.grade=?1")
+    List<Student> findByGrade(String grade);
 
     @Transactional
     @Modifying

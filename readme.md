@@ -252,9 +252,9 @@ http://192.168.43.1:8888/volunteer/comment/save
 ```
     private String id;//添加id时为修改，不添加为新增
     private String content;//评论内容
-    private ArrayList<ImageVo> imageVos;//数组
+    private ArrayList<ImageVo> imageVos;//数组，若无则不写
     private String parentCommentId;//父评论id，若无则不写
-    private String activityId;//必填
+    private String activityId;//不填则为首页通知
 ```
 示例:
 ```
@@ -284,17 +284,23 @@ commentId 要删除的评论id
 
 返回 无 
 
+#### 获取首页通知
+http://192.168.43.1:8888/volunteer/comment/getIndexComments
+
+发送 post 无
+
+返回 json 数组 首页通知
+
 #### 获取特定活动的评论区（分页） [2020.2.6 修改]
 http://192.168.43.1:8888/volunteer/comment/getComments
 
 发送 post application/x-www-form-urlencoded
 ```
 activity 该活动的id
-size 每页活动数
 page 页码
 ```
 
-返回 json数组
+返回 json数组 每页10条
 示例：activity = 001 size = 3 page = 0
 ```
 [

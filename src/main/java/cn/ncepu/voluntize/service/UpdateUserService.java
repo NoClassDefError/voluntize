@@ -28,4 +28,6 @@ public interface UpdateUserService {
     String resetPassword(String userId);
 
     String deleteUser(String id);
+
+    String deleteStuByGrade(int grade);
 }

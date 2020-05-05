@@ -119,13 +119,16 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
             return "部门的id不能和学生的一样";
         String result;
         if (departmentRepository.findById(voAdmin.getId()).isPresent())
-            return "账号已存在，甲方不让管理员通过此接口修改其信息。若要修改已存在部门账号的信息，嗯，只能先把它删掉重建，抱歉。";
+            return "账号已存在，甲方不让管理员通过此接口修改其信息。若要修改已存在部门账号的信息，只能先把它注销掉重建，抱歉。";
+        if(departmentRepository.findByIdCanceled(voAdmin.getId()).isPresent())
+            return "此账号已被注销，请换个id";
         else result = "---status:添加部门";
         Department department = new Department();
         department.setId(voAdmin.getId());
         department.setManager(voAdmin.getManager());
         department.setName(voAdmin.getName());
         department.setPassword("123456");
+        department.setDeleted(false);
 //        if (voAdmin.getPassword() == null) department.setPassword("123456");
 //        else department.setPassword(voAdmin.getPassword());
         return departmentRepository.save(department).getId() + result;
@@ -160,5 +163,11 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
             return "部门账户" + id + "已注销";
         }
         return "没有找到这个账户";
+    }
+
+    @Override
+    public String deleteStuByGrade(int grade) {
+        studentRepository.deleteInBatch(studentRepository.findByGrade(grade + ""));
+        return "已删除" + grade;
     }
 }

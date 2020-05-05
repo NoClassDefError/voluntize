@@ -90,27 +90,38 @@ public class CategoryInterceptor implements HandlerInterceptor {
     }
 
     public static String getRemoteIP(HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        if (ip.equals("127.0.0.1") || ip.equals("192.168.1.110"))
-            ip = processIP(request.getHeader("x-forwarded-for"));
+        Logger logger = LoggerFactory.getLogger(CategoryInterceptor.class);
+        logger.info("Got ips:" + request.getRemoteAddr() + " " + request.getHeader("x-forwarded-for")
+                + " " + request.getHeader("Proxy-Client-IP") + " " + request.getHeader("WL-Proxy-Client-IP"));
+        String ip = processIP(request.getHeader("x-forwarded-for"));
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
             ip = processIP(request.getHeader("Proxy-Client-IP"));
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
             ip = processIP(request.getHeader("WL-Proxy-Client-IP"));
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))
+            ip = request.getRemoteAddr();
+        logger.info("Client ip addr:" + ip);
         return ip;
     }
 
     public static String processIP(String xff) {
-        int begin = 0, end = 0;
-        for (int i = 0; i < xff.length(); i++) {
-            if (xff.charAt(i) == '[') begin = i;
-            if (xff.charAt(i) == ']') {
-                end = i;
-                break;
-            }
-        }
-        if (end == 0) return xff;
-        return xff.substring(begin + 1, end);
+        if (xff == null) return null;
+        String qudiaokuohao;
+        String qudiaodouhao;
+        String qudiaomaohao;
+        //去掉逗号
+        int douhao = xff.indexOf(",");
+        if (douhao != -1) qudiaodouhao = xff.substring(0, douhao);
+        else qudiaodouhao = xff;
+        //去掉中括号
+        int begin = qudiaodouhao.indexOf("["), end = qudiaodouhao.indexOf("]");
+        if (end == -1) qudiaokuohao = qudiaodouhao;
+        else qudiaokuohao = qudiaodouhao.substring(begin + 1, end);
+        //去掉冒号
+        int maohao = qudiaokuohao.indexOf(":");
+        if (maohao != -1) qudiaomaohao = qudiaokuohao.substring(0, maohao);
+        else qudiaomaohao = qudiaokuohao;
+        return qudiaomaohao;
 //        return xff.split("^\\[((:)|(\\d))*\\]")[0];
     }
 

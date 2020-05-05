@@ -34,11 +34,11 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         Optional<Department> optional2 = departmentRepository.findById(user.getId());
         if (optional1.isPresent()) if (user.getPassword().equals(optional1.get().getPassword())) {
             Student student = optional1.get();
-            Integer a = recordRepository.getTheDuration(student.getStudentNum());
-//            System.out.println(recordRepository.getTheDuration(student.getStudentNum()));
-            if (a == null) a = 0;
-            student.setTotalDuration(a);
-            studentRepository.updateTotalDuration(user.getId(), a);
+            //更新学生总时长
+//            Integer a = recordRepository.getTheDuration(student.getStudentNum());
+//            if (a == null) a = 0;
+//            student.setTotalDuration(a);
+//            studentRepository.updateTotalDuration(user.getId(), a);
             return new UserInfoVo(1, student, null);
         }
         if (optional2.isPresent()) if (user.getPassword().equals(optional2.get().getPassword()))
@@ -79,8 +79,13 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
 
     @Override
     public List<StudentExcelVo> findStuExcel(Integer grade) {
-        if (grade == null) return studentRepository.findExcelAll();
-        else return studentRepository.findExcelByGrade(grade);
+        ArrayList<StudentExcelVo> findStuExcel = new ArrayList<>();
+        if (grade == null)
+            for (Student student : studentRepository.findAll())
+                findStuExcel.add(new StudentExcelVo(student));
+        else for (Student student : studentRepository.findExcelByGrade(grade + ""))
+            findStuExcel.add(new StudentExcelVo(student));
+        return findStuExcel;
     }
 
     @Override
