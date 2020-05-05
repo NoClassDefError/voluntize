@@ -83,7 +83,7 @@ public class LoginImpl extends BaseUserImpl implements LoginService {
         if (grade == null)
             for (Student student : studentRepository.findAll())
                 findStuExcel.add(new StudentExcelVo(student));
-        else for (Student student : studentRepository.findExcelByGrade(grade + ""))
+        else for (Student student : studentRepository.findExcelByGrade(grade))
             findStuExcel.add(new StudentExcelVo(student));
         return findStuExcel;
     }

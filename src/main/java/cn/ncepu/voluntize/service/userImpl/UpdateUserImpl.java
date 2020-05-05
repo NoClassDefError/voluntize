@@ -10,8 +10,7 @@ import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
 import cn.ncepu.voluntize.vo.requestVo.UserUpdateVoAdmin;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
@@ -120,7 +119,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         String result;
         if (departmentRepository.findById(voAdmin.getId()).isPresent())
             return "账号已存在，甲方不让管理员通过此接口修改其信息。若要修改已存在部门账号的信息，只能先把它注销掉重建，抱歉。";
-        if(departmentRepository.findByIdCanceled(voAdmin.getId()).isPresent())
+        if (departmentRepository.findByIdCanceled(voAdmin.getId()).isPresent())
             return "此账号已被注销，请换个id";
         else result = "---status:添加部门";
         Department department = new Department();
@@ -167,7 +166,18 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
 
     @Override
     public String deleteStuByGrade(int grade) {
-        studentRepository.deleteInBatch(studentRepository.findByGrade(grade + ""));
-        return "已删除" + grade;
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        if (grade < year - 4) {
+            studentRepository.deleteInBatch(studentRepository.findByGrade(grade));
+            return "已删除" + grade;
+        }
+        return "不允许批量删除近四届的学生";
     }
+
+    @Override
+    public List<Integer> getWhatCanBeDeleted() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        return studentRepository.getWhatCanDelete(year - 4);
+    }
+
 }

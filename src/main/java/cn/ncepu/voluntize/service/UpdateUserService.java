@@ -4,6 +4,8 @@ import cn.ncepu.voluntize.vo.requestVo.DepartmentUpdateVo;
 import cn.ncepu.voluntize.vo.requestVo.StudentUpdateVo;
 import cn.ncepu.voluntize.vo.requestVo.UserUpdateVoAdmin;
 
+import java.util.List;
+
 public interface UpdateUserService {
     /**
      * 修改学生账户信息（不包括密码）
@@ -30,4 +32,6 @@ public interface UpdateUserService {
     String deleteUser(String id);
 
     String deleteStuByGrade(int grade);
+
+    List<Integer> getWhatCanBeDeleted();
 }

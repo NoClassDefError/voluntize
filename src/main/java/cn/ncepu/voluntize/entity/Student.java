@@ -58,8 +58,8 @@ public class Student implements Cloneable {
     private String major;
 
     @Basic
-    @Column(name = "grade", columnDefinition = "varchar(45) comment '年级'")
-    private String grade;
+    @Column(name = "grade", columnDefinition = "int(11) comment '年级'")
+    private Integer grade;
 
     @Basic
     @Column(name = "class", columnDefinition = "varchar(45) comment '班级\n" +

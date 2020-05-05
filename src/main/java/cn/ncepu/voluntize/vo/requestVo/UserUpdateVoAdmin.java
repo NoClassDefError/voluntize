@@ -8,7 +8,7 @@ public class UserUpdateVoAdmin {
     private Integer category;
     private String name;
     private String classs;
-    private String grade;
+    private Integer grade;
     private String major;
     private String gender;
     private String idNum;

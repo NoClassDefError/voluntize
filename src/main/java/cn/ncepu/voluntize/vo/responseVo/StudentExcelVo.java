@@ -12,7 +12,7 @@ public class StudentExcelVo {
     private String gender;
     private String name;
     private String major;
-    private String grade;
+    private Integer grade;
     private String classs;
     private String phoneNum;
     private String email;

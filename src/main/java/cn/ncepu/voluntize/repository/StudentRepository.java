@@ -23,13 +23,16 @@ public interface StudentRepository extends JpaRepository<Student,String> {
      * 并不总是直接查出vo速度快
      */
     @Query("select s from Student s where s.grade=?1")
-    List<Student> findExcelByGrade(String grade);
+    List<Student> findExcelByGrade(Integer grade);
 
     @Query("select s from Student s where s.grade=?1")
-    List<Student> findByGrade(String grade);
+    List<Student> findByGrade(Integer grade);
 
     @Transactional
     @Modifying
     @Query("update Student s set s.totalDuration=?2 where s.studentNum=?1")
     void updateTotalDuration(String id,int duration);
+
+    @Query("select distinct s.grade from Student s where s.grade<?1")
+    List<Integer> getWhatCanDelete(int grade);
 }

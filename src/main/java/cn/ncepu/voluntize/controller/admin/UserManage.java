@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/user")
 public class UserManage {
@@ -44,5 +46,11 @@ public class UserManage {
     @ResponseBody
     public HttpResult deleteStudents(int grade) {
         return new HttpResult("deleteStuBy:" + updateUserService.deleteStuByGrade(grade));
+    }
+
+    @RequestMapping("/getWhatCanBeDeleted")
+    @ResponseBody
+    public List<Integer> findWhatCanDeleted(){
+        return updateUserService.getWhatCanBeDeleted();
     }
 }
