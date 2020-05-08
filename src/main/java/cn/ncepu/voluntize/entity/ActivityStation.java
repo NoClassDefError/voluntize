@@ -35,27 +35,33 @@ public class ActivityStation {
     private String name;
 
     @Basic
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description", length = 5000)
     private String description;
 
+    /**
+     * comment '联系人，每个地点的联系人不一定一样'
+     */
     @Basic
-    @Column(name="linkman",columnDefinition = "varchar(255) comment '联系人，每个地点的联系人不一定一样'")
+    @Column(name = "linkman")
     private String linkman;
 
+    /**
+     * comment '联系人电话'
+     */
     @Basic
-    @Column(name="phone_num",columnDefinition = "varchar(255) comment '联系人电话'")
+    @Column(name = "phone_num")
     private String phoneNum;
 
     /**
      * 所属志愿活动
      */
-    @ManyToOne(targetEntity = Activity.class,cascade = CascadeType.REMOVE)
+    @ManyToOne(targetEntity = Activity.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_activity", referencedColumnName = "id")
     private Activity parentActivity;
 
     /**
      * 划分为多个时间段
      */
-    @OneToMany(targetEntity = ActivityPeriod.class, mappedBy = "parent", cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = ActivityPeriod.class, mappedBy = "parent", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<ActivityPeriod> periods;
 }

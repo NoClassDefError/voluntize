@@ -28,78 +28,76 @@ public class Student implements Cloneable {
      * 学号，唯一非空，外部导入，学生表主键
      */
     @Id
-    @Column(name = "id", nullable = false, columnDefinition = "varchar(25) comment '学号，主键'")
+    @Column(name = "id", nullable = false, length = 25)
     private String studentNum;
 
     /**
      * 身份证号
      */
 //    @Basic
-//    @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null comment '身份证号'")
+//    @Column(name = "id_num", length = 19, columnDefinition = "varchar(19) null")
 //    private String idNum;
 
     @Basic
-    @Column(name = "gender", columnDefinition = "varchar(10) comment '性别'")
+    @Column(name = "gender", length = 10)
     private String gender;
 
     /**
      * 密码，初始密码为"123456"
      */
     @Basic
-    @Column(name = "password", length = 30, nullable = false, columnDefinition = " varchar(30) default '123456' comment '初始密码，默认是123456'")
-    private String password;
+    @Column(name = "password", length = 30, nullable = false, columnDefinition = " varchar(30) default '123456'")
+    private String password = "123456";
 
     @Basic
     @Column(name = "name")
     private String name;
 
     @Basic
-    @Column(name = "major", columnDefinition = "varchar(255) comment '专业'")
+    @Column(name = "major")
     private String major;
 
     @Basic
-    @Column(name = "grade", columnDefinition = "int(11) comment '年级'")
+    @Column(name = "grade")
     private Integer grade;
 
     @Basic
-    @Column(name = "class", columnDefinition = "varchar(45) comment '班级\n" +
-            "可从学籍数据库调用'")
+    @Column(name = "class", length = 45)
     private String classs;
 
     @Basic
-    @Column(name = "phone_num", length = 11, columnDefinition = "varchar(11) comment '学生的常用联系电话'")
+    @Column(name = "phone_num", length = 11)
     private String phoneNum;
 
     @Basic
-    @Column(name = "email", columnDefinition = "varchar(255) comment '联系邮箱用于密码找回'")
+    @Column(name = "email")
     private String email;
 
     @Basic
-    @Column(name = "school", columnDefinition = "varchar(255) comment '学院\n" +
-            "可从学籍数据库调用'")
+    @Column(name = "school")
     private String school;
 
     /**
      * 志愿总时长
      */
     @Basic
-    @Column(name = "total_duration", columnDefinition = "int default 0 comment'学生已获得时长，单位：小时'")
-    private int totalDuration;
+    @Column(name = "total_duration", columnDefinition = "integer default 0")
+    private int totalDuration = 0;
 
     /**
      * 志愿记录，一对多关联ActivityPeriod。<br>
      * 报名则计入志愿记录，但未必报名成功。
      */
-    @OneToMany(mappedBy = "volunteer", targetEntity = Record.class, cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "volunteer", targetEntity = Record.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private List<Record> participated;
 
-    @OneToMany(mappedBy = "student", targetEntity = Comment.class, cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", targetEntity = Comment.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     /**
      * 头像
      */
-    @OneToMany(mappedBy = "student", targetEntity = Image.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", targetEntity = Image.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Image> profiles;
 
     @Override

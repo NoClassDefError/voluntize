@@ -37,44 +37,49 @@ public class ActivityPeriod {
     /**
      * 所属志愿岗位
      */
-    @ManyToOne(targetEntity = ActivityStation.class,cascade = CascadeType.REMOVE)
+    @ManyToOne(targetEntity = ActivityStation.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent", referencedColumnName = "id")
     private ActivityStation parent;
 
     /**
-     * 对时间和时间段。。。。！
+     * 对时间和时间段。。。。！comment '本项公益劳动开始的日期'
      */
     @Basic
-    @Column(name = "start_date", columnDefinition = "timestamp default now() comment '本项公益劳动开始的日期'")
+    @Column(name = "start_date")
     private Timestamp startDate;
 
     @Basic
-    @Column(name = "end_date", columnDefinition = "timestamp default now()")
+    @Column(name = "end_date")
     private Timestamp endDate;
 
+    /**
+     * comment '每天活动时间安排，例如上午8至11，下午2至5'
+     */
     @Basic
-    @Column(name = "period", columnDefinition = "text comment '每天活动时间安排，例如上午8至11，下午2至5'")
+    @Column(name = "period", length = 1000)
     private String timePeriod;
 
     /**
      * 使用一个字符串储存多个要求，中间使用';'隔开
      */
     @Basic
-    @Column(name = "requirements", columnDefinition = "text")
+    @Column(name = "requirements", length = 5000)
     private String requirements;
 
     /**
      * 等效志愿时长
+     * comment '等效公益劳动时长\n不是简单的末初时间的差，需要单独给定'
      */
     @Basic
-    @Column(name = "equ_duration", columnDefinition = "int comment '等效公益劳动时长\n不是简单的末初时间的差，需要单独给定' ")
+    @Column(name = "equ_duration")
     private Integer equDuration;
 
     /**
      * 所需人数，活动开始前有效
+     * comment '所需人数'
      */
     @Basic
-    @Column(name = "amount_required", columnDefinition = "int comment '所需人数'")
+    @Column(name = "amount_required")
     private Integer amountRequired;
 
     /**

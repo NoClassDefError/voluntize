@@ -47,12 +47,8 @@ public class Activity {
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id", columnDefinition = "int default 0 comment '0 部门已发送等待审核\n" +
-            "1 审核并修改\n" +
-            "2 报名\n" +
-            "3 录用并开始活动\n" +
-            "4 结束并评价'")
-    private int statusId;
+    @Column(name = "status_id", nullable = false)
+    private int statusId = 0;
 
     @Basic
     @Column(name = "name")
@@ -64,14 +60,14 @@ public class Activity {
 
     @CreatedDate
     @Basic
-    @Column(name = "create_time", columnDefinition = "long")
+    @Column(name = "create_time", nullable = false)
     private Long createTime;
 
     @Basic
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description", length = 5000)
     private String description;
 
-    @ManyToOne(targetEntity = Department.class)
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "department", referencedColumnName = "id")
     private Department department;
 
@@ -85,13 +81,13 @@ public class Activity {
     /**
      * 志愿活动的评论区，只有在报名阶段以后才允许评论
      */
-    @OneToMany(targetEntity = Comment.class, mappedBy = "activity", cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "activity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     /**
      * 划分为多个岗位
      */
-    @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity", cascade = CascadeType.REMOVE)
+    @OneToMany(targetEntity = ActivityStation.class, mappedBy = "parentActivity", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<ActivityStation> stations;
 
     public void setStatus(ActivityStatus status) {

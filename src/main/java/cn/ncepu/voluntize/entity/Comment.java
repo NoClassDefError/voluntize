@@ -33,21 +33,21 @@ public class Comment {
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private String id;
 
     /**
      * 所属志愿活动，非空
      */
-    @ManyToOne(targetEntity = Activity.class)
-    @JoinColumn(name = "activity", nullable = false, referencedColumnName = "id")
+    @ManyToOne(targetEntity = Activity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity", referencedColumnName = "id")
     private Activity activity;
 
-    @ManyToOne(targetEntity = Student.class)
+    @ManyToOne(targetEntity = Student.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "student", referencedColumnName = "id")
     private Student student;
 
-    @ManyToOne(targetEntity = Department.class)
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "department", referencedColumnName = "id")
     private Department department;
 
@@ -55,30 +55,30 @@ public class Comment {
      * 评论内容
      */
     @Basic
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description", length = 5000)
     private String content;
 
     /**
      * 发布时间
      */
     @Basic
-    @Column(name = "time", columnDefinition = "long")
+    @Column(name = "time", nullable = false)
     @CreatedDate
     private Long time;
 
     /**
      * 评论图片
      */
-    @OneToMany(targetEntity = Image.class, mappedBy = "comment")
+    @OneToMany(targetEntity = Image.class, mappedBy = "comment", fetch = FetchType.LAZY)
     private List<Image> images;
 
     /**
      * 父级评论，没有父级则为空
      */
-    @ManyToOne(targetEntity = Comment.class)
+    @ManyToOne(targetEntity = Comment.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment", referencedColumnName = "id")
     private Comment parentComment;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "parentComment")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "parentComment", fetch = FetchType.LAZY)
     private List<Comment> sonComment;
 }

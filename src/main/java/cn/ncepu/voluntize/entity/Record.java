@@ -56,17 +56,17 @@ public class Record {
      * 学生报名时的备注信息
      */
     @Basic
-    @Column(name = "info", columnDefinition = "text comment '学生报名时的备注信息'")
+    @Column(name = "info", length = 5000)
     private String info;
     /**
      * 用于数据库存储，总是与status匹配，请不要直接操作此值，而是操作status；
      */
     @Basic
-    @Column(name = "status_id", nullable = false, columnDefinition = "int default 0 comment '标志任一公益劳动项目所处状态\n0  已报名 \n1 已审核\n2 已授分甚至评价'")
-    private int statusId;
+    @Column(name = "status_id", nullable = false, columnDefinition = "integer default 0")
+    private int statusId = 0;
 
     @Basic
-    @Column(name = "create_time", columnDefinition = "long")
+    @Column(name = "create_time")
     @CreatedDate
     private Long createTime;
 
@@ -80,42 +80,32 @@ public class Record {
      * 被允许加入活动，初始值为空
      */
     @Basic
-    @Column(name = "is_passed", columnDefinition = "tinyint(1) default 1 comment '非0：已被录取（true）；\\n0：非录取状态（false）'")
-    private boolean isPassed;
+    @Column(name = "is_passed")
+    private boolean isPassed = true;
 
     /**
      * 志愿成绩 0 不通过 1 通过 2 良好 3 优秀
      */
     @Basic
-    @Column(name = "audit_level", columnDefinition = " int comment '公益劳动成绩 ：\n" +
-            "0  不通过，若不通过，给评级部门必须填写不通过的理由，见evaluation；\n" +
-            "1  通过； \n" +
-            "2  良好； \n" +
-            "3  优秀。'")
+    @Column(name = "audit_level")
     private Integer auditLevel;
 
     /**
      * 如果不通过，必填理由
      */
     @Basic
-    @Column(name = "evaluation", columnDefinition = "varchar(255) comment '0  不通过，见audit_level；\n" +
-            "若不通过，给评级部门必须填写不通过的理由（不超过255字）；'")
+    @Column(name = "evaluation")
     private String evaluation;
 
     /**
-     * 学生反馈评星 （0，1，2，3，4，5）
+     * 学生反馈评星 （0，1，2，3，4）
      */
     @Basic
-    @Column(name = "stars", columnDefinition = "int default 0 comment '公益劳动结束后，\n" +
-            "学生反馈评星 \n" +
-            "（0，1，2，3，4，5）\n" +
-            "默认未评星（0）'")
-    private Integer stars;
+    @Column(name = "stars", columnDefinition = "integer default 0")
+    private Integer stars = 0;
 
     @Basic
-    @Column(name = "comments", columnDefinition = "text comment '公益劳动结束后，\n" +
-            "参加该公益劳动的学生对所参加的活动的文字评价,\n" +
-            "初始值置空'")
+    @Column(name = "comments", length = 5000)
     private String comment;
 
     public void setStatus(RecordStatus status) {

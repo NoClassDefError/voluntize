@@ -103,7 +103,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         student.setMajor(voAdmin.getMajor());
         student.setSchool(voAdmin.getSchool());
         student.setTotalDuration(voAdmin.getTotalDuration());
-        student.setPassword("123456");
+//        student.setPassword("123456");
 //        if (voAdmin.getPassword() == null) student.setPassword("123456");
 //        else student.setPassword(voAdmin.getPassword());
         return studentRepository.save(student).getStudentNum() + result;
@@ -126,7 +126,7 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
         department.setId(voAdmin.getId());
         department.setManager(voAdmin.getManager());
         department.setName(voAdmin.getName());
-        department.setPassword("123456");
+//        department.setPassword("123456");
         department.setDeleted(false);
 //        if (voAdmin.getPassword() == null) department.setPassword("123456");
 //        else department.setPassword(voAdmin.getPassword());
@@ -168,7 +168,10 @@ public class UpdateUserImpl extends BaseUserImpl implements UpdateUserService {
     public String deleteStuByGrade(int grade) {
         int year = Calendar.getInstance().get(Calendar.YEAR);
         if (grade < year - 4) {
-            studentRepository.deleteInBatch(studentRepository.findByGrade(grade));
+            for(Student student:studentRepository.findByGrade(grade))
+                studentRepository.delete(student);
+            //不能使用deleteInBatch，这个方法将多个实体并为一句删除，不能级联操作
+//            studentRepository.deleteInBatch(studentRepository.findByGrade(grade));
             return "已删除" + grade;
         }
         return "不允许批量删除近四届的学生";
