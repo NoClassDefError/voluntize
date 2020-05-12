@@ -13,13 +13,16 @@ import java.util.Optional;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, String> {
-    @Query(value = "select new cn.ncepu.voluntize.vo.responseVo.DepartmentExcelVo(d.id, d.name, avg(r.stars))" +
+    //sql server中avg()返回的类型与括号中一致，要先转成浮点型
+    @Query(value = "select new cn.ncepu.voluntize.vo.responseVo.DepartmentExcelVo(d.id, d.name, avg(r.stars*1.0))" +
             " from Department d left join Activity a on d.id = a.department " +
             " left join ActivityStation ast on a.id = ast.parentActivity " +
             " left join ActivityPeriod ap on ast.id = ap.parent " +
             " left join Record r on ap.id = r.period " +
             "where r.statusId = 3 and d.isDeleted=false " +
-            "group by d.id")
+            "group by d.id, d.name")
+        // 注意sql server 规定，如果 SELECT 子句 <select list> 中包含聚合函数，则 GROUP BY 将计算每个组的汇总值。
+        // 指定 GROUP BY 时，选择列表中任何非聚合表达式内的每个属性名都应包含在GROUP BY列表中，或者GROUP BY表达式必须与选择列表表达式完全匹配
     List<DepartmentExcelVo> getDepartmentExcelVo();
 
     @Transactional

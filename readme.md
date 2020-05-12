@@ -220,7 +220,7 @@ http://192.168.43.1:8888/volunteer/uploadImage
     {uploadImage:error}
 
 #### 修改密码
-http://192.168.43.1:8888/volunteer/changePassword
+http://192.168.43.1:8888/volunteer/password/changePassword
 
 发送 post application/x-www-form-urlencoded
 
@@ -233,7 +233,7 @@ http://192.168.43.1:8888/volunteer/changePassword
     {changePassword:error}
 
 #### 发送验证邮件
-http://192.168.43.1:8888/volunteer/sendEmail
+http://192.168.43.1:8888/volunteer/password/sendEmail
 
 发送 post application/x-www-form-urlencoded
 
@@ -1106,7 +1106,7 @@ http://192.168.43.1:8888/volunteer/admin/excel/search
 ```
 
 #### 批量导出学生记录
-http://192.168.43.1:8888/volunteer/admin/excel/students
+http://192.168.43.1:8888/volunteer/admin/excel/stu
 
 发送 post application/x-www-form-urlencoded
 
@@ -1117,6 +1117,13 @@ http://192.168.43.1:8888/volunteer/admin/excel/students
 文件 student_all.xlsx student_2017.xlsx
 表格信息与学生登录接口返回信息一样
 
+#### 其它没有写文档的接口
+
+    /admin/activity/deConfirm，/admin/user/deleteStuByGrade，/admin/user/getWhatCanBeDeleted，/admin/user/reset，/admin/excel/dep，/admin/activity/records，
+    /password/captcha，/password/verify，
+    /getLoginVo,/publicKey,/unlock,
+    /department/service/createActivity,/department/service/terminate,/department/service/start,/department/service/startEvaluation,/department/query/pages
+    
 ## 软件调试
 
 ### jpa uuid主键生成策略
